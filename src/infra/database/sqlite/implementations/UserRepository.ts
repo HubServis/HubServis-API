@@ -5,10 +5,10 @@ import Database from '../config';
 
 export class UserRepositorySqlite implements IUsersRepository{
     public async create(props: User): Promise<User> {
-        const {id, name, email, password} = props;
+        const {id, username, email, password} = props;
 
         const userRepository = (await Database).getRepository(UserSchema)
-        const user = await userRepository.save({id, name, email, password})
+        const user = await userRepository.save({id, username, email, password})
 
         return user;
     }
