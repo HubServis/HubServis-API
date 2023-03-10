@@ -1,12 +1,12 @@
 import {v4 as uuid} from 'uuid'
 
-export class User{
+export class Product{
     public id: string;
-    public username: string;
-    public email: string;
-    public password: string;
+    public name: string;
+    public description: string;
+    public price: number;
 
-    constructor (props: Omit<User, "id">, id: string = null){
+    constructor (props: Omit<Product, "id">, id: string = null){
         Object.assign(this, props);
         if(!id){
             this.id = uuid();
