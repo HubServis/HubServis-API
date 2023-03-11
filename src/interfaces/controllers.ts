@@ -16,6 +16,7 @@ export interface IProductCotroller{
 
 export interface IRoleCotroller{
     create(req: Request, res: Response):Promise<Response>;
+    createRolePermission(req: Request, res: Response):Promise<Response>;
 }
 
 export interface IPermissionController{

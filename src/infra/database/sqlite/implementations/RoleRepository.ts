@@ -17,11 +17,4 @@ export class RoleRepositorySqlite implements IRolesRepository {
 
         return role;
     }
-
-    // public async find(): Promise<Role[]>{
-    //     const userRepository = (await Database).getRepository(RoleSchema);
-    //     const user = await userRepository.find();
-
-    //     return user;
-    // }
 }

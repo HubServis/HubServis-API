@@ -25,4 +25,6 @@ app.post('/permission', PermissionController.create); //rota que será autentica
 
 app.post('/users/acl', UserACLController.create); //rota que será autenticada futuramente
 
+app.post('/roles/:roleId', RoleController.createRolePermission); //rota que será autenticada futuramente
+
 app.listen(3000, () => console.log("server is running in http://localhost:3000"));

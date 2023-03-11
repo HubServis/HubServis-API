@@ -1,4 +1,3 @@
-import { User } from "../../entities/User";
 import { IUsersACLRepository, UserACLRequest } from "../../repositories/UsersACLRepository";
 
 export class CreateUserAccessControlListService{
