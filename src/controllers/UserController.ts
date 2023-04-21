@@ -11,10 +11,10 @@ const findUserService = new FindUserService(new UserRepositorySqlite());
 class UserController implements IUserCotroller{
     
     async create(req: Request, res: Response){
-        const { username, email, password } = req.body;
+        const { username, email, password, name, cpfcnpj } = req.body;
 
         try {
-            const user = new User({username, email, password});
+            const user = new User({username, email, password, cpfcnpj, name});
             const createdUser = await createUserService.execute(user);
     
             if(createdUser instanceof Error){

@@ -6,7 +6,7 @@ import { IUsersRepository } from "../../../../repositories/UsersRepository";
 
 export class UserRepositorySqlite implements IUsersRepository {
     public async create(props: User): Promise<Error | User> {
-        const {id, username, email, password} = props;
+        const {id, username, email, password, name, cpfcnpj} = props;
 
         const existUser = (await Database).getRepository(UserSchema);
         const isExistUser = await existUser.findOne({
@@ -22,7 +22,7 @@ export class UserRepositorySqlite implements IUsersRepository {
         const passwordHash = await hash(password, 8);
 
         const userRepository = (await Database).getRepository(UserSchema);
-        const user = await userRepository.save({id, username, email, password: passwordHash});
+        const user = await userRepository.save({id, username, email, name, cpfcnpj, password: passwordHash});
 
         return user;
     }
