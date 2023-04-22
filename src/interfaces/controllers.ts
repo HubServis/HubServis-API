@@ -22,3 +22,9 @@ export interface IRoleCotroller{
 export interface IPermissionController{
     create(req: Request, res: Response):Promise<Response>;
 }
+
+
+export interface IBusinessCotroller{
+    create(req: Request, res: Response):Promise<Response>;
+    // find(req: Request, res: Response):Promise<Response>;
+}

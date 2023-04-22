@@ -1,7 +1,8 @@
-import { Column, ManyToMany, JoinTable, Entity } from "typeorm";
+import { Column, ManyToMany, JoinTable, Entity, OneToOne, JoinColumn } from "typeorm";
 import Role from "./Role";
 import Permission from "./Permission";
 import { BaseEntity } from "./BaseEntity";
+import Business from "./Business";
 
 @Entity("users")
 export class User extends BaseEntity {
@@ -36,4 +37,8 @@ export class User extends BaseEntity {
         inverseJoinColumns: [{name: "permission_id"}]
     })
     permissions: Permission[];
+
+    @OneToOne(() => Business)
+    @JoinColumn()
+    business: Business;
 }
