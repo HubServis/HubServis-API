@@ -25,7 +25,7 @@ routes.post('/role', RoleController.create); //rota que será autenticada futura
 
 routes.post('/permission', PermissionController.create); //rota que será autenticada futuramente
 
-routes.post('/users/acl', UserACLController.create); //rota que será autenticada futuramente
+routes.post('/users/acl', UserACLController.create); //rota que será autenticada futuramente - ela adiciona permissões e regras à usuários.
 
 routes.post('/roles/:roleId', RoleController.createRolePermission); //rota que será autenticada futuramente
 
