@@ -10,6 +10,7 @@ class SessionController {
 
         try {
             const result = await sessionService.execute({username, password});
+            console.log(result);
 
             if (result instanceof Error) {
                 return res.status(400).json(result.message);

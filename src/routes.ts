@@ -12,8 +12,8 @@ const routes = Router();
 
 routes.post('/login', SessionController.handle);
 
-routes.get('/users', UserController.find);
 routes.post('/user', UserController.create);
+routes.get('/users', UserController.find);
 
 routes.post('/product', ProductController.create);
 routes.get('/products', ProductController.find);

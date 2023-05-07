@@ -8,34 +8,34 @@ import { BusinessRepositorySqlite } from "../infra/database/sqlite/implementatio
 const createBusinessService = new CreateBusinessService(
     new BusinessRepositorySqlite()
 );
-const findBusinessService = new FindBusinessService(new BusinessRepositorySqlite());
+const findBusinessService = new FindBusinessService(
+    new BusinessRepositorySqlite()
+);
 
 class BusinessController implements IBusinessCotroller {
     async create(req: Request, res: Response) {
         const { name } = req.body;
 
         try {
-            const business = new Business({ name }); 
+            const business = new Business({ name });
             const createdBusiness = await createBusinessService.execute(
                 business
             );
 
-            return res.status(201).json({res: createdBusiness});
+            return res.status(201).json({ res: createdBusiness });
         } catch (err) {
             console.log(err.message);
             return res.status(500).json("Unexpected error");
         }
     }
 
-    async find(req: Request, res: Response){
-
+    async find(req: Request, res: Response) {
         try {
             const products = await findBusinessService.execute();
             return res.status(201).json(products);
-
         } catch (err) {
             console.log(err.message);
-            return res.status(500).json('Unexpected error');
+            return res.status(500).json("Unexpected error");
         }
     }
 }

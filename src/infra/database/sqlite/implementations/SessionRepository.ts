@@ -29,9 +29,13 @@ export class SessionRepositorySqlite implements ISessionRepository {
             return new Error("User or Password incorrect");
         }
 
-        const token = sign({}, process.env.SECRET_JWT, {
-            subject: user.id,
-        });
+        const token = sign(
+            {
+                id: user.id,
+            },
+            process.env.SECRET_JWT,
+            { expiresIn: "4h" },
+        );
 
         return { token };
     }

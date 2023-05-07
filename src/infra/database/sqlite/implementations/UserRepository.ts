@@ -15,8 +15,18 @@ export class UserRepositorySqlite implements IUsersRepository {
             }
         });
 
+        const isExistCpfCnpjUser = await existUser.findOne({
+            where: {
+                cpfcnpj: cpfcnpj
+            }
+        });
+
         if(isExistUser){
             return new Error("User already exists");
+        }
+
+        if(isExistCpfCnpjUser){
+            return new Error("Cpf or cnpj already exists");
         }
 
         const passwordHash = await hash(password, 8);
@@ -29,7 +39,14 @@ export class UserRepositorySqlite implements IUsersRepository {
 
     public async find(): Promise<User[]> {
         const userRepository = (await Database).getRepository(UserSchema);
-        const user = await userRepository.find();
+        const user = await userRepository.find({select: {
+            id: true,
+            cpfcnpj: true,
+            name: true,
+            email: true,
+            username: true,
+            created_at: true,
+        }});
 
         return user;
     }
