@@ -1,6 +1,11 @@
 import { User } from "../entities/User";
 
+export interface ResRegisterUser {
+    user: User,
+    token: String
+}
+
 export interface IUsersRepository{
-    create(props: User):Promise<Error | User>;
+    create(props: User):Promise<Error | ResRegisterUser>;
     find(): Promise<User[]>;
 }

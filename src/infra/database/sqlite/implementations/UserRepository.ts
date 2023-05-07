@@ -2,10 +2,11 @@ import { hash } from "bcrypt";
 import Database from "../config";
 import { User } from "../../../../entities/User";
 import { User as UserSchema } from "../models/User";
-import { IUsersRepository } from "../../../../repositories/UsersRepository";
+import { IUsersRepository, ResRegisterUser } from "../../../../repositories/UsersRepository";
+import { sign } from "jsonwebtoken";
 
 export class UserRepositorySqlite implements IUsersRepository {
-    public async create(props: User): Promise<Error | User> {
+    public async create(props: User): Promise<Error | ResRegisterUser> {
         const {id, username, email, password, name, cpfcnpj} = props;
 
         const existUser = (await Database).getRepository(UserSchema);
@@ -34,7 +35,15 @@ export class UserRepositorySqlite implements IUsersRepository {
         const userRepository = (await Database).getRepository(UserSchema);
         const user = await userRepository.save({id, username, email, name, cpfcnpj, password: passwordHash});
 
-        return user;
+        const token = sign(
+            {
+                id: user.id,
+            },
+            process.env.SECRET_JWT,
+            { expiresIn: "4h" },
+        );
+
+        return {user: user, token: token};
     }
 
     public async find(): Promise<User[]> {
