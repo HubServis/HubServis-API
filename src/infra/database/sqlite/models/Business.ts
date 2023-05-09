@@ -1,6 +1,7 @@
-import { Column, Entity, JoinColumn, JoinTable, OneToOne } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, OneToMany, OneToOne } from "typeorm";
 import { BaseEntity } from "./BaseEntity";
 import { User } from "./User";
+import Service from "./Service";
 
 @Entity("business")
 export class Business extends BaseEntity {
@@ -9,6 +10,9 @@ export class Business extends BaseEntity {
 
     @OneToOne(() => User, user => user.business)
     user: User;
+
+    @OneToMany(() => Service, (service) => service.business)
+    services: Service[]
 }
 
 export default Business;
