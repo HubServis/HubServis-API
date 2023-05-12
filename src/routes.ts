@@ -6,6 +6,7 @@ import RoleController from './controllers/RoleController';
 import PermissionController from './controllers/PermissionController';
 import UserACLController from './controllers/UserACLController';
 import BusinessController from './controllers/BusinessController';
+import { auth } from './middleware/auth';
 
 const routes = Router();
 
@@ -13,7 +14,7 @@ const routes = Router();
 routes.post('/login', SessionController.handle);
 
 routes.post('/user', UserController.create);
-routes.get('/users', UserController.find);
+routes.get('/users', auth, UserController.find);
 
 routes.post('/product', ProductController.create);
 routes.get('/products', ProductController.find);

@@ -48,6 +48,7 @@ export class UserRepositorySqlite implements IUsersRepository {
 
     public async find(): Promise<User[]> {
         const userRepository = (await Database).getRepository(UserSchema);
+        
         const user = await userRepository.find({select: {
             id: true,
             cpfcnpj: true,
@@ -56,6 +57,9 @@ export class UserRepositorySqlite implements IUsersRepository {
             username: true,
             created_at: true,
         }});
+
+        console.log(user);
+        
 
         return user;
     }

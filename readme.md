@@ -6,7 +6,11 @@ A fazeres
 - [x] Criar verificações quando for criar um usuário
 - [x] Retornar token quando registrar um usuário
 
-- [] Criar permissões para usuário padrões. Criar também verificações para alterações de permissões e roles para deixar apenas admin com acesso a isso mexer nas permissions e roles.
+- [x] Criar permissões para usuário padrões. Criar também verificações para alterações de permissões e roles para deixar apenas admin com acesso a isso mexer nas permissions e roles.
+
+- [] Criar uma utils para geração e verificação de token, depois substituir em todo o app
+
+- [] Deixar todas as rotas criadas recebendo os devidos dados do diagrama do BD
 
 - [] criar middleware de authentication
 - [] arrumar todas as rotas que recebem token ou userId
