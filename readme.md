@@ -12,6 +12,7 @@ A fazeres
 
 - [] Deixar todas as rotas criadas recebendo os devidos dados do diagrama do BD
 - [] Criar lista de usuários para teste
+- [] Criar rotas e sistema de profissionais o quanto antes
 
 - [] criar middleware de authentication
 - [] arrumar todas as rotas que recebem token ou userId
@@ -22,7 +23,10 @@ A fazeres
 ## Rotas prontas para documentar
 - [] Register
 - [] Login
-- [] Find Users
+- [] Find All Users
+- [] Create Business
+- [] Find All Business
+- [] *Create Service
 
 ## Anotações
 - Token expira em 4 horas

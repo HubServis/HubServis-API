@@ -1,13 +1,13 @@
 import { Service } from "../../entities/Service";
-import { IServiceRepository } from "../../repositories/ServicesRepository";
+import { IServicesRepository } from "../../repositories/ServicesRepository";
 
-export class CreateRerviceService{
+export class CreateServiceService{
     constructor(
-        private servicesRepository: IServiceRepository
+        private servicesRepository: IServicesRepository
     ){}
 
-    public async execute(props: Service){
-        const service = await this.servicesRepository.create(props);
+    public async execute(props: Service, userId: string){
+        const service = await this.servicesRepository.create(props, userId);
         return service;
     }
 }

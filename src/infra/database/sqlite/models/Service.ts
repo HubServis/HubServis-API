@@ -7,6 +7,12 @@ export class Service extends BaseEntity {
     @Column()
     name: string;
 
+    @Column()
+    price: string;
+
+    @Column()
+    duration: string;
+
     @ManyToOne(() => Business, (business) => business.services)
     business: Business
 }

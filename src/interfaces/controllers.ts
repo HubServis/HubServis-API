@@ -26,5 +26,10 @@ export interface IPermissionController{
 
 export interface IBusinessCotroller{
     create(req: Request, res: Response):Promise<Response>;
+    find(req: Request, res: Response):Promise<Response>;
+}
+
+export interface IServiceCotroller{
+    create(req: Request, res: Response):Promise<Response>;
     // find(req: Request, res: Response):Promise<Response>;
 }

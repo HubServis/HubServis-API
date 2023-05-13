@@ -1,5 +1,5 @@
 import { Service } from "../entities/Service";
 
-export interface IServiceRepository{
-    create(props: Service):Promise<Error | any>;
+export interface IServicesRepository{
+    create(props: Service, userId: string):Promise<Error | Service>;
 }

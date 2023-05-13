@@ -4,7 +4,6 @@ import { CreateBusinessService } from "../services/business/CreateBusiness";
 import { FindBusinessService } from "../services/business/FindBusiness";
 import { Business } from "../entities/Business";
 import { BusinessRepositorySqlite } from "../infra/database/sqlite/implementations/BusinessRepository";
-import { log } from "console";
 
 const createBusinessService = new CreateBusinessService(
     new BusinessRepositorySqlite()

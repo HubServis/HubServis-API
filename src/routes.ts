@@ -7,6 +7,7 @@ import PermissionController from './controllers/PermissionController';
 import UserACLController from './controllers/UserACLController';
 import BusinessController from './controllers/BusinessController';
 import { auth } from './middleware/auth';
+import ServiceController from './controllers/ServiceController';
 
 const routes = Router();
 
@@ -18,6 +19,8 @@ routes.get('/users', UserController.find);
 
 routes.post('/business/create', auth, BusinessController.create);
 routes.get('/business', BusinessController.find);
+
+routes.post('/service/create', auth, ServiceController.create);
 
 routes.post('/role', RoleController.create); //rota que será autenticada futuramente
 
