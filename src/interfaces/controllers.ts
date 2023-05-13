@@ -31,5 +31,5 @@ export interface IBusinessCotroller{
 
 export interface IServiceCotroller{
     create(req: Request, res: Response):Promise<Response>;
-    // find(req: Request, res: Response):Promise<Response>;
+    find(req: Request, res: Response):Promise<Response>;
 }

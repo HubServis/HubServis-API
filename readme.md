@@ -27,6 +27,7 @@ A fazeres
 - [] Create Business
 - [] Find All Business
 - [] *Create Service
+- [] Find All Service
 
 ## Anotações
 - Token expira em 4 horas

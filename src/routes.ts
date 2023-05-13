@@ -21,6 +21,7 @@ routes.post('/business/create', auth, BusinessController.create);
 routes.get('/business', BusinessController.find);
 
 routes.post('/service/create', auth, ServiceController.create);
+routes.get('/services', ServiceController.find);
 
 routes.post('/role', RoleController.create); //rota que será autenticada futuramente
 
