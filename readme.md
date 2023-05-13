@@ -25,5 +25,8 @@ A fazeres
 ## Anotações
 - Token expira em 4 horas
 
+### env's
+- SECRET_JWT
+
 ## OBS
 - As únicas funções que não seguem o conceito de repository, é as funções dentro do arquivo de `middleware/permissions.ts`

@@ -7,6 +7,7 @@ import {
     ISessionRepository,
     UserRequest,
 } from "../../../../repositories/SessionRepository";
+import { Token } from "../../../../utils/token";
 
 export class SessionRepositorySqlite implements ISessionRepository {
     public async handle(props: UserRequest): Promise<Error | any> {
@@ -29,13 +30,7 @@ export class SessionRepositorySqlite implements ISessionRepository {
             return new Error("User or Password incorrect");
         }
 
-        const token = sign(
-            {
-                id: user.id,
-            },
-            process.env.SECRET_JWT,
-            { expiresIn: "4h" },
-        );
+        const token = new Token().sign(user);
 
         return { token };
     }
