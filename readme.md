@@ -8,9 +8,10 @@ A fazeres
 
 - [x] Criar permissões para usuário padrões. Criar também verificações para alterações de permissões e roles para deixar apenas admin com acesso a isso mexer nas permissions e roles.
 
-- [] Criar uma utils para geração e verificação de token, depois substituir em todo o app
+- [x] Criar uma utils para geração e verificação de token, depois substituir em todo o app
 
 - [] Deixar todas as rotas criadas recebendo os devidos dados do diagrama do BD
+- [] Criar lista de usuários para teste
 
 - [] criar middleware de authentication
 - [] arrumar todas as rotas que recebem token ou userId
@@ -20,6 +21,7 @@ A fazeres
 
 ## Rotas prontas para documentar
 - [] Register
+- [] Login
 - [] Find Users
 
 ## Anotações

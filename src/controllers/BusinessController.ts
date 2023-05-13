@@ -4,6 +4,7 @@ import { CreateBusinessService } from "../services/business/CreateBusiness";
 import { FindBusinessService } from "../services/business/FindBusiness";
 import { Business } from "../entities/Business";
 import { BusinessRepositorySqlite } from "../infra/database/sqlite/implementations/BusinessRepository";
+import { log } from "console";
 
 const createBusinessService = new CreateBusinessService(
     new BusinessRepositorySqlite()
@@ -18,11 +19,16 @@ class BusinessController implements IBusinessCotroller {
 
         try {
             const business = new Business({ name });
-            const createdBusiness = await createBusinessService.execute(
-                business
+            const result = await createBusinessService.execute(
+                business,
+                req.userReq.id
             );
 
-            return res.status(201).json({ res: createdBusiness });
+            if(result instanceof Error){
+                return res.status(400).json(result.message);
+            }
+
+            return res.status(201).json({ res: result });
         } catch (err) {
             console.log(err.message);
             return res.status(500).json("Unexpected error");

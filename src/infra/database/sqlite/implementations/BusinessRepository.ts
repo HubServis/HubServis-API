@@ -6,7 +6,7 @@ import { IBusinessRepository } from "../../../../repositories/BusinessRepository
 import Business from "../models/Business";
 
 export class BusinessRepositorySqlite implements IBusinessRepository {
-    public async create(props: Business): Promise<Business> {
+    public async create(props: Business, userId: string): Promise<Business | Error> {
         const { id, name } = props;
 
         const businessRepository = (await Database).getRepository(
@@ -15,12 +15,20 @@ export class BusinessRepositorySqlite implements IBusinessRepository {
         const userRepository = (await Database).getRepository(UserSchema);
         const user = await userRepository.findOne({
             where: {
-                id: "a7a24e6b-cada-4329-9265-ce55726cbb8d",
+                id: userId,
             },
+            relations: ["business"]
         });
-        const business = await businessRepository.save({ id, name, user });
+        
+        if(user.business){
+            return new Error("User already contains a business!");
+        }
 
-        console.log(business);
+        if(!user){
+            return new Error("User not found!");
+        }
+
+        const business = await businessRepository.save({ id, name, user });
 
         return business;
     }

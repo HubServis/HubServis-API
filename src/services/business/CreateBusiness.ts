@@ -1,3 +1,4 @@
+import { UserReq } from "../../@types/userReq";
 import { Business } from "../../entities/Business";
 import { IBusinessRepository } from "../../repositories/BusinessRepository";
 
@@ -12,8 +13,8 @@ export class CreateBusinessService{
     //     this.usersRepository = usersRepository;
     // }
 
-    public async execute(props: Business){
-        const business = await this.businessRepository.create(props);
+    public async execute(props: Business, userId: UserReq){
+        const business = await this.businessRepository.create(props, userId);
         return business;
     }
 }
