@@ -34,12 +34,10 @@ export class ServiceRepositorySqlite implements IServicesRepository {
     public async find(): Promise<Error | Service[]> {
         const serviceRepository = (await Database).getRepository(ServiceSchema);
         
-        const service = await serviceRepository.find();
-
-        // console.log(user);
-        
+        const service = await serviceRepository.find({
+            relations: ["business"]
+        });
 
         return service;
-        // return new Error("Sla!");
     }
 }

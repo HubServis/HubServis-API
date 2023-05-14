@@ -4,7 +4,7 @@ import { User } from "./User";
 import Service from "./Service";
 import { Professional } from "./Professional";
 
-@Entity("business")
+@Entity("appointments")
 export class Business extends BaseEntity {
     @Column()
     name: string;
@@ -12,9 +12,7 @@ export class Business extends BaseEntity {
     @OneToOne(() => User, user => user.business)
     user: User;
 
-    @OneToMany(() => Service, (service) => service.business, {
-        cascade: true
-    })
+    @OneToMany(() => Service, (service) => service.business)
     services: Service[]
     
     @OneToMany(() => Professional, (professional) => professional.business)

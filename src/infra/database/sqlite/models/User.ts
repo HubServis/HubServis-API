@@ -3,6 +3,7 @@ import Role from "./Role";
 import Permission from "./Permission";
 import { BaseEntity } from "./BaseEntity";
 import Business from "./Business";
+import { Professional } from "./Professional";
 
 @Entity("users")
 export class User extends BaseEntity {
@@ -41,4 +42,8 @@ export class User extends BaseEntity {
     @OneToOne(() => Business)
     @JoinColumn()
     business: Business;
+    
+    @OneToOne(() => Professional)
+    @JoinColumn()
+    professional: Professional;
 }

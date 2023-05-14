@@ -10,13 +10,13 @@ A fazeres
 
 - [x] Criar uma utils para geração e verificação de token, depois substituir em todo o app
 
-- [] Deixar todas as rotas criadas recebendo os devidos dados do diagrama do BD
-- [] Criar lista de usuários para teste
+- [x] Deixar todas as rotas criadas recebendo os devidos dados do diagrama do BD
 - [] Criar rotas e sistema de profissionais o quanto antes
+- [] Criar lista de usuários para teste
 
-- [] criar middleware de authentication
-- [] arrumar todas as rotas que recebem token ou userId
-- [] Terminar rota de criação de negócio, atualmente ela recebe um usuário fixo.
+- [x] criar middleware de authentication
+- [x] arrumar todas as rotas que recebem token ou userId
+- [x] Terminar rota de criação de negócio, atualmente ela recebe um usuário fixo.
 
 - [] Estruturar o banco para ficar em modelo cascata, se o usuário for excluido tudo relacionado a ele também será.
 

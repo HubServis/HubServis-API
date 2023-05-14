@@ -8,9 +8,9 @@ import UserACLController from './controllers/UserACLController';
 import BusinessController from './controllers/BusinessController';
 import { auth } from './middleware/auth';
 import ServiceController from './controllers/ServiceController';
+import ProfessionalController from './controllers/ProfessionalController';
 
 const routes = Router();
-
 
 routes.post('/login', SessionController.handle);
 
@@ -19,6 +19,9 @@ routes.get('/users', UserController.find);
 
 routes.post('/business/create', auth, BusinessController.create);
 routes.get('/business', BusinessController.find);
+
+routes.post('/professional/add', auth, ProfessionalController.addToBusiness);
+routes.get('/professionals', ProfessionalController.findProfessionals);
 
 routes.post('/service/create', auth, ServiceController.create);
 routes.get('/services', ServiceController.find);

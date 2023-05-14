@@ -33,3 +33,8 @@ export interface IServiceCotroller{
     create(req: Request, res: Response):Promise<Response>;
     find(req: Request, res: Response):Promise<Response>;
 }
+
+export interface IProfessionalCotroller{
+    addToBusiness(req: Request, res: Response):Promise<Response>;
+    findProfessionals(req: Request, res: Response):Promise<Response>;
+}

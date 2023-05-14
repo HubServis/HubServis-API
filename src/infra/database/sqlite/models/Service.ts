@@ -13,7 +13,9 @@ export class Service extends BaseEntity {
     @Column()
     duration: string;
 
-    @ManyToOne(() => Business, (business) => business.services)
+    @ManyToOne(() => Business, (business) => business.services, {
+        onDelete: "CASCADE"
+    })
     business: Business
 }
 
