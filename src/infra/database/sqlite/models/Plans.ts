@@ -5,6 +5,8 @@ import {
   Entity,
   OneToOne,
   JoinColumn,
+  OneToMany,
+  ManyToOne,
 } from "typeorm";
 
 import { BaseEntity } from "./BaseEntity";
@@ -37,6 +39,6 @@ export class Plans extends BaseEntity {
   @Column()
   extra_benefits: string; //???
 
-  @Column()
+  @ManyToOne(() => Benefits)
   benefits: Benefits[]; //relation to benefits
 }

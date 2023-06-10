@@ -36,6 +36,7 @@ export function is(rolesRoutes: string[]) {
     const { userId } = req;
 
     const userRepository = (await Database).getRepository(UserSchema);
+
     const user = await userRepository.findOne({
       where: { id: userId },
       relations: ["roles"],
@@ -45,7 +46,6 @@ export function is(rolesRoutes: string[]) {
       return res.status(400).json("User does not exists!");
     }
 
-    // problema tá aqui
     const rolesExists = user.roles
       .map((role) => role.name)
       .some((role) => rolesRoutes.includes(role));
