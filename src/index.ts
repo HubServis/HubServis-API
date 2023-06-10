@@ -1,11 +1,8 @@
 import express from "express";
-import UserController from "./controllers/UserController";
+
 import { config } from 'dotenv';
 import cors from 'cors';
 import './infra/database/sqlite/config';
-import ProductController from "./controllers/ProductController";
-import RoleController from "./controllers/RoleController";
-import PermissionController from "./controllers/PermissionController";
 import { routes } from "./routes";
 
 import swaggerUI from 'swagger-ui-express';
