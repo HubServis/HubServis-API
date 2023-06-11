@@ -1,13 +1,4 @@
-import {
-  Column,
-  ManyToMany,
-  JoinTable,
-  Entity,
-  OneToOne,
-  JoinColumn,
-  OneToMany,
-  ManyToOne,
-} from "typeorm";
+import { Column, ManyToMany, Entity } from "typeorm";
 
 import { BaseEntity } from "./BaseEntity";
 
@@ -39,6 +30,6 @@ export class Plans extends BaseEntity {
   @Column()
   extra_benefits: string; //???
 
-  @ManyToOne(() => Benefits)
+  @ManyToMany(() => Benefits)
   benefits: Benefits[]; //relation to benefits
 }

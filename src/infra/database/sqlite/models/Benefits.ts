@@ -1,16 +1,9 @@
-import {
-  Column,
-  ManyToMany,
-  JoinTable,
-  Entity,
-  OneToOne,
-  JoinColumn,
-} from "typeorm";
+import { Column, Entity } from "typeorm";
 
 import { BaseEntity } from "./BaseEntity";
 
 @Entity("Benefits")
-export class Benefits extends BaseEntity {
+export class Benefit extends BaseEntity {
   @Column()
   name: string;
 
@@ -18,5 +11,5 @@ export class Benefits extends BaseEntity {
   description: string;
 
   @Column()
-  max_value: string;
+  max_value: number;
 }
