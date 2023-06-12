@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 
-import { Benefit } from "../entities/Benefits";
+import { Benefit } from "../entities/Benefit";
 import { BenefitRepositorySqlite } from "../infra/database/sqlite/implementations/BenefitRepository";
 
 import { IBenefitsController } from "../interfaces/controllers";
 
 import { CreateBenefitService } from "../services/Benefits/CreateBenefit";
-import { DeleteBenefitService } from "../services/Benefits/DeleteBenefits";
+import { DeleteBenefitService } from "../services/Benefits/DeleteBenefit";
 import { FindBenefitService } from "../services/Benefits/FindBenefits";
-import { UpdateBenefitService } from "../services/Benefits/UpdateBenefits";
+import { UpdateBenefitService } from "../services/Benefits/UpdateBenefit";
 
 const createBenefitService = new CreateBenefitService(
   new BenefitRepositorySqlite()
@@ -25,13 +25,14 @@ const updateBenefitService = new UpdateBenefitService(
 
 class BenefitsController implements IBenefitsController {
   async create(req: Request, res: Response) {
-    const { name, description, max_value } = req.body;
+    const { name, description, max_value, plan } = req.body;
 
     try {
       const benefit = new Benefit({
         name,
         description,
         max_value: Number(max_value),
+        plan,
       });
 
       const result = await createBenefitService.execute(benefit);
@@ -76,15 +77,17 @@ class BenefitsController implements IBenefitsController {
 
   async patch(req: Request, res: Response) {
     const { benefitName } = req.params;
-    const { name, description, max_value } = req.body;
+    const { id, name, description, max_value, plan } = req.body;
 
     try {
       const result = await updateBenefitService.execute({
         benefitName,
         newBenefit: {
+          id,
           name,
           description,
           max_value,
+          plan,
         },
       });
 

@@ -1,11 +1,11 @@
 import { User } from "../entities/User";
 
 export interface ResRegisterUser {
-    user: User,
-    token: String
+  user: User;
+  token: string;
 }
 
-export interface IUsersRepository{
-    create(props: User):Promise<Error | ResRegisterUser>;
-    find(): Promise<User[]>;
+export interface IUsersRepository {
+  create(props: User): Promise<Error | ResRegisterUser>;
+  find(): Promise<User[]>;
 }

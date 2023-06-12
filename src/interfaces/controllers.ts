@@ -38,7 +38,13 @@ export interface IProfessionalCotroller {
   findProfessionals(req: Request, res: Response): Promise<Response>;
 }
 
-export interface IPlansController {}
+export interface IPlansController {
+  create(req: Request, res: Response): Promise<Response>;
+  find(req: Request, res: Response): Promise<Response>;
+  delete(req: Request, res: Response): Promise<Response>;
+  patch(req: Request, res: Response): Promise<Response>;
+  append(req: Request, res: Response): Promise<Response>;
+}
 
 export interface IBenefitsController {
   create(req: Request, res: Response): Promise<Response>;

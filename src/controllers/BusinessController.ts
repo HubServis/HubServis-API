@@ -7,43 +7,43 @@ import { Business } from "../entities/Business";
 import { BusinessRepositorySqlite } from "../infra/database/sqlite/implementations/BusinessRepository";
 
 const createBusinessService = new CreateBusinessService(
-    new BusinessRepositorySqlite()
+  new BusinessRepositorySqlite()
 );
 const findBusinessService = new FindBusinessService(
-    new BusinessRepositorySqlite()
+  new BusinessRepositorySqlite()
 );
 
 class BusinessController implements IBusinessCotroller {
-    async create(req: Request, res: Response) {
-        const { name } = req.body;
+  async create(req: Request, res: Response) {
+    const { name } = req.body;
 
-        try {
-            const business = new Business({ name });
-            const result = await createBusinessService.execute(
-                business,
-                req.userReq.id
-            );
+    try {
+      const business = new Business({ name });
+      const result = await createBusinessService.execute(
+        business,
+        req.userReq.id
+      );
 
-            if(result instanceof Error){
-                return res.status(400).json(result.message);
-            }
+      if (result instanceof Error) {
+        return res.status(400).json(result.message);
+      }
 
-            return res.status(201).json({ res: result });
-        } catch (err) {
-            console.log(err.message);
-            return res.status(500).json("Unexpected error");
-        }
+      return res.status(201).json({ res: result });
+    } catch (err) {
+      console.log(err.message);
+      return res.status(500).json("Unexpected error");
     }
+  }
 
-    async find(req: Request, res: Response) {
-        try {
-            const products = await findBusinessService.execute();
-            return res.status(201).json(products);
-        } catch (err) {
-            console.log(err.message);
-            return res.status(500).json("Unexpected error");
-        }
+  async find(req: Request, res: Response) {
+    try {
+      const products = await findBusinessService.execute();
+      return res.status(201).json(products);
+    } catch (err) {
+      console.log(err.message);
+      return res.status(500).json("Unexpected error");
     }
+  }
 }
 
 export default new BusinessController();

@@ -1,11 +1,21 @@
-import { Plans } from "../entities/Plans";
+import { Benefit } from "../entities/Benefit";
 
-export type PlansRepository = {
-  planId: string;
-};
+import { Plan } from "../entities/Plan";
 
-export interface IPlansRepository {
-  create(props): Promise<Error | Plans>;
-  delete(props): Promise<Error | String>;
-  patch(props): Promise<Error | Plans>;
+export interface IPlanUpdate {
+  planName: string;
+  newPlan: Plan;
+}
+
+export interface IPlanAppend {
+  planName: string;
+  benefitName: Benefit;
+}
+
+export interface IPlanRepository {
+  create(props: Plan): Promise<Error | Plan | string>;
+  find(props: string): Promise<Error | Plan[]>;
+  delete(props: string): Promise<Error | string>;
+  patch(props: IPlanUpdate): Promise<Error | Plan | string>;
+  append(props: IPlanAppend): Promise<Error | string>;
 }

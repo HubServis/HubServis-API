@@ -1,6 +1,5 @@
 import { Response, Request } from "express";
 
-
 // const createExempleService = new CreateExempleService(
 // new ExempleRepositorySqlite()
 // );

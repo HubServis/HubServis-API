@@ -1,12 +1,12 @@
 import Database from "../config";
 
-import { Benefit } from "../../../../entities/Benefits";
-import { Benefit as BenefitSchema } from "../models/Benefits";
+import { Benefit } from "../../../../entities/Benefit";
+import { Benefit as BenefitSchema } from "../models/Benefit";
 import { IBenefitRepository } from "../../../../repositories/BenefitsRepository";
 
 export class BenefitRepositorySqlite implements IBenefitRepository {
   public async create(props: Benefit): Promise<Benefit | Error> {
-    const { id, name, max_value, description } = props;
+    const { id, name, max_value, description, plan } = props;
 
     const benefitRepository = (await Database).getRepository(BenefitSchema);
 
@@ -21,6 +21,7 @@ export class BenefitRepositorySqlite implements IBenefitRepository {
       name,
       max_value,
       description,
+      plan,
     });
 
     return benefit;
@@ -36,7 +37,7 @@ export class BenefitRepositorySqlite implements IBenefitRepository {
     return benefit;
   }
 
-  public async delete(name: string): Promise<String | Error> {
+  public async delete(name: string): Promise<string | Error> {
     const benefitRepository = (await Database).getRepository(BenefitSchema);
 
     const benefit = await benefitRepository.findOne({
@@ -53,7 +54,7 @@ export class BenefitRepositorySqlite implements IBenefitRepository {
   public async patch(props: {
     benefitName: string;
     newBenefit: Benefit;
-  }): Promise<String | Error> {
+  }): Promise<string | Error> {
     const benefitRepository = (await Database).getRepository(BenefitSchema);
 
     const benefit = await benefitRepository.findOne({
@@ -65,6 +66,7 @@ export class BenefitRepositorySqlite implements IBenefitRepository {
     benefit.max_value = props.newBenefit.max_value;
     benefit.description = props.newBenefit.description;
     benefit.name = props.newBenefit.name;
+    benefit.plan = props.newBenefit.plan;
 
     await benefitRepository.save(benefit);
 
