@@ -26,46 +26,48 @@ export class BenefitRepositorySqlite implements IBenefitRepository {
     return benefit;
   }
 
-  public async find(props: Benefit): Promise<Benefit[]> {
+  public async find(props: string): Promise<Benefit[]> {
     const benefitRepository = (await Database).getRepository(BenefitSchema);
 
     const benefit = await benefitRepository.find({
-      where: { id: props.id },
+      where: { id: props },
     });
 
     return benefit;
   }
 
-  public async delete(id: string): Promise<String | Error> {
+  public async delete(name: string): Promise<String | Error> {
     const benefitRepository = (await Database).getRepository(BenefitSchema);
 
     const benefit = await benefitRepository.findOne({
-      where: { id: id },
+      where: { name: name },
     });
 
     if (!benefit) return new Error("This Benefit not Exists!");
 
-    await benefitRepository.delete(benefit);
+    await benefitRepository.remove(benefit);
 
-    return `Benefit with id ${id} removed!`;
+    return `Benefit with name: ${name} removed!`;
   }
 
   public async patch(props: {
-    benefitId: string;
+    benefitName: string;
     newBenefit: Benefit;
   }): Promise<String | Error> {
     const benefitRepository = (await Database).getRepository(BenefitSchema);
 
     const benefit = await benefitRepository.findOne({
-      where: { id: props.benefitId },
+      where: { name: props.benefitName },
     });
 
     if (!benefit) return new Error("This Benefit not Exists!");
 
     benefit.max_value = props.newBenefit.max_value;
-	benefit.description = props.newBenefit.description;
-	benefit.name = props.newBenefit.name;
+    benefit.description = props.newBenefit.description;
+    benefit.name = props.newBenefit.name;
 
-	return `Benefit Created Successfuly`
+    await benefitRepository.save(benefit);
+
+    return `Benefit Edited Successfuly`;
   }
 }

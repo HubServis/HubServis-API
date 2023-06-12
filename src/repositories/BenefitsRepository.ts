@@ -1,12 +1,13 @@
 import { Benefit } from "../entities/Benefit";
 
 type PlansRepositoryPatch = {
-  benefitId: string;
+  benefitName: string;
   newBenefit: Benefit;
 };
 
 export interface IBenefitRepository {
-  create(props: Benefit): Promise<Error | Benefit>;
+  create(props: Benefit): Promise<Error | Benefit | String>;
   delete(props: string): Promise<Error | String>;
-  patch(props: PlansRepositoryPatch): Promise<Error | Benefit>;
+  patch(props: PlansRepositoryPatch): Promise<Error | Benefit | String>;
+  find(props: string): Promise<Error | Benefit[]>
 }

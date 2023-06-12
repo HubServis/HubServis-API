@@ -9,6 +9,7 @@ import BusinessController from './controllers/BusinessController';
 import { auth } from './middleware/auth';
 import ServiceController from './controllers/ServiceController';
 import ProfessionalController from './controllers/ProfessionalController';
+import BenefitsController from './controllers/BenefitsController';
 
 const routes = Router();
 
@@ -37,5 +38,10 @@ routes.post('/roles/:roleId', RoleController.createRolePermission); //rota que s
 // remover essas rotas depois talvez
 routes.post('/product', ProductController.create);
 routes.get('/products', ProductController.find);
+
+routes.get('/benefit', BenefitsController.find);
+routes.post('/benefit', BenefitsController.create);
+routes.patch('/benefit/:name', BenefitsController.patch);
+routes.delete('/benefit/:name', BenefitsController.delete);
 
 export { routes };
