@@ -1,14 +1,14 @@
 import {
   Column,
-  ManyToMany,
-  JoinTable,
+  // ManyToMany,
+  // JoinTable,
   Entity,
   OneToOne,
   JoinColumn,
 } from "typeorm";
 
-import Role from "./Role";
-import Permission from "./Permission";
+// import Role from "./Role";
+// import Permission from "./Permission";
 import { BaseEntity } from "./BaseEntity";
 import Business from "./Business";
 import { Professional } from "./Professional";
@@ -31,21 +31,21 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  @ManyToMany(() => Role)
-  @JoinTable({
-    name: "users_roles", //nome tabela pivo
-    joinColumns: [{ name: "user_id" }],
-    inverseJoinColumns: [{ name: "role_id" }],
-  })
-  roles: Role[];
-
-  @ManyToMany(() => Permission)
-  @JoinTable({
-    name: "users_permissions", //nome tabela pivo
-    joinColumns: [{ name: "user_id" }],
-    inverseJoinColumns: [{ name: "permission_id" }],
-  })
-  permissions: Permission[];
+  // @ManyToMany(() => Role)
+  // @JoinTable({
+  //   name: "users_roles", //nome tabela pivo
+  //   joinColumns: [{ name: "user_id" }],
+  //   inverseJoinColumns: [{ name: "role_id" }],
+  // })
+  // roles: Role[];
+  //
+  // @ManyToMany(() => Permission)
+  // @JoinTable({
+  //   name: "users_permissions", //nome tabela pivo
+  //   joinColumns: [{ name: "user_id" }],
+  //   inverseJoinColumns: [{ name: "permission_id" }],
+  // })
+  // permissions: Permission[];
 
   @OneToOne(() => Business)
   @JoinColumn()

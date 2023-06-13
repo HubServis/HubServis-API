@@ -51,10 +51,7 @@ routes.get("/plans", PlanController.find);
 routes.post("/plans", PlanController.create);
 routes.patch("/plans/:planName", PlanController.patch);
 routes.delete("/plans/:planName", PlanController.delete);
-routes.patch(
-  "/plans/:planName/:benefitName",
-  PlanController.appendBenefit
-);
+routes.patch("/plans/:planName/:benefitName", PlanController.appendBenefit);
 routes.delete("/plans/:planName/:benefitName", PlanController.deleteBenefit);
 
 export { routes };

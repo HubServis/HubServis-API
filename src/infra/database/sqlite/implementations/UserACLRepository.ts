@@ -1,4 +1,3 @@
-import { hash } from "bcrypt";
 import { In } from "typeorm";
 import Database from "../config";
 import { User } from "../../../../entities/User";
