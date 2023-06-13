@@ -1,72 +1,282 @@
 {
-    "openapi": "3.0.1",
-    "info": {
-        "title": "HubServis",
-        "description": "Documentation the HubServis api",
-        "version": "1.0.0"
-    },
-    "basePath": "/",
-    "paths": {
-        "/login": {
-            "post": {
-                "requestBody": {
-                    "content": {
-                        "aplication/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "name": {
-                                        "type": "string"
-                                    },
-                                    "password": {
-                                        "type": "string"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Loged"
-                    }
+  "openapi": "3.0.1",
+  "info": {
+    "title": "HubServis",
+    "description": "Documentation the HubServis api",
+    "version": "1.0.0"
+  },
+  "basePath": "/",
+  "paths": {
+    "/login": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "aplication/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
                 }
+              }
             }
+          }
         },
-        "/user": {
-            "post": {
-                "requestBody": {
-                    "content": {
-                        "aplication/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "name": {
-                                        "type": "string"
-                                    },
-                                    "username": {
-                                        "type": "string"
-                                    },
-                                    "password": {
-                                        "type": "string"
-                                    },
-                                    "email": {
-                                        "type": "string"
-                                    },
-                                    "cpfcnpj": {
-                                        "type": "string"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "User data created and token"
-                    }
-                }
-            }
+        "responses": {
+          "200": {
+            "description": "Loged"
+          }
         }
+      }
+    },
+    "/user": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "aplication/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "username": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "cpfcnpj": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User data created and token"
+          }
+        }
+      }
+    },
+    "/plans": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Body Containing all Plans Registered."
+          },
+          "400": {
+            "description": "Bad request ${Reason}"
+          },
+          "500": {
+            "description": "Internal Server Error ${Reason}"
+          }
+        }
+      },
+      "post": {
+        "requestBody": {
+          "content": {
+            "aplication/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "description": { "type": "string" },
+                  "price": { "type": "number" },
+                  "month_price": { "type": "string" },
+                  "reminder_limit": { "type": "string" },
+                  "professional_limit": { "type": "string" },
+                  "client_limit": { "type": "string" },
+                  "customer_limit": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Message Status With New Plan Created"
+          },
+          "400": {
+            "description": "Bad request ${Reason}"
+          },
+          "500": {
+            "description": "Internal Server Error ${Reason}"
+          }
+        }
+      }
+    },
+    "/plans/:planName": {
+      "patch": {
+        "requestBody": {
+          "content": {
+            "aplication/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "description": { "type": "string" },
+                  "price": { "type": "number" },
+                  "month_price": { "type": "string" },
+                  "reminder_limit": { "type": "string" },
+                  "professional_limit": { "type": "string" },
+                  "client_limit": { "type": "string" },
+                  "customer_limit": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Message Status With Plan Updated"
+          },
+          "400": {
+            "description": "Bad request ${Reason}"
+          },
+          "500": {
+            "description": "Internal Server Error ${Reason}"
+          }
+        }
+      },
+      "delete": {
+        "responses": {
+          "200": {
+            "description": "Message Status With Plan Removed"
+          },
+          "400": {
+            "description": "Bad request ${Reason}"
+          },
+          "500": {
+            "description": "Internal Server Error ${Reason}"
+          }
+        }
+      }
+    },
+    "/plans/:planName/:benefitName": {
+      "patch": {
+        "responses": {
+          "200": {
+            "description": "Message Status With Benefit Added to a Plan"
+          },
+          "400": {
+            "description": "Bad request ${Reason}"
+          },
+          "500": {
+            "description": "Internal Server Error ${Reason}"
+          }
+        }
+      },
+      "delete": {
+        "responses": {
+          "200": {
+            "description": "Message Status With Benefit Removed from Plan"
+          },
+          "400": {
+            "description": "Bad request ${Reason}"
+          },
+          "500": {
+            "description": "Internal Server Error ${Reason}"
+          }
+        }
+      }
+    },
+    "/benefits": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Body Containing all Benefits Registered."
+          },
+          "400": {
+            "description": "Bad request ${Reason}"
+          },
+          "500": {
+            "description": "Internal Server Error ${Reason}"
+          }
+        }
+      },
+      "post": {
+        "requestBody": {
+          "content": {
+            "aplication/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "description": { "type": "string" },
+                  "max_value": { "type": "number" },
+                  "isControllable": { "type": "boolean" },
+                  "role": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Message Status With New Benefit Created"
+          },
+          "400": {
+            "description": "Bad request ${Reason}"
+          },
+          "500": {
+            "description": "Internal Server Error ${Reason}"
+          }
+        }
+      }
+    },
+    "/benefits/:benefitName": {
+      "patch": {
+        "requestBody": {
+          "content": {
+            "aplication/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "description": { "type": "string" },
+                  "max_value": { "type": "number" },
+                  "isControllable": { "type": "boolean" },
+                  "role": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Message Status With Benefit Updated"
+          },
+          "400": {
+            "description": "Bad request ${Reason}"
+          },
+          "500": {
+            "description": "Internal Server Error ${Reason}"
+          }
+        }
+      },
+      "delete": {
+        "responses": {
+          "200": {
+            "description": "Message Status With Benefit Removed"
+          },
+          "400": {
+            "description": "Bad request ${Reason}"
+          },
+          "500": {
+            "description": "Internal Server Error ${Reason}"
+          }
+        }
+      }
     }
+  }
 }

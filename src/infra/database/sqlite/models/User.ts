@@ -6,11 +6,13 @@ import {
   OneToOne,
   JoinColumn,
 } from "typeorm";
+
 import Role from "./Role";
 import Permission from "./Permission";
 import { BaseEntity } from "./BaseEntity";
 import Business from "./Business";
 import { Professional } from "./Professional";
+import { Plan } from "./Plan";
 
 @Entity("users")
 export class User extends BaseEntity {
@@ -52,4 +54,8 @@ export class User extends BaseEntity {
   @OneToOne(() => Professional)
   @JoinColumn()
   professional: Professional;
+
+  @OneToOne(() => Plan)
+  @JoinColumn()
+  plan: Plan;
 }

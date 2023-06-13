@@ -7,6 +7,8 @@ export class Benefit {
   public name: string;
   public description: string;
   public max_value: number;
+  public isControllable: boolean;
+  public role: string;
 
   constructor(props: Omit<Benefit, "id">, id: string = null) {
     Object.assign(this, props);
