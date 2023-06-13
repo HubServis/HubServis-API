@@ -7,15 +7,17 @@ export interface IPlanUpdate {
   newPlan: Plan;
 }
 
-export interface IPlanAppend {
+export interface IPlanBenefitNames {
   planName: string;
-  benefitName: Benefit;
+  benefitName: string;
 }
 
 export interface IPlanRepository {
   create(props: Plan): Promise<Error | Plan | string>;
   find(props: string): Promise<Error | Plan[]>;
   delete(props: string): Promise<Error | string>;
-  patch(props: IPlanUpdate): Promise<Error | Plan | string>;
-  append(props: IPlanAppend): Promise<Error | string>;
+  patch(props: IPlanUpdate): Promise<Error | string>;
+
+  appendBenefit(props: IPlanBenefitNames): Promise<Error | string>;
+  deleteBenefit(props: IPlanBenefitNames): Promise<Error | string>;
 }

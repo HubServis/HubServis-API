@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne } from "typeorm";
+import { Column, Entity, ManyToMany } from "typeorm";
 
 import { BaseEntity } from "./BaseEntity";
 import { Plan } from "./Plan";
@@ -13,7 +13,4 @@ export class Benefit extends BaseEntity {
 
   @Column()
   max_value: number;
-
-  @ManyToOne(() => Plan, (plan) => plan.benefits)
-  plan: Pick<Plan, "id">;
 }

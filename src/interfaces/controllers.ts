@@ -43,7 +43,9 @@ export interface IPlansController {
   find(req: Request, res: Response): Promise<Response>;
   delete(req: Request, res: Response): Promise<Response>;
   patch(req: Request, res: Response): Promise<Response>;
-  append(req: Request, res: Response): Promise<Response>;
+
+  appendBenefit(req: Request, res: Response): Promise<Response>;
+  deleteBenefit(req: Request, res: Response): Promise<Response>;
 }
 
 export interface IBenefitsController {

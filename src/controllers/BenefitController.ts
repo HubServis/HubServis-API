@@ -41,7 +41,7 @@ class BenefitsController implements IBenefitsController {
         return res.status(400).json(result.message);
       }
 
-      return res.status(201);
+      return res.status(201).json(result);
     } catch (err) {
       return res.status(500).json(`Unexpected Error ${err.message}`);
     }
@@ -62,10 +62,10 @@ class BenefitsController implements IBenefitsController {
   }
 
   async delete(req: Request, res: Response) {
-    const { name } = req.params;
+    const { benefitName } = req.params;
 
     try {
-      const result = await deleteBenefitService.execute(name);
+      const result = await deleteBenefitService.execute(benefitName);
 
       if (result instanceof Error) return res.status(400).json(result.message);
 

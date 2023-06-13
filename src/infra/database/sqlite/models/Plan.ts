@@ -1,4 +1,4 @@
-import { Column, ManyToMany, Entity, OneToMany } from "typeorm";
+import { Column, ManyToMany, Entity, JoinTable } from "typeorm";
 
 import { BaseEntity } from "./BaseEntity";
 import { Benefit } from "./Benefit";
@@ -12,7 +12,7 @@ export class Plan extends BaseEntity {
   description: string;
 
   @Column()
-  price: string;
+  price: number;
 
   @Column()
   month_price: string;
@@ -24,11 +24,12 @@ export class Plan extends BaseEntity {
   professional_limit: string;
 
   @Column()
-  customer_limit: string;
+  client_limit: string;
 
   @Column()
-  extra_benefits: string; //???
+  customer_limit: string;
 
-  @OneToMany(() => Benefit, (benefit) => benefit.plan)
+  @ManyToMany(() => Benefit)
+  @JoinTable()
   benefits: Benefit[]; //relation to benefits
 }

@@ -3,11 +3,11 @@ import {
   IPlanRepository,
 } from "../../repositories/PlansRepository";
 
-export class AppendPlanBenefitService {
+export class DeletePlanBenefitService {
   constructor(private plansRepository: IPlanRepository) {}
 
   public async execute(props: IPlanBenefitNames) {
-    const benefit = await this.plansRepository.appendBenefit(props);
+    const benefit = await this.plansRepository.deleteBenefit(props);
 
     return benefit;
   }

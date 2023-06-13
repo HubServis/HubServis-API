@@ -1,4 +1,5 @@
 import { Router } from "express";
+
 import UserController from "./controllers/UserController";
 import SessionController from "./controllers/SessionController";
 import ProductController from "./controllers/ProductController";
@@ -6,10 +7,12 @@ import RoleController from "./controllers/RoleController";
 import PermissionController from "./controllers/PermissionController";
 import UserACLController from "./controllers/UserACLController";
 import BusinessController from "./controllers/BusinessController";
-import { auth } from "./middleware/auth";
 import ServiceController from "./controllers/ServiceController";
 import ProfessionalController from "./controllers/ProfessionalController";
 import BenefitController from "./controllers/BenefitController";
+import PlanController from "./controllers/PlanController";
+
+import { auth } from "./middleware/auth";
 
 const routes = Router();
 
@@ -41,7 +44,17 @@ routes.get("/products", ProductController.find);
 
 routes.get("/benefit", BenefitController.find);
 routes.post("/benefit", BenefitController.create);
-routes.patch("/benefit/:name", BenefitController.patch);
-routes.delete("/benefit/:name", BenefitController.delete);
+routes.patch("/benefit/:benefitName", BenefitController.patch);
+routes.delete("/benefit/:benefitName", BenefitController.delete);
+
+routes.get("/plans", PlanController.find);
+routes.post("/plans", PlanController.create);
+routes.patch("/plans/:planName", PlanController.patch);
+routes.delete("/plans/:planName", PlanController.delete);
+routes.patch(
+  "/plans/:planName/:benefitName",
+  PlanController.appendBenefit
+);
+routes.delete("/plans/:planName/:benefitName", PlanController.deleteBenefit);
 
 export { routes };
