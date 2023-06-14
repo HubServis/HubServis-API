@@ -2,6 +2,7 @@ import { hash } from "bcrypt";
 import Database from "../config";
 import { User } from "../../../../entities/User";
 import { User as UserSchema } from "../models/User";
+import { Plan as PlanSchema } from "../models/Plan";
 import {
   IUsersRepository,
   ResRegisterUser,
@@ -46,14 +47,9 @@ export class UserRepositorySqlite implements IUsersRepository {
       plan: plan,
     });
 
-    const token = sign(
-      {
-        id: user.id,
-        plan: plan,
-      },
-      process.env.SECRET_JWT,
-      { expiresIn: "4h" }
-    );
+    const token = sign({ id: user.id }, process.env.SECRET_JWT, {
+      expiresIn: "4h",
+    });
 
     return { user: user, token: token };
   }
@@ -71,12 +67,63 @@ export class UserRepositorySqlite implements IUsersRepository {
         created_at: true,
       },
       relations: {
-        plan: true,
+        plan: { benefits: true },
       },
     });
 
     console.log(user);
 
     return user;
+  }
+
+  public async appendPlan(props: {
+    planName: string;
+    userId: string;
+  }): Promise<string | Error> {
+    const { planName, userId } = props;
+
+    const userRepository = (await Database).getRepository(UserSchema);
+
+    const planRepository = (await Database).getRepository(PlanSchema);
+
+    const user = await userRepository.findOne({
+      where: { id: userId },
+    });
+
+    if (!user) return new Error("This User not Exists!");
+
+    const plan = await planRepository.findOne({
+      where: { name: planName },
+    });
+
+    if (!plan) return new Error("This Plan not Exists!");
+
+    user.plan = plan;
+
+    await userRepository.save(user);
+
+    return `The Plan ${plan.name} Has Been Assigned to user ${user.name}.`;
+  }
+
+  public async deletePlan(props: { userId: string }): Promise<string | Error> {
+    const { userId } = props;
+
+    const userRepository = (await Database).getRepository(UserSchema);
+
+    const user = await userRepository.findOne({
+      where: { id: userId },
+      relations: { plan: true },
+    });
+
+    if (!user) return new Error("This User not Exists!");
+
+    if (user.plan === null)
+      return new Error("The User is Already Out of Plan!");
+
+    user.plan = null;
+
+    await userRepository.save(user);
+
+    return `The Plan Has Been Deleted from user ${user.name}`;
   }
 }

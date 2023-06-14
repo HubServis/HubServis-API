@@ -1,5 +1,11 @@
-import jwt, { sign } from "jsonwebtoken";
+import { sign } from "jsonwebtoken";
+
 import { User } from "../entities/User";
+
+//env's não carregaram pra mim ;(
+import { config } from "dotenv";
+
+config();
 
 export class Token {
   sign(user: User) {

@@ -8,7 +8,7 @@ export class User {
   public cpfcnpj: string;
   public username: string;
   public password: string;
-  public plan: Plan;
+  public plan?: Plan;
 
   constructor(props: Omit<User, "id">, id: string = null) {
     Object.assign(this, props);

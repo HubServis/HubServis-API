@@ -3,6 +3,8 @@ import { Response, Request } from "express";
 export interface IUserCotroller {
   create(req: Request, res: Response): Promise<Response>;
   find(req: Request, res: Response): Promise<Response>;
+  appendPlan(req: Request, res: Response): Promise<Response>;
+  deletePlan(req: Request, res: Response): Promise<Response>;
 }
 
 export interface IUserACLCotroller {
