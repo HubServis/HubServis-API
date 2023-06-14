@@ -25,21 +25,20 @@ const updateBenefitService = new UpdateBenefitService(
 
 class BenefitsController implements IBenefitsController {
   async create(req: Request, res: Response) {
-    const { name, description, max_value, plan } = req.body;
+    const { name, description, max_value, isControllable, role } = req.body;
 
     try {
       const benefit = new Benefit({
         name,
         description,
         max_value: Number(max_value),
-        plan,
+        isControllable,
+        role,
       });
 
       const result = await createBenefitService.execute(benefit);
 
-      if (result instanceof Error) {
-        return res.status(400).json(result.message);
-      }
+      if (result instanceof Error) return res.status(400).json(result.message);
 
       return res.status(201).json(result);
     } catch (err) {
@@ -69,7 +68,7 @@ class BenefitsController implements IBenefitsController {
 
       if (result instanceof Error) return res.status(400).json(result.message);
 
-      return res.status(201).json("OK");
+      return res.status(201).json(result);
     } catch (err) {
       return res.status(500).json(`Unexpected Error: ${err.message}`);
     }
@@ -77,7 +76,7 @@ class BenefitsController implements IBenefitsController {
 
   async patch(req: Request, res: Response) {
     const { benefitName } = req.params;
-    const { id, name, description, max_value, plan } = req.body;
+    const { id, name, description, max_value, isControllable, role } = req.body;
 
     try {
       const result = await updateBenefitService.execute({
@@ -87,13 +86,14 @@ class BenefitsController implements IBenefitsController {
           name,
           description,
           max_value,
-          plan,
+          isControllable,
+          role,
         },
       });
 
       if (result instanceof Error) return res.status(400).json(result.message);
 
-      return res.status(201).json("Updated!");
+      return res.status(201).json(result);
     } catch (err) {
       return res.status(500).json(`Unexpected Error: ${err.message}`);
     }

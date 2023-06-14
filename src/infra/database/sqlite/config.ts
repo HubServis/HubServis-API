@@ -7,7 +7,7 @@ const Database = new DataSource({
   entities: ["./src/infra/database/sqlite/models/**.ts"],
   migrations: ["./src/infra/database/migrations"],
   synchronize: true,
-  logging: true,
+  logging: false,
 });
 
 export default Database.initialize();

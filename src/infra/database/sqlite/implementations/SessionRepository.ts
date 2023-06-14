@@ -1,7 +1,5 @@
-import { compare, hash } from "bcrypt";
+import { compare } from "bcrypt";
 import Database from "../config";
-import { sign } from "jsonwebtoken";
-import { User } from "../../../../entities/User";
 import { User as UserSchema } from "../models/User";
 import {
   ISessionRepository,
@@ -12,12 +10,11 @@ import { Token } from "../../../../utils/token";
 export class SessionRepositorySqlite implements ISessionRepository {
   public async handle(props: UserRequest): Promise<Error | any> {
     const { username, password } = props;
-    const repo = await (await Database).getRepository(UserSchema);
+
+    const repo = (await Database).getRepository(UserSchema);
 
     const user = await repo.findOne({
-      where: {
-        username,
-      },
+      where: { username: username.toLowerCase() },
     });
 
     if (!user) {

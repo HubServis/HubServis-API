@@ -1,3 +1,5 @@
+import { Plan } from "../entities/Plan";
+
 import { User } from "../entities/User";
 
 export interface ResRegisterUser {
@@ -8,4 +10,9 @@ export interface ResRegisterUser {
 export interface IUsersRepository {
   create(props: User): Promise<Error | ResRegisterUser>;
   find(): Promise<User[]>;
+  appendPlan(props: {
+    planName: string;
+    userId: string;
+  }): Promise<Error | string>;
+  deletePlan(props: { userId: string }): Promise<Error | string>;
 }

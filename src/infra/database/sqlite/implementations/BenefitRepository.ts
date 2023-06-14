@@ -6,7 +6,7 @@ import { IBenefitRepository } from "../../../../repositories/BenefitsRepository"
 
 export class BenefitRepositorySqlite implements IBenefitRepository {
   public async create(props: Benefit): Promise<Benefit | Error> {
-    const { id, name, max_value, description } = props;
+    const { id, name, max_value, description, role, isControllable } = props;
 
     const benefitRepository = (await Database).getRepository(BenefitSchema);
 
@@ -21,6 +21,8 @@ export class BenefitRepositorySqlite implements IBenefitRepository {
       name,
       max_value,
       description,
+      isControllable,
+      role,
     });
 
     return benefit;
@@ -63,6 +65,8 @@ export class BenefitRepositorySqlite implements IBenefitRepository {
     benefit.max_value = props.newBenefit.max_value;
     benefit.description = props.newBenefit.description;
     benefit.name = props.newBenefit.name;
+    benefit.isControllable = props.newBenefit.isControllable;
+    benefit.role = props.newBenefit.role;
 
     await benefitRepository.save(benefit);
 

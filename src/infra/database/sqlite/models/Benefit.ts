@@ -1,7 +1,6 @@
-import { Column, Entity, ManyToMany } from "typeorm";
+import { Column, Entity } from "typeorm";
 
 import { BaseEntity } from "./BaseEntity";
-import { Plan } from "./Plan";
 
 @Entity("Benefit")
 export class Benefit extends BaseEntity {
@@ -13,4 +12,10 @@ export class Benefit extends BaseEntity {
 
   @Column()
   max_value: number;
+
+  @Column({ default: true })
+  isControllable: boolean;
+
+  @Column({ default: "" })
+  role: string;
 }
