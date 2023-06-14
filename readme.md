@@ -4,22 +4,36 @@ A fazeres
 - [x] criar middleware
 
 - [x] Criar verificações quando for criar um usuário
-- [] Retornar token quando registrar um usuário
+- [x] Retornar token quando registrar um usuário
 
-- [] Criar permissões para usuário padrões, admin. Criar também verificações para alterações de permissões e roles para deixar apenas admin com acesso a isso mexer nas permissions e roles.
+- [x] Criar permissões para usuário padrões. Criar também verificações para alterações de permissões e roles para deixar apenas admin com acesso a isso mexer nas permissions e roles.
 
-- [] arrumar todas as rotas que recebem token ou userId
-- [] criar middleware de authentication
-- [] Terminar rota de criação de negócio, atualmente ela recebe um usuário fixo.
+- [x] Criar uma utils para geração e verificação de token, depois substituir em todo o app
+
+- [x] Deixar todas as rotas criadas recebendo os devidos dados do diagrama do BD
+- [] Criar rotas e sistema de profissionais o quanto antes
+- [] Criar lista de usuários para teste
+
+- [x] criar middleware de authentication
+- [x] arrumar todas as rotas que recebem token ou userId
+- [x] Terminar rota de criação de negócio, atualmente ela recebe um usuário fixo.
 
 - [] Estruturar o banco para ficar em modelo cascata, se o usuário for excluido tudo relacionado a ele também será.
 
 ## Rotas prontas para documentar
 - [] Register
-- [] Find Users
+- [] Login
+- [] Find All Users
+- [] Create Business
+- [] Find All Business
+- [] *Create Service
+- [] Find All Service
 
 ## Anotações
 - Token expira em 4 horas
+
+### env's
+- SECRET_JWT
 
 ## OBS
 - As únicas funções que não seguem o conceito de repository, é as funções dentro do arquivo de `middleware/permissions.ts`
