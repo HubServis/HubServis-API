@@ -5,76 +5,85 @@ import { IProfessionalsRepository } from "../../../../repositories/Professionals
 import { Professional } from "../../../../entities/Professional";
 
 export class ProfessionalRepositorySqlite implements IProfessionalsRepository {
-    public async add(props: Professional, userId: string): Promise<Error | Professional> {
-        const { id, name, cpfcnpj, isRegistred } = props;
+  public async add(
+    props: Professional,
+    userId: string
+  ): Promise<Error | Professional> {
+    const { id, name, cpfcnpj, isRegistred } = props;
 
-        const ownerBusinessRepository = (await Database).getRepository(UserSchema);
-        const owner = await ownerBusinessRepository.findOne({
-            where: { id: userId },
-            relations: ["business"],
-        });
+    const ownerBusinessRepository = (await Database).getRepository(UserSchema);
+    const owner = await ownerBusinessRepository.findOne({
+      where: { id: userId },
+      relations: ["business"],
+    });
 
-        if(!owner){
-            return new Error("Business owner not found!");
-        }
-
-        if(!owner.business){
-            return new Error("Business not found!");
-        }
-
-        if (isRegistred) {
-            const userRepository = (await Database).getRepository(UserSchema);
-            const user = await userRepository.findOne({
-                where: {
-                    cpfcnpj,
-                },
-            });
-
-            if(!user){
-                return new Error("User not found!");
-            }
-
-            const professionalRepository = (await Database).getRepository(ProfessionalSchema);
-            const professional = await professionalRepository.save({
-                id,
-                name: user.name,
-                cpfcnpj: user.cpfcnpj,
-                isRegistred,
-                business: owner.business,
-                user
-            });
-
-            return professional;
-        }
-
-        const professionalRepository = (await Database).getRepository(ProfessionalSchema);
-        const professional = await professionalRepository.save({
-            id,
-            name,
-            cpfcnpj,
-            isRegistred,
-            business: owner.business
-        });
-
-        return professional;
+    if (!owner) {
+      return new Error("Business owner not found!");
     }
 
-    public async findAll():Promise<Error | Professional[]>{
-        const professionalRepository = (await Database).getRepository(ProfessionalSchema);
-        const professionals = await professionalRepository.find({
-            relations: ["business", "user"],
-            select: {
-                user: {
-                    username: true,
-                    id: true,
-                    cpfcnpj: true,
-                    email: true,
-                    name: true,
-                    created_at: true
-                }
-            }
-        });
-
-        return professionals;
+    if (!owner.business) {
+      return new Error("Business not found!");
     }
+
+    if (isRegistred) {
+      const userRepository = (await Database).getRepository(UserSchema);
+      const user = await userRepository.findOne({
+        where: {
+          cpfcnpj,
+        },
+      });
+
+      if (!user) {
+        return new Error("User not found!");
+      }
+
+      const professionalRepository = (await Database).getRepository(
+        ProfessionalSchema
+      );
+      const professional = await professionalRepository.save({
+        id,
+        name: user.name,
+        cpfcnpj: user.cpfcnpj,
+        isRegistred,
+        business: owner.business,
+        user,
+      });
+
+      return professional;
+    }
+
+    const professionalRepository = (await Database).getRepository(
+      ProfessionalSchema
+    );
+    const professional = await professionalRepository.save({
+      id,
+      name,
+      cpfcnpj,
+      isRegistred,
+      business: owner.business,
+    });
+
+    return professional;
+  }
+
+  public async findAll(): Promise<Error | Professional[]> {
+    const professionalRepository = (await Database).getRepository(
+      ProfessionalSchema
+    );
+    const professionals = await professionalRepository.find({
+      relations: ["business", "user"],
+      select: {
+        user: {
+          username: true,
+          id: true,
+          cpfcnpj: true,
+          email: true,
+          name: true,
+          created_at: true,
+        },
+      },
+    });
+
+    return professionals;
+  }
 }

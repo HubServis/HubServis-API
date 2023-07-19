@@ -3,14 +3,14 @@ import { BaseEntity } from "./BaseEntity";
 
 @Entity("products")
 export class Product extends BaseEntity {
-    @Column()
-    name: string;
+  @Column()
+  name: string;
 
-    @Column()
-    description: string;
+  @Column()
+  description: string;
 
-    @Column()
-    price: number;
+  @Column()
+  price: number;
 }
 
 export default Product;

@@ -1,72 +1,369 @@
 {
-    "openapi": "3.0.1",
-    "info": {
-        "title": "HubServis",
-        "description": "Documentation the HubServis api",
-        "version": "1.0.0"
-    },
-    "basePath": "/",
-    "paths": {
-        "/login": {
-            "post": {
-                "requestBody": {
-                    "content": {
-                        "aplication/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "name": {
-                                        "type": "string"
-                                    },
-                                    "password": {
-                                        "type": "string"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Loged"
-                    }
-                }
-            }
-        },
-        "/user": {
-            "post": {
-                "requestBody": {
-                    "content": {
-                        "aplication/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "name": {
-                                        "type": "string"
-                                    },
-                                    "username": {
-                                        "type": "string"
-                                    },
-                                    "password": {
-                                        "type": "string"
-                                    },
-                                    "email": {
-                                        "type": "string"
-                                    },
-                                    "cpfcnpj": {
-                                        "type": "string"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "User data created and token"
-                    }
-                }
-            }
-        }
+  "openapi": "3.0.1",
+  "info": {
+    "title": "HubServis",
+    "description": "Documentation the HubServis api",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
     }
+  ],
+  "apis": ["./src/routes.ts"],
+  "basePath": "/",
+  "paths": {
+    "/login": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "aplication/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Loged"
+          }
+        }
+      }
+    },
+    "/user": {
+      "post": {
+        "requestBody": {
+          "content": {
+            "aplication/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "username": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "cpfcnpj": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User data created and token"
+          }
+        }
+      }
+    },
+    "/plans": {
+      "get": {
+        "tags": ["Plan"],
+        "responses": {
+          "200": {
+            "description": "Body Containing all Plans Registered."
+          },
+          "400": {
+            "description": "Bad Request With Reason"
+          },
+          "500": {
+            "description": "Internal Server Error Reason"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Plan"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "aplication/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "description": { "type": "string" },
+                  "price": { "type": "number" },
+                  "month_price": { "type": "string" },
+                  "reminder_limit": { "type": "string" },
+                  "professional_limit": { "type": "string" },
+                  "client_limit": { "type": "string" },
+                  "customer_limit": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Message Status With New Plan Created"
+          },
+          "400": {
+            "description": "Bad request With Reason"
+          },
+          "500": {
+            "description": "Internal Server Error With Reason"
+          }
+        }
+      }
+    },
+    "/plans/{planName}": {
+      "patch": {
+        "tags": ["Plan"],
+        "parameters": [
+          {
+            "name": "planName",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Plan Name to Change"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "aplication/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "description": { "type": "string" },
+                  "price": { "type": "number" },
+                  "month_price": { "type": "string" },
+                  "reminder_limit": { "type": "string" },
+                  "professional_limit": { "type": "string" },
+                  "client_limit": { "type": "string" },
+                  "customer_limit": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Message Status With Plan Updated"
+          },
+          "400": {
+            "description": "Bad request With Reason"
+          },
+          "500": {
+            "description": "Internal Server Error With Reason"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Plan"],
+        "parameters": [
+          {
+            "name": "planName",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Plan Name to Delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message Status With Plan Removed"
+          },
+          "400": {
+            "description": "Bad request With Reason"
+          },
+          "500": {
+            "description": "Internal Server Error With Reason"
+          }
+        }
+      }
+    },
+    "/plans/{planName}/{benefitName}": {
+      "patch": {
+        "tags": ["Plan"],
+        "parameters": [
+          {
+            "name": "planName",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Target Plan to Change"
+          },
+          {
+            "name": "benefitName",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Benefit Name to be Inserted"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message Status With Benefit Added to a Plan"
+          },
+          "400": {
+            "description": "Bad request With Reason"
+          },
+          "500": {
+            "description": "Internal Server Error With Reason"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Plan"],
+        "parameters": [
+          {
+            "name": "planName",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Target Plan to Change"
+          },
+          {
+            "name": "benefitName",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Benefit Name to be Removed"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message Status With Benefit Removed from Plan"
+          },
+          "400": {
+            "description": "Bad request With Reason"
+          },
+          "500": {
+            "description": "Internal Server Error With Reason"
+          }
+        }
+      }
+    },
+    "/benefits": {
+      "get": {
+        "tags": ["Benefit"],
+        "responses": {
+          "200": {
+            "description": "Body Containing all Benefits Registered."
+          },
+          "400": {
+            "description": "Bad request With Reason"
+          },
+          "500": {
+            "description": "Internal Server Error With Reason"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Benefit"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "aplication/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "description": { "type": "string" },
+                  "max_value": { "type": "number" },
+                  "isControllable": { "type": "boolean" },
+                  "role": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Message Status With New Benefit Created"
+          },
+          "400": {
+            "description": "Bad request With Reason"
+          },
+          "500": {
+            "description": "Internal Server Error With Reason"
+          }
+        }
+      }
+    },
+    "/benefits/{benefitName}": {
+      "patch": {
+        "tags": ["Benefit"],
+        "parameters": [
+          {
+            "name": "benefitName",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Benefit Name to Change"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "aplication/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "description": { "type": "string" },
+                  "max_value": { "type": "number" },
+                  "isControllable": { "type": "boolean" },
+                  "role": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Message Status With Benefit Updated"
+          },
+          "400": {
+            "description": "Bad request With Reason"
+          },
+          "500": {
+            "description": "Internal Server Error With Reason"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Benefit"],
+        "parameters": [
+          {
+            "name": "benefitName",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Benefit Name to Remove"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message Status With Benefit Removed"
+          },
+          "400": {
+            "description": "Bad request With Reason"
+          },
+          "500": {
+            "description": "Internal Server Error With Reason"
+          }
+        }
+      }
+    }
+  }
 }

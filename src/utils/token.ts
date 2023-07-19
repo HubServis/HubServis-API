@@ -1,14 +1,20 @@
-import jwt, { sign } from 'jsonwebtoken';
-import { User } from '../entities/User';
+import { sign } from "jsonwebtoken";
 
-export class Token{
-    sign(user: User){
-        return sign(
-            {
-                id: user.id,
-            },
-            process.env.SECRET_JWT,
-            { expiresIn: "4h" },
-        );
-    }
+import { User } from "../entities/User";
+
+//env's não carregaram pra mim ;(
+import { config } from "dotenv";
+
+config();
+
+export class Token {
+  sign(user: User) {
+    return sign(
+      {
+        id: user.id,
+      },
+      process.env.SECRET_JWT,
+      { expiresIn: "4h" }
+    );
+  }
 }

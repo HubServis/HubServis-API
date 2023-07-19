@@ -1,55 +1,65 @@
-import { Request, Response, NextFunction } from "express";
 import Database from "../infra/database/sqlite/config";
+
+import { Request, Response, NextFunction } from "express";
+
 import { User as UserSchema } from "../infra/database/sqlite/models/User";
 
-export function can(permissionsRoutes: string[]) {
-    return async (req: Request, res: Response, next: NextFunction) => {
-        const { userId } = req;
+// Verifica assinatura para ver o nível de permissão
+export function is(permissionsRoutes: string[]) {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    const { userReq } = req;
 
-        const userRepository = await (await Database).getRepository(UserSchema);
-        const user = await userRepository.findOne({
-            where: { id: userId },
-            relations: ["permissions"],
-        });
+    const userRepository = (await Database).getRepository(UserSchema);
 
-        if (!user) {
-            return res.status(400).json("User does not exists!");
-        }
+    const user = await userRepository.findOne({
+      where: { id: userReq.id },
+      relations: ["plan"],
+    });
 
-        const permissionsExists = user.permissions
-        .map(permission => permission.name)
-        .some(permission => permissionsRoutes.includes(permission));
+    if (!user) return res.status(400).json("User does not exists!");
 
-        if(!permissionsExists){
-            return res.status(401).end();
-        }
+    const acceptablePlanLevel = permissionsRoutes.includes(user.plan.name);
 
-        return next();
-    };
+    if (!acceptablePlanLevel)
+      return res
+        .status(401)
+        .json(`Unauthorized, This Plan is Not Allowed`)
+        .end();
+
+    return next();
+  };
 }
 
-export function is(rolesRoutes: string[]) {
-    return async (req: Request, res: Response, next: NextFunction) => {
-        const { userId } = req;
+// Verifica roles inclusas em cada Plano
+export function can(rolesRoutes: string[]) {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    const { userReq } = req;
 
-        const userRepository = await (await Database).getRepository(UserSchema);
-        const user = await userRepository.findOne({
-            where: { id: userId },
-            relations: ["roles"],
-        });
+    const userRepository = (await Database).getRepository(UserSchema);
 
-        if (!user) {
-            return res.status(400).json("User does not exists!");
-        }
+    const user = await userRepository.findOne({
+      where: { id: userReq.id },
+      relations: {
+        plan: {
+          benefits: true,
+        },
+      },
+    });
 
-        const rolesExists = user.roles
-        .map(role => role.name)
-        .some(role => rolesRoutes.includes(role));
+    if (!user) return res.status(400).json("User does not exists!");
 
-        if(!rolesExists){
-            return res.status(401).end();
-        }
+    const benefitsRolesIsPermited = user.plan.benefits
+      .map((benefit) => benefit.role)
+      .some((role) => rolesRoutes.includes(role));
 
-        return next();
-    };
+    if (!benefitsRolesIsPermited)
+      return res
+        .status(401)
+        .json(
+          `Unauthorized, This Plan ${user.plan.name} does not offer this permission!`
+        )
+        .end();
+
+    return next();
+  };
 }
