@@ -12,7 +12,7 @@ import Service from "./Service";
 import { Professional } from "./Professional";
 
 @Entity("appointments")
-export class Business extends BaseEntity {
+export class Appointment extends BaseEntity {
   @Column()
   name: string;
 
@@ -26,4 +26,4 @@ export class Business extends BaseEntity {
   professionals: Professional[];
 }
 
-export default Business;
+export default Appointment;

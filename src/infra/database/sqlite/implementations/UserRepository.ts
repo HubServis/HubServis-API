@@ -16,7 +16,7 @@ export class UserRepositorySqlite implements IUsersRepository {
     const existUser = (await Database).getRepository(UserSchema);
     const isExistUser = await existUser.findOne({
       where: {
-        username: username,
+        username: username.toLowerCase(),
       },
     });
 
@@ -39,7 +39,7 @@ export class UserRepositorySqlite implements IUsersRepository {
     const userRepository = (await Database).getRepository(UserSchema);
     const user = await userRepository.save({
       id,
-      username,
+      username: username.toLowerCase(),
       email,
       name,
       cpfcnpj,
