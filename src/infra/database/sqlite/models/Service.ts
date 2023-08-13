@@ -1,13 +1,12 @@
 import {
   Column,
   Entity,
-  JoinColumn,
-  JoinTable,
   ManyToOne,
-  OneToOne,
+  OneToMany,
 } from "typeorm";
 import { BaseEntity } from "./BaseEntity";
 import { Business } from "./Business";
+import Appointment from "./Appointment";
 
 @Entity("service")
 export class Service extends BaseEntity {
@@ -19,6 +18,12 @@ export class Service extends BaseEntity {
 
   @Column()
   duration: string;
+
+  @Column()
+  description: string;
+
+  @OneToMany(() => Appointment, (appointment) => appointment.service)
+  appointments: Appointment[]
 
   @ManyToOne(() => Business, (business) => business.services, {
     onDelete: "CASCADE",

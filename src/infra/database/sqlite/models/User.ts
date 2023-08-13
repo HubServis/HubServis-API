@@ -5,6 +5,7 @@ import {
   Entity,
   OneToOne,
   JoinColumn,
+  OneToMany,
 } from "typeorm";
 
 // import Role from "./Role";
@@ -13,6 +14,7 @@ import { BaseEntity } from "./BaseEntity";
 import Business from "./Business";
 import { Professional } from "./Professional";
 import { Plan } from "./Plan";
+import Appointment from "./Appointment";
 
 @Entity("users")
 export class User extends BaseEntity {
@@ -31,21 +33,8 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  // @ManyToMany(() => Role)
-  // @JoinTable({
-  //   name: "users_roles", //nome tabela pivo
-  //   joinColumns: [{ name: "user_id" }],
-  //   inverseJoinColumns: [{ name: "role_id" }],
-  // })
-  // roles: Role[];
-  //
-  // @ManyToMany(() => Permission)
-  // @JoinTable({
-  //   name: "users_permissions", //nome tabela pivo
-  //   joinColumns: [{ name: "user_id" }],
-  //   inverseJoinColumns: [{ name: "permission_id" }],
-  // })
-  // permissions: Permission[];
+  @OneToMany(() => Appointment, (appointment) => appointment.user)
+  appointments: Appointment[]
 
   @OneToOne(() => Business)
   @JoinColumn()

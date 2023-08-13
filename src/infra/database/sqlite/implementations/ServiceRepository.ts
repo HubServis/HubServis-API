@@ -9,7 +9,7 @@ export class ServiceRepositorySqlite implements IServicesRepository {
     props: Service,
     userId: string
   ): Promise<Error | Service> {
-    const { id, name, duration, price } = props;
+    const { id, name, duration, price, description } = props;
 
     const serviceRepository = (await Database).getRepository(ServiceSchema);
     const userRepository = (await Database).getRepository(UserSchema);
@@ -34,6 +34,7 @@ export class ServiceRepositorySqlite implements IServicesRepository {
       name,
       duration,
       price,
+      description,
       business: user.business,
     });
 

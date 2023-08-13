@@ -14,10 +14,10 @@ const findServiceService = new FindServiceService(
 
 class ServiceController implements IServiceCotroller {
   async create(req: Request, res: Response) {
-    const { name, price, duration } = req.body;
+    const { name, price, duration, description } = req.body;
 
     try {
-      const service = new Service({ name, price, duration });
+      const service = new Service({ name, price, duration, description });
       const result = await createServiceService.execute(
         service,
         req.userReq.id

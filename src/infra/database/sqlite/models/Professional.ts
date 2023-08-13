@@ -1,7 +1,8 @@
-import { Column, Entity, ManyToOne, OneToOne } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, OneToOne } from "typeorm";
 import { BaseEntity } from "./BaseEntity";
 import Business from "./Business";
 import { User } from "./User";
+import Appointment from "./Appointment";
 
 @Entity("professional")
 export class Professional extends BaseEntity {
@@ -23,4 +24,7 @@ export class Professional extends BaseEntity {
 
   @ManyToOne(() => Business, (business) => business.services)
   business: Business;
+
+  @OneToMany(() => Appointment, (appointment) => appointment.professional)
+  appointments: Appointment[]
 }
