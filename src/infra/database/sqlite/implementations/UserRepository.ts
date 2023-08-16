@@ -71,8 +71,6 @@ export class UserRepositorySqlite implements IUsersRepository {
       },
     });
 
-    console.log(user);
-
     return user;
   }
 

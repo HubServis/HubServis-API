@@ -5,7 +5,7 @@ import { IServicesRepository } from "../../repositories/ServicesRepository";
 export class FindServiceService {
   constructor(private servicesRepository: IServicesRepository) {}
 
-  public async execute(): Promise<Service[]> {
+  public async execute(): Promise<Error | Service[]> {
     const services = await this.servicesRepository.find();
     return services;
   }

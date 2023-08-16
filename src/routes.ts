@@ -14,6 +14,7 @@ import PlanController from "./controllers/PlanController";
 
 import { auth } from "./middleware/auth";
 import { can, is } from "./middleware/permissions";
+import AppointmentController from "./controllers/AppointmentController";
 
 const routes = Router();
 
@@ -53,12 +54,14 @@ routes.post(
   can(["create_plan"]),
   BenefitController.create
 );
+
 routes.patch(
   "/benefit/:benefitName",
   is(["dev_plan"]),
   can(["create_plan"]),
   BenefitController.patch
 );
+
 routes.delete(
   "/benefit/:benefitName",
   is(["dev_plan"]),
@@ -73,29 +76,36 @@ routes.post(
   can(["create_plan"]),
   PlanController.create
 );
+
 routes.patch(
   "/plans/:planName",
   is(["dev_plan"]),
   can(["create_plan"]),
   PlanController.patch
 );
+
 routes.delete(
   "/plans/:planName",
   is(["dev_plan"]),
   can(["create_plan"]),
   PlanController.delete
 );
+
 routes.patch(
   "/plans/:planName/:benefitName",
   is(["dev_plan"]),
   can(["create_plan"]),
   PlanController.appendBenefit
 );
+
 routes.delete(
   "/plans/:planName/:benefitName",
   is(["dev_plan"]),
   can(["create_plan"]),
   PlanController.deleteBenefit
 );
+
+routes.get("/appointments", AppointmentController.find);
+routes.post("/appointment/create", auth ,AppointmentController.create);
 
 export { routes };

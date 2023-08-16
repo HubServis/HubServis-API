@@ -1,11 +1,7 @@
 import {
   Column,
   Entity,
-  JoinColumn,
-  JoinTable,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
+  ManyToOne
 } from "typeorm";
 import { BaseEntity } from "./BaseEntity";
 import { User } from "./User";
@@ -16,16 +12,15 @@ import Business from "./Business";
 @Entity("appointments")
 export class Appointment extends BaseEntity {
   @Column()
-  name: string;
-
-  @Column()
   status: string;
+  /* STATUS pode conter uma das opções abaixo:
+   CONCLUIDO
+   PENDENTE
+   CANCELADO
+  */
 
   @Column()
-  date: string;
-
-  @Column()
-  time: string;
+  date_time: string;
 
   @ManyToOne(() => User, (user) => user.appointments)
   user: User;
