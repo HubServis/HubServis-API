@@ -57,7 +57,7 @@ export class AppointmentRepositorySqlite implements IAppointmentsRepository {
 
     const business = await businessRepository.findOne({
         where: {
-            id: "cded4e7f-4a56-4f29-9bf6-71dc80782e48"
+          id: "68cf108e-76a2-48f5-82c4-10e96045fe52"
         },
     });
 
@@ -81,7 +81,7 @@ export class AppointmentRepositorySqlite implements IAppointmentsRepository {
   public async find(): Promise<Error | Appointment[]> {
     const appointmentRepository = (await Database).getRepository(AppointmentSchema);
 
-    const appointment = await appointmentRepository.find();
+    const appointment = await appointmentRepository.find({relations: ["user", "business", "professional"]});
 
     return appointment;
   }
