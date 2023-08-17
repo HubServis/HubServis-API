@@ -37,7 +37,7 @@ export class BusinessRepositorySqlite implements IBusinessRepository {
   public async find(): Promise<Business[]> {
     const userRepository = (await Database).getRepository(BusinessSchema);
     const user = await userRepository.find({
-      relations: ["user"],
+      relations: ["user", "professionals"],
       select: {
         user: {
           id: true,

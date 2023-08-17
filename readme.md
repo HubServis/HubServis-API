@@ -33,6 +33,8 @@ A fazeres
 - Token expira em 4 horas
 - dev jwt key: 81dc9bdb52d04dc20036dbd8313ed055
 
+- Para os agendamentos é importante lembrar que quando o profissional já tem um serviço agendado para o mesmo horario do novo agendamento, será definido como "Disponivel do momento" que no caso será o profissional disponivel no momento do serviço.
+
 - Logica agendamento, verificações:
 data e hora é valida?
 usuário é valido?
