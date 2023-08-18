@@ -5,14 +5,13 @@ import { Service as ServiceSchema } from "../models/Service";
 import { Professional as ProfessionalSchema } from "../models/Professional";
 import { Business as BusinessSchema } from "../models/Business";
 import Database from "../config";
-import { IAppointmentsRepository } from "../../../../repositories/AppointmentRepository";
+import { IAppointmentsRepository, ICreateAppointment } from "../../../../repositories/AppointmentRepository";
 import { Appointment } from "../../../../entities/Appointment";
 import { v4 as uuid } from "uuid";
 
 export class AppointmentRepositorySqlite implements IAppointmentsRepository {
   public async create(
-    props: Appointment,
-    userId: string
+    props: ICreateAppointment
   ): Promise<Error | Appointment> {
     // const { id, name, duration, price, description } = props;
 
@@ -36,7 +35,7 @@ export class AppointmentRepositorySqlite implements IAppointmentsRepository {
 
     const user = await userRepository.findOne({
       where: {
-          id: "a7a24e6b-cada-4329-9265-ce55726cbb8d"
+          id: props.client
       }
     });
 
@@ -46,13 +45,18 @@ export class AppointmentRepositorySqlite implements IAppointmentsRepository {
 
     const service = await serviceRepository.findOne({
       where: {
-          id: "f692f8a3-7dd5-4f5c-a108-98eb36ff1d4f"
+          id: props.service
       },
+      relations: ["business"]
     });
+
+    if (!service) {
+      return new Error("Service not found!");
+    }
 
     const business = await businessRepository.findOne({
       where: {
-        id: "68cf108e-76a2-48f5-82c4-10e96045fe52"
+        id: service.business.id
       },
     });
 
@@ -62,7 +66,7 @@ export class AppointmentRepositorySqlite implements IAppointmentsRepository {
 
     const professional = await professionalRepository.findOne({
       where: {
-          id: "489336ae-9c9d-4c02-8ef0-c047848da272"
+          id: props.professional
       },
       relations: ["business"]
     });
@@ -73,8 +77,8 @@ export class AppointmentRepositorySqlite implements IAppointmentsRepository {
 
     const appointment = await appointmentRepository.save({
         id: uuid(),
-        date_time: "2023-08-16 10:00:00",
-        status: "CONCLUIDO",
+        date_time: props.date_time,
+        status: "PENDENTE",
         professional,
         service,
         user,

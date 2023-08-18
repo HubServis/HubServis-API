@@ -1,12 +1,8 @@
 import { Response, Request } from "express";
-import { CreateServiceService } from "../services/service/CreateService";
 import { IAppointmentController } from "../interfaces/controllers";
-import { Service } from "../entities/Service";
-import { ServiceRepositorySqlite } from "../infra/database/sqlite/implementations/ServiceRepository";
-import { FindAppointmentService } from "../services/Appointment/FindService";
+import { FindAppointmentService } from "../services/Appointment/FindAppointment";
 import { AppointmentRepositorySqlite } from "../infra/database/sqlite/implementations/AppointmentRepository";
-import { CreateAppointmentService } from "../services/Appointment/CreateService";
-import { Appointment } from "../entities/Appointment";
+import { CreateAppointmentService } from "../services/Appointment/CreateAppointment";
 
 const createAppointmentService = new CreateAppointmentService(
   new AppointmentRepositorySqlite()
@@ -18,14 +14,15 @@ const findAppointmentService = new FindAppointmentService(
 
 class AppointmentController implements IAppointmentController {
   async create(req: Request, res: Response) {
-    // const { name, price, duration, description } = req.body;
+    const { date_time, client, service, professional } = req.body;
 
     try {
-      const appointment = new Appointment({date_time: "", status: ""});
-      const result = await createAppointmentService.execute(
-        appointment,
-        req.userReq.id
-      );
+      const result = await createAppointmentService.execute({
+        date_time,
+        client,
+        service,
+        professional,
+      });
 
       if (result instanceof Error) {
         return res.status(400).json(result.message);
