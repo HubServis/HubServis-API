@@ -1,23 +1,11 @@
 A fazeres
-- [x] relacionamento entre permissions e roles
-- [x] criar serviços de session
-- [x] criar middleware
-
-- [x] Criar verificações quando for criar um usuário
-- [x] Retornar token quando registrar um usuário
-
-- [x] Criar permissões para usuário padrões. Criar também verificações para alterações de permissões e roles para deixar apenas admin com acesso a isso mexer nas permissions e roles.
-
-- [x] Criar uma utils para geração e verificação de token, depois substituir em todo o app
-
-- [x] Deixar todas as rotas criadas recebendo os devidos dados do diagrama do BD
-- [x] Criar rotas e sistema de profissionais o quanto antes
+- [] Criar sistema de categorias (privadas e publicas) e criar o CRUD para esse sistema
+- [] Criar CRUD para:
+   - [] BUSINESS
+   - [] PROFESSIONAL
+   - [] SERVICES
+   - [] PRODUCTS
 - [] Criar lista de usuários para teste
-
-- [x] criar middleware de authentication
-- [x] arrumar todas as rotas que recebem token ou userId
-- [x] Terminar rota de criação de negócio, atualmente ela recebe um usuário fixo.
-
 - [] Estruturar o banco para ficar em modelo cascata, se o usuário for excluido tudo relacionado a ele também deve ser excluido.
 
 ## Rotas prontas para documentar
@@ -46,3 +34,13 @@ profissional é valido? Ele trabalha no mesmo negócio do serviço?
 
 ## OBS
 - As únicas funções que não seguem o conceito de repository, é as funções dentro do arquivo de `middleware/permissions.ts`
+
+---
+
+# PRÉ DOCUMENTAÇÃO
+ ### Change Status Appointment
+ - opções do status
+    - 1 -> Concluido
+    - 2 -> Pendente (Default)
+    - 3 -> Cancelado
+ - Agendamento deve pertencer ao seu criador ou dono do negocio para ser alterado o seu status

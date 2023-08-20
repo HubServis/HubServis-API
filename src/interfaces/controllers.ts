@@ -58,8 +58,8 @@ export interface IBenefitsController {
 }
 
 export interface IAppointmentController {
-  // create(req: Request, res: Response): Promise<Response>;
+  create(req: Request, res: Response): Promise<Response>;
   find(req: Request, res: Response): Promise<Response>;
+  patch(req: Request, res: Response): Promise<Response>;
   // delete(req: Request, res: Response): Promise<Response>;
-  // patch(req: Request, res: Response): Promise<Response>;
 }

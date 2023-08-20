@@ -107,5 +107,6 @@ routes.delete(
 
 routes.get("/appointments", AppointmentController.find);
 routes.post("/appointment/create", auth ,AppointmentController.create);
+routes.patch("/appointment/:id/:status", auth, AppointmentController.patch);
 
 export { routes };
