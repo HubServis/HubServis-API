@@ -10,6 +10,7 @@ export interface ICreateAppointment{
 export interface IPatchStatusAppointment{
   id: string;
   status: string;
+  date_time: string | any;
   userReqId: string;
 }
 

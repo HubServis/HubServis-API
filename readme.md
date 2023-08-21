@@ -4,7 +4,6 @@ A fazeres
    - [] BUSINESS
    - [] PROFESSIONAL
    - [] SERVICES
-   - [] PRODUCTS
 - [] Criar lista de usuários para teste
 - [] Estruturar o banco para ficar em modelo cascata, se o usuário for excluido tudo relacionado a ele também deve ser excluido.
 

@@ -57,13 +57,15 @@ class AppointmentController implements IAppointmentController {
 
   async patch(req: Request, res: Response) {
     const { id, status } = req.params;
+    const { date_time } = req.query;
     const userReqId  = req.userReq.id;
 
     try {
       const result = await patchAppointmentService.execute({
         id,
         status,
-        userReqId
+        date_time,
+        userReqId,
       });
 
       if (result instanceof Error) {

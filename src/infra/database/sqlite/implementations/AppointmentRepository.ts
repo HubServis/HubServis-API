@@ -114,7 +114,7 @@ export class AppointmentRepositorySqlite implements IAppointmentsRepository {
   public async patch(
     props: IPatchStatusAppointment
   ): Promise<Error | Appointment> {
-    const { id, status, userReqId } = props;
+    const { id, status, userReqId, date_time } = props;
 
     if (!id) {
       return new Error("Id not given!");
@@ -148,6 +148,9 @@ export class AppointmentRepositorySqlite implements IAppointmentsRepository {
       }
 
       appointment.status = statusType[status] || StatusAppointment.PENDING;
+      if(date_time != null || date_time != undefined){
+        appointment.date_time = date_time;
+      }
 
       await appointmentRepository.save(appointment);
       
