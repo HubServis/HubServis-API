@@ -43,3 +43,6 @@ profissional é valido? Ele trabalha no mesmo negócio do serviço?
     - 2 -> Pendente (Default)
     - 3 -> Cancelado
  - Agendamento deve pertencer ao seu criador ou dono do negocio para ser alterado o seu status
+ 
+ ### Categorias
+  - As categorias podem ser privadas e publicas, se for privada ela pertencerá a um negocio (business), owner (usuario que a criou); Já se ela for publica não tera negocio (business), apenas owner (usuario que a criou)

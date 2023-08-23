@@ -11,6 +11,7 @@ import { User } from "./User";
 import Service from "./Service";
 import { Professional } from "./Professional";
 import Appointment from "./Appointment";
+import Category from "./Category";
 
 @Entity("business")
 export class Business extends BaseEntity {
@@ -19,6 +20,9 @@ export class Business extends BaseEntity {
 
   @OneToMany(() => Appointment, (appointment) => appointment.business)
   appointments: Appointment[]
+
+  @OneToMany(() => Category, (category) => category.business)
+  categories: Category[]
 
   @OneToOne(() => User, (user) => user.business)
   user: User;

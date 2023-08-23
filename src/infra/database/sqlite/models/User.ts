@@ -15,6 +15,7 @@ import Business from "./Business";
 import { Professional } from "./Professional";
 import { Plan } from "./Plan";
 import Appointment from "./Appointment";
+import Category from "./Category";
 
 @Entity("users")
 export class User extends BaseEntity {
@@ -47,4 +48,8 @@ export class User extends BaseEntity {
   @OneToOne(() => Plan)
   @JoinColumn()
   plan: Plan;
+
+  @OneToOne(() => Category)
+  @JoinColumn()
+  category: Category;
 }
