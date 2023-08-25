@@ -13,16 +13,8 @@ import { Professional } from "./Professional";
 import Business from "./Business";
 import { StatusAppointment } from '../../../../enums/models';
 
-@Entity("appointments")
+@Entity("category")
 export class Category extends BaseEntity {
-  // @Column({type: "varchar"})
-  // status: StatusAppointment;
-  /* STATUS pode conter uma das opções abaixo:
-   CONCLUIDO
-   PENDENTE
-   CANCELADO
-  */
-
   @Column()
   name: string;
 
@@ -30,15 +22,14 @@ export class Category extends BaseEntity {
   description: string;
 
   @Column()
-  isPrivated: string;
+  isPrivated: boolean;
 
   @OneToOne(() => User, (user) => user.category)
   owner: User;
 
-  // @ManyToOne(() => User, (user) => user.appointments)
-  // user: User;
-
-  @ManyToOne(() => Business, (business) => business.categories)
+  @ManyToOne(() => Business, (business) => business.categories, {
+    cascade: true,
+  })
   business: Business;
 
   @ManyToMany(() => Service, (service) => service.categories, {
@@ -46,12 +37,6 @@ export class Category extends BaseEntity {
   })
   @JoinTable()
   services: Service[]
-
-  // @ManyToOne(() => Service, (service) => service.appointments)
-  // service: Service;
-
-  // @ManyToOne(() => Professional, (professional) => professional.appointments)
-  // professional: Professional;
 }
 
 export default Category;

@@ -63,3 +63,10 @@ export interface IAppointmentController {
   patch(req: Request, res: Response): Promise<Response>;
   // delete(req: Request, res: Response): Promise<Response>;
 }
+
+export interface ICategoryController {
+  create(req: Request, res: Response): Promise<Response>;
+  // find(req: Request, res: Response): Promise<Response>;
+  // patch(req: Request, res: Response): Promise<Response>;
+  // delete(req: Request, res: Response): Promise<Response>;
+}
