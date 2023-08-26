@@ -15,6 +15,7 @@ import PlanController from "./controllers/PlanController";
 import { auth } from "./middleware/auth";
 import { can, is } from "./middleware/permissions";
 import AppointmentController from "./controllers/AppointmentController";
+import CategoryController from "./controllers/CategoryController";
 
 const routes = Router();
 
@@ -38,7 +39,7 @@ routes.post("/role", RoleController.create); //rota que será autenticada futura
 
 routes.post("/permission", PermissionController.create); //rota que será autenticada futuramente
 
-routes.post("/users/acl", UserACLController.create); //rota que será autenticada futuramente - ela adiciona permissões e regras à usuários.
+routes.post("/users/acl", auth, UserACLController.create); //rota que será autenticada futuramente - ela adiciona permissões e regras à usuários.
 
 routes.post("/roles/:roleId", RoleController.createRolePermission); //rota que será autenticada futuramente
 
@@ -108,5 +109,8 @@ routes.delete(
 routes.get("/appointments", AppointmentController.find);
 routes.post("/appointment/create", auth ,AppointmentController.create);
 routes.patch("/appointment/:id/:status", auth, AppointmentController.patch);
+
+routes.post("/category", auth, CategoryController.create);
+routes.get("/categories", CategoryController.find);
 
 export { routes };

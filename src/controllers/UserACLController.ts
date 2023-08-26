@@ -10,8 +10,8 @@ const createUserAccessControlListService =
 class UserController implements IUserACLCotroller {
   async create(req: Request, res: Response) {
     const { roles, permissions } = req.body;
-    // const { userId } = req;
-    const userId = "a18f572e-e3a5-4747-8fe4-a6269c1bad57"; // quando implementar session retirar essa linha e ativar a de acima
+    const userId = req.userReq.id;
+    // const userId = "a18f572e-e3a5-4747-8fe4-a6269c1bad57"; // quando implementar session retirar essa linha e ativar a de acima
 
     try {
       const result = await createUserAccessControlListService.execute({
