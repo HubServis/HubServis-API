@@ -7,6 +7,7 @@ import {
   IAppendCategoryService,
   ICategoryRepository,
   ICreateCategory,
+  IDeleteCategory,
 } from "../../../../repositories/CategoryRepository";
 import { Category as CategorySchema } from "../models/Category";
 import { Category } from "../../../../entities/Category";
@@ -65,6 +66,10 @@ export class CategoryRepositorySqlite implements ICategoryRepository {
     const categorysExists = await categoryRepository.findBy({
       id: In(categoriesId),
     });
+    
+    if(categorysExists.length == 0){
+      return new Error("Categories not found!");
+    }
 
     const serviceRepository = (await Database).getRepository(ServiceSchema);
     const service = await serviceRepository.findOne({
@@ -74,11 +79,30 @@ export class CategoryRepositorySqlite implements ICategoryRepository {
       relations: ["categories"]
     });
 
+    if(!service){
+      return new Error("Service not found!");
+    }
+
     service.categories = categorysExists.filter(category => !service.categories.includes(category))
 
     await serviceRepository.save(service);
 
     return service;
-    // return new Error("Sla!");
+  }
+
+  public async delete(props: IDeleteCategory): Promise<string | Error> {
+    const { category: categoryId, userId } = props;
+    const categoryRepository = (await Database).getRepository(CategorySchema);
+    const category = await categoryRepository.findOne({
+      where: {
+        id: categoryId
+      }
+    });
+
+    if (!category) return new Error("This Category not Exists");
+
+    await categoryRepository.remove(category);
+
+    return `Category with name ${category.name} removed!`;
   }
 }

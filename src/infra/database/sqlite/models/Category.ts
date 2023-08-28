@@ -27,14 +27,10 @@ export class Category extends BaseEntity {
   @OneToOne(() => User, (user) => user.category)
   owner: User;
 
-  @ManyToOne(() => Business, (business) => business.categories, {
-    cascade: true,
-  })
+  @ManyToOne(() => Business, (business) => business.categories)
   business: Business;
 
-  @ManyToMany(() => Service, (service) => service.categories, {
-    cascade: true,
-  })
+  @ManyToMany(() => Service, (service) => service.categories)
   @JoinTable()
   services: Service[]
 }

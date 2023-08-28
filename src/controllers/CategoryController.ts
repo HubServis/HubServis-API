@@ -8,6 +8,7 @@ import { CategoryRepositorySqlite } from "../infra/database/sqlite/implementatio
 import { CreateCategoryService } from "../services/Category/CreateCategory";
 import { FindCategoryService } from "../services/Category/FindCategory";
 import { AppendCategoryServiceService } from "../services/Category/AppendCategoryService";
+import { DeleteCategoryService } from "../services/Category/DeleteCategory";
 
 const createAppointmentService = new CreateCategoryService(
   new CategoryRepositorySqlite()
@@ -18,6 +19,10 @@ const findCategoryService = new FindCategoryService(
 );
 
 const appendCategoryServiceService = new AppendCategoryServiceService(
+  new CategoryRepositorySqlite()
+);
+
+const deleteCategoryService = new DeleteCategoryService(
   new CategoryRepositorySqlite()
 );
 
@@ -66,6 +71,27 @@ class CategoryController implements ICategoryController {
       const result = await appendCategoryServiceService.execute({
         service, 
         categories
+      });
+
+      if (result instanceof Error) {
+        return res.status(400).json(result.message);
+      }
+
+      return res.status(201).json(result);
+    } catch (err) {
+      console.log(err.message);
+      return res.status(500).json("Unexpected error");
+    }
+  }
+
+  async delete(req: Request, res: Response) {
+    const { categoryId } = req.params;
+    const { id } = req.userReq;
+
+    try {
+      const result = await deleteCategoryService.execute({
+        category: categoryId, 
+        userId: id
       });
 
       if (result instanceof Error) {
