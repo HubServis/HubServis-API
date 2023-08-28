@@ -27,6 +27,7 @@ export class UserACLRepositorySqlite implements IUsersACLRepository {
     const permissionRepository = (await Database).getRepository(
       PermissionSchema
     );
+    
     const permissionsExists = await permissionRepository.findBy({
       id: In(permissions),
     });

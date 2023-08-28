@@ -112,5 +112,6 @@ routes.patch("/appointment/:id/:status", auth, AppointmentController.patch);
 
 routes.post("/category", auth, CategoryController.create);
 routes.get("/categories", CategoryController.find);
+routes.patch("/categories/services", CategoryController.appendService);
 
 export { routes };

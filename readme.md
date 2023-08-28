@@ -45,4 +45,4 @@ profissional é valido? Ele trabalha no mesmo negócio do serviço?
  - Agendamento deve pertencer ao seu criador ou dono do negocio para ser alterado o seu status
  
  ### Categorias
-  - As categorias podem ser privadas e publicas, se for privada ela pertencerá a um negocio (business), owner (usuario que a criou); Já se ela for publica não tera negocio (business), apenas owner (usuario que a criou)
+  - As categorias podem ser privadas ou publicas, se for privada ela pertencerá a um negocio (business); Já se ela for publica não terá que pertencer a um negocio (business), apenas a um owner (usuario que a criou)

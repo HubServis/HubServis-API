@@ -1,13 +1,17 @@
 import { User as UserSchema } from "../models/User";
 import { Permission as PermissionSchema } from "../models/Permission";
 import { Business as BusinessSchema } from "../models/Business";
+import { Service as ServiceSchema } from "../models/Service";
 import Database from "../config";
 import {
+  IAppendCategoryService,
   ICategoryRepository,
   ICreateCategory,
 } from "../../../../repositories/CategoryRepository";
 import { Category as CategorySchema } from "../models/Category";
 import { Category } from "../../../../entities/Category";
+import { In } from "typeorm";
+import { Service } from "../../../../entities/Service";
 
 export class CategoryRepositorySqlite implements ICategoryRepository {
   public async create(props: ICreateCategory): Promise<Category | Error> {
@@ -52,5 +56,29 @@ export class CategoryRepositorySqlite implements ICategoryRepository {
     const categories = await categoryRepository.find({});
 
     return categories;
+  }
+
+  public async appendService(props: IAppendCategoryService): Promise<Service | Error> {
+    const { categories: categoriesId , service: serviceId } = props;
+
+    const categoryRepository = (await Database).getRepository(CategorySchema);
+    const categorysExists = await categoryRepository.findBy({
+      id: In(categoriesId),
+    });
+
+    const serviceRepository = (await Database).getRepository(ServiceSchema);
+    const service = await serviceRepository.findOne({
+      where: {
+        id: serviceId,
+      },
+      relations: ["categories"]
+    });
+
+    service.categories = categorysExists.filter(category => !service.categories.includes(category))
+
+    await serviceRepository.save(service);
+
+    return service;
+    // return new Error("Sla!");
   }
 }
