@@ -2,7 +2,7 @@
 import { Business as BusinessSchema } from "../models/Business";
 import { User as UserSchema } from "../models/User";
 import Database from "../config";
-import { IBusinessRepository, IDeleteBusiness, IFindOneBusiness } from "../../../../repositories/BusinessRepository";
+import { IBusinessRepository, IDeleteBusiness, IFindOneBusiness, IPatchBusiness } from "../../../../repositories/BusinessRepository";
 import Business from "../models/Business";
 
 export class BusinessRepositorySqlite implements IBusinessRepository {
@@ -96,5 +96,56 @@ export class BusinessRepositorySqlite implements IBusinessRepository {
     await businessRepository.remove(business);
 
     return `Business with name ${business.name} removed!`;
+  }
+
+  public async patch(props: IPatchBusiness): Promise<string | Error> {
+    const { newBusiness, userId } = props;
+
+    const userRepository = (await Database).getRepository(UserSchema);
+    const user = await userRepository.findOne({
+      where: {
+        id: userId
+      },
+      relations: ["business"]
+    });
+    
+    if(user.business.id !== newBusiness.id) return new Error("You cannot edit this deal. You don't own it, nor an admin!");
+
+    const businessRepository = (await Database).getRepository(BusinessSchema);
+    const businessExists = await businessRepository.findOne({
+      where: {
+        name: newBusiness.name,
+      },
+    });
+
+    if(businessExists){
+      return new Error("A business with that name already exists!");
+    }
+
+    const business = await businessRepository.findOne({
+      where: {
+        id: newBusiness.id,
+        user: {
+          id: userId,
+        }
+      },
+      relations: ["user"],
+      select: {
+        user: {
+          name: true,
+          email: true,
+        }
+      }
+    });
+
+    if(!business){
+      return new Error("Business not found!");
+    }
+
+    business.name = newBusiness.name;
+
+    await businessRepository.save(business);
+
+    return `Business Edited Successfuly`;
   }
 }

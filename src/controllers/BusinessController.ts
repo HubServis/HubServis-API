@@ -7,6 +7,7 @@ import { Business } from "../entities/Business";
 import { BusinessRepositorySqlite } from "../infra/database/sqlite/implementations/BusinessRepository";
 import { FindOneBusinessService } from "../services/business/FindOneBusiness";
 import { DeleteBusinessService } from "../services/business/DeleteBusiness";
+import { PatchBusinessService } from "../services/business/PatchBusiness";
 
 const createBusinessService = new CreateBusinessService(
   new BusinessRepositorySqlite()
@@ -20,6 +21,10 @@ const findOneBusinessService = new FindOneBusinessService(
 );
 
 const deleteBusinessService = new DeleteBusinessService(
+  new BusinessRepositorySqlite()
+);
+
+const patchBusinessService = new PatchBusinessService(
   new BusinessRepositorySqlite()
 );
 
@@ -82,6 +87,30 @@ class BusinessController implements IBusinessCotroller {
       const result = await deleteBusinessService.execute({
         businessId,
         userId: id
+      });
+
+      if (result instanceof Error) {
+        return res.status(400).json(result.message);
+      }
+
+      return res.status(201).json(result);
+    } catch (err) {
+      console.log(err.message);
+      return res.status(500).json("Unexpected error");
+    }
+  }
+
+  async patch(req: Request, res: Response) {
+    const { id } = req.userReq;
+    const { name, id: businessId } = req.body;
+
+    try {
+      const result = await patchBusinessService.execute({
+        userId: id,
+        newBusiness: {
+          id: businessId,
+          name
+        }
       });
 
       if (result instanceof Error) {

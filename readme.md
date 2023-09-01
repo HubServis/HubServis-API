@@ -7,7 +7,7 @@
 
 #### *Importante*
 - [] Criar CRUD para:
-   - [] BUSINESS
+   - [x] BUSINESS
    - [] PROFESSIONAL
    - [] SERVICES
    
@@ -15,6 +15,7 @@
    - [] verificação de criação de categoria publica ou privada
       - [] Configurar verificações de permissões
    - [] verificação de delete business
+   - [] verificação admin patch business
 
 
 #### *Urgente*

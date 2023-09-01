@@ -30,6 +30,7 @@ routes.post("/business/create", auth, BusinessController.create);
 routes.get("/business", BusinessController.find);
 routes.get("/business/:id", BusinessController.findOne);
 routes.delete("/business/delete/:businessId", auth, BusinessController.delete);
+routes.patch("/business", auth, BusinessController.patch);
 
 routes.post("/professional/add", auth, ProfessionalController.addToBusiness);
 routes.get("/professionals", ProfessionalController.findProfessionals);
