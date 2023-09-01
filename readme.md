@@ -1,11 +1,23 @@
-A fazeres
-- [] Criar sistema de categorias (privadas e publicas) e criar o CRUD para esse sistema
+## **A FAZERES**
+#### *Essencial*
+- [] Criar migrations ou qualquer forma de popular o BD com apenas 1 click
+- [] Criar lista de usuários e dados para testes e cargos na plataforma
+   - [] Criar plano admin e permissões de admin para ele
+- [] Criar verificação de criação de categoria publica ou privada
+   - [] Configurar verificações de permissões
+- [] Resolver bug no delete de categorias
+
+#### *Importante*
 - [] Criar CRUD para:
    - [] BUSINESS
    - [] PROFESSIONAL
    - [] SERVICES
-- [] Criar lista de usuários para teste
-- [] Estruturar o banco para ficar em modelo cascata, se o usuário for excluido tudo relacionado a ele também deve ser excluido.
+
+#### *Urgente*
+
+#### *Assim que der*
+- [] Sistema de imagens para users, business, professionals, services e products
+- [] Estruturar o banco para ficar em cascata, se o usuário for excluido tudo relacionado a ele também deve ser excluido.
 
 ## Rotas prontas para documentar
 - [] Register
@@ -16,7 +28,7 @@ A fazeres
 - [] *Create Service
 - [] Find All Service
 
-## Anotações
+## Anotações gerais
 - Token expira em 4 horas
 - dev jwt key: 81dc9bdb52d04dc20036dbd8313ed055
 

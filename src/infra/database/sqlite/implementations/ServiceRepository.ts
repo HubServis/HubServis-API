@@ -45,7 +45,7 @@ export class ServiceRepositorySqlite implements IServicesRepository {
     const serviceRepository = (await Database).getRepository(ServiceSchema);
 
     const service = await serviceRepository.find({
-      relations: ["business"],
+      relations: ["business", "categories"],
     });
 
     return service;

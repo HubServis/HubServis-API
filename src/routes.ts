@@ -28,6 +28,7 @@ routes.delete("/user/:userId", UserController.deletePlan);
 
 routes.post("/business/create", auth, BusinessController.create);
 routes.get("/business", BusinessController.find);
+routes.get("/business/:id", BusinessController.findOne);
 
 routes.post("/professional/add", auth, ProfessionalController.addToBusiness);
 routes.get("/professionals", ProfessionalController.findProfessionals);
@@ -73,6 +74,7 @@ routes.delete(
 routes.get("/plans", PlanController.find);
 routes.post(
   "/plans",
+  auth,
   is(["dev_plan"]),
   can(["create_plan"]),
   PlanController.create

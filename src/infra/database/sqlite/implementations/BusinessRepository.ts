@@ -2,7 +2,7 @@
 import { Business as BusinessSchema } from "../models/Business";
 import { User as UserSchema } from "../models/User";
 import Database from "../config";
-import { IBusinessRepository } from "../../../../repositories/BusinessRepository";
+import { IBusinessRepository, IFindOneBusiness } from "../../../../repositories/BusinessRepository";
 import Business from "../models/Business";
 
 export class BusinessRepositorySqlite implements IBusinessRepository {
@@ -35,8 +35,8 @@ export class BusinessRepositorySqlite implements IBusinessRepository {
   }
 
   public async find(): Promise<Business[]> {
-    const userRepository = (await Database).getRepository(BusinessSchema);
-    const user = await userRepository.find({
+    const businessRepository = (await Database).getRepository(BusinessSchema);
+    const business = await businessRepository.find({
       relations: ["user", "professionals"],
       select: {
         user: {
@@ -49,6 +49,36 @@ export class BusinessRepositorySqlite implements IBusinessRepository {
       },
     });
 
-    return user;
+    return business;
+  }
+
+  public async findOne(props: IFindOneBusiness): Promise<Business | Error> {
+    const businessRepository = (await Database).getRepository(BusinessSchema);
+    const business = await businessRepository.findOne({
+      where: {
+        id: props.businessId
+      },
+      relations: ["user", "professionals"],
+      select: {
+        user: {
+          id: true,
+          name: true,
+          cpfcnpj: false,
+          email: true,
+          username: true,
+        },
+        professionals: {
+          id: true,
+          name: true,
+          created_at: true,
+        }
+      },
+    });
+
+    if(!business){
+      return new Error("Business not found!");
+    }
+
+    return business;
   }
 }
