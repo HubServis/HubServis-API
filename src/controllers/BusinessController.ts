@@ -6,6 +6,7 @@ import { FindBusinessService } from "../services/business/FindBusiness";
 import { Business } from "../entities/Business";
 import { BusinessRepositorySqlite } from "../infra/database/sqlite/implementations/BusinessRepository";
 import { FindOneBusinessService } from "../services/business/FindOneBusiness";
+import { DeleteBusinessService } from "../services/business/DeleteBusiness";
 
 const createBusinessService = new CreateBusinessService(
   new BusinessRepositorySqlite()
@@ -15,6 +16,10 @@ const findBusinessService = new FindBusinessService(
 );
 
 const findOneBusinessService = new FindOneBusinessService(
+  new BusinessRepositorySqlite()
+);
+
+const deleteBusinessService = new DeleteBusinessService(
   new BusinessRepositorySqlite()
 );
 
@@ -54,10 +59,36 @@ class BusinessController implements IBusinessCotroller {
     const { id: businessId } = req.params;
 
     try {
-      const products = await findOneBusinessService.execute({
+      const result = await findOneBusinessService.execute({
         businessId
       });
-      return res.status(201).json(products);
+
+      if (result instanceof Error) {
+        return res.status(400).json(result.message);
+      }
+
+      return res.status(201).json(result);
+    } catch (err) {
+      console.log(err.message);
+      return res.status(500).json("Unexpected error");
+    }
+  }
+
+  async delete(req: Request, res: Response) {
+    const { businessId } = req.params;
+    const { id } = req.userReq;
+
+    try {
+      const result = await deleteBusinessService.execute({
+        businessId,
+        userId: id
+      });
+
+      if (result instanceof Error) {
+        return res.status(400).json(result.message);
+      }
+
+      return res.status(201).json(result);
     } catch (err) {
       console.log(err.message);
       return res.status(500).json("Unexpected error");

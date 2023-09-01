@@ -2,9 +2,7 @@
 #### *Essencial*
 - [] Criar migrations ou qualquer forma de popular o BD com apenas 1 click
 - [] Criar lista de usuários e dados para testes e cargos na plataforma
-   - [] Criar plano admin e permissões de admin para ele
-- [] Criar verificação de criação de categoria publica ou privada
-   - [] Configurar verificações de permissões
+- [] Criar plano admin e permissões de admin para ele
 - [] Resolver bug no delete de categorias
 
 #### *Importante*
@@ -12,6 +10,12 @@
    - [] BUSINESS
    - [] PROFESSIONAL
    - [] SERVICES
+   
+- [] Verificações que precisam ser feitas o quanto antes:
+   - [] verificação de criação de categoria publica ou privada
+      - [] Configurar verificações de permissões
+   - [] verificação de delete business
+
 
 #### *Urgente*
 

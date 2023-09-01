@@ -2,7 +2,7 @@
 import { Business as BusinessSchema } from "../models/Business";
 import { User as UserSchema } from "../models/User";
 import Database from "../config";
-import { IBusinessRepository, IFindOneBusiness } from "../../../../repositories/BusinessRepository";
+import { IBusinessRepository, IDeleteBusiness, IFindOneBusiness } from "../../../../repositories/BusinessRepository";
 import Business from "../models/Business";
 
 export class BusinessRepositorySqlite implements IBusinessRepository {
@@ -80,5 +80,21 @@ export class BusinessRepositorySqlite implements IBusinessRepository {
     }
 
     return business;
+  }
+
+  public async delete(props: IDeleteBusiness): Promise<string | Error> {
+    const { businessId, userId } = props;
+    const businessRepository = (await Database).getRepository(BusinessSchema);
+    const business = await businessRepository.findOne({
+      where: {
+        id: businessId
+      }
+    });
+
+    if (!business) return new Error("This Business not Exists");
+
+    await businessRepository.remove(business);
+
+    return `Business with name ${business.name} removed!`;
   }
 }

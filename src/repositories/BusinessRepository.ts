@@ -4,8 +4,14 @@ export interface IFindOneBusiness{
   businessId: string;
 }
 
+export interface IDeleteBusiness{
+  businessId: string;
+  userId: string;
+}
+
 export interface IBusinessRepository {
   create(props: Business, userId: string): Promise<Business | Error>;
   find(): Promise<Business[]>;
   findOne(props: IFindOneBusiness): Promise<Business | Error>;
+  delete(props: IDeleteBusiness): Promise<string | Error>;
 }

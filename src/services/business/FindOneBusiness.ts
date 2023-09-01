@@ -5,7 +5,7 @@ export class FindOneBusinessService {
   constructor(private BusinessRepository: IBusinessRepository) {}
 
   public async execute(props: IFindOneBusiness): Promise<Business | Error> {
-    const user = await this.BusinessRepository.findOne(props);
-    return user;
+    const business = await this.BusinessRepository.findOne(props);
+    return business;
   }
 }
