@@ -4,13 +4,24 @@ import { FindServiceService } from "../services/service/FindService";
 import { IServiceCotroller } from "../interfaces/controllers";
 import { Service } from "../entities/Service";
 import { ServiceRepositorySqlite } from "../infra/database/sqlite/implementations/ServiceRepository";
+import { FindOneServiceService } from "../services/service/FindOneService";
+import { DeleteServiceService } from "../services/service/DeleteService";
 
 const createServiceService = new CreateServiceService(
   new ServiceRepositorySqlite()
 );
+
 const findServiceService = new FindServiceService(
   new ServiceRepositorySqlite()
 );
+
+const findOneServiceService = new FindOneServiceService(
+  new ServiceRepositorySqlite()
+);
+
+const deleteServiceService = new DeleteServiceService(
+  new ServiceRepositorySqlite()
+)
 
 class ServiceController implements IServiceCotroller {
   async create(req: Request, res: Response) {
@@ -37,6 +48,43 @@ class ServiceController implements IServiceCotroller {
   async find(req: Request, res: Response) {
     try {
       const result = await findServiceService.execute();
+
+      if (result instanceof Error) {
+        return res.status(400).json(result.message);
+      }
+
+      return res.status(201).json(result);
+    } catch (err) {
+      console.log(err.message);
+      return res.status(500).json("Unexpected error");
+    }
+  }
+  
+  async findOne(req: Request, res: Response) {
+    const { serviceId } = req.params;
+
+    try {
+      const result = await findOneServiceService.execute({
+        serviceId,
+      });
+
+      if (result instanceof Error) {
+        return res.status(400).json(result.message);
+      }
+
+      return res.status(201).json(result);
+    } catch (err) {
+      console.log(err.message);
+      return res.status(500).json("Unexpected error");
+    }
+  }
+
+  async delete(req: Request, res: Response) {
+    const { serviceId } = req.params;
+    try {
+      const result = await deleteServiceService.execute({
+        serviceId,
+      });
 
       if (result instanceof Error) {
         return res.status(400).json(result.message);

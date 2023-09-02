@@ -37,6 +37,8 @@ routes.get("/professionals", ProfessionalController.findProfessionals);
 
 routes.post("/service/create", auth, ServiceController.create);
 routes.get("/services", ServiceController.find);
+routes.get("/service/:serviceId", ServiceController.findOne);
+routes.delete("/service/:serviceId", ServiceController.delete);
 
 routes.post("/role", RoleController.create); //rota que será autenticada futuramente
 

@@ -9,13 +9,14 @@
 - [] Criar CRUD para:
    - [x] BUSINESS
    - [] PROFESSIONAL
-   - [] SERVICES
+   - [x] SERVICES
    
 - [] Verificações que precisam ser feitas o quanto antes:
    - [] verificação de criação de categoria publica ou privada
       - [] Configurar verificações de permissões
    - [] verificação de delete business
    - [] verificação admin patch business
+   - [] verificação admin e user, na rota delete service
 
 
 #### *Urgente*

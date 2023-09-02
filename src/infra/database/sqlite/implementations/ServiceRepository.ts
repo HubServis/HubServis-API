@@ -2,7 +2,7 @@ import { Service } from "../../../../entities/Service";
 import { Service as ServiceSchema } from "../models/Service";
 import { User as UserSchema } from "../models/User";
 import Database from "../config";
-import { IServicesRepository } from "../../../../repositories/ServicesRepository";
+import { IDeleteService, IFindOneService, IServicesRepository } from "../../../../repositories/ServicesRepository";
 
 export class ServiceRepositorySqlite implements IServicesRepository {
   public async create(
@@ -49,5 +49,38 @@ export class ServiceRepositorySqlite implements IServicesRepository {
     });
 
     return service;
+  }
+  
+  public async findOne(props: IFindOneService): Promise<Error | Service> {
+    const { serviceId } = props;
+    const serviceRepository = (await Database).getRepository(ServiceSchema);
+
+    const service = await serviceRepository.findOne({
+      where: {
+        id: serviceId,
+      },
+      relations: ["business", "categories"]
+    });
+
+    if(!service) return new Error("Service not found!");
+
+    return service;
+  }
+
+  public async delete(props: IDeleteService): Promise<Error | string> {
+    const { serviceId } = props;
+    const serviceRepository = (await Database).getRepository(ServiceSchema);
+
+    const service = await serviceRepository.find({
+      where: {
+        id: serviceId,
+      },
+    });
+
+    if(!service) return new Error("Service not found!");
+
+    await serviceRepository.remove(service);
+
+    return "Remove service with name Sla!";
   }
 }
