@@ -1,3 +1,12 @@
+## **DOCUMENTAÇÃO**
+Antes de rodar esse projeto, recomendo baixar o front-end dele também. Pois pelo front-end vc conseguirá rodar os dois ambientes juntos simultaneamentes e sem o risco da famosa frase: 
+
+_"Háh precisava do back rodando também para tesatr o front"_
+
+**OBS:** _No front-end do projeto HubServis contém todo o guia de como rodar tanto o ambiente front-end quanto o back-end juntos_
+
+---
+
 ## **A FAZERES**
 #### *Essencial*
 - [] Criar migrations ou qualquer forma de popular o BD com apenas 1 click
@@ -36,7 +45,7 @@
 
 ## Anotações gerais
 - Token expira em 4 horas
-- dev jwt key: 81dc9bdb52d04dc20036dbd8313ed055
+- jwt dev key: 81dc9bdb52d04dc20036dbd8313ed055
 
 - Para os agendamentos é importante lembrar que quando o profissional já tem um serviço agendado para o mesmo horario do novo agendamento, será definido como "Disponivel do momento" que no caso será o profissional disponivel no momento do serviço.
 
