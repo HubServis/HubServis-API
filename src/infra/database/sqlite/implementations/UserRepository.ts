@@ -74,6 +74,30 @@ export class UserRepositorySqlite implements IUsersRepository {
     return user;
   }
 
+  public async findOneUser(props: { userId: string }): Promise<Error | User> {
+    const { userId } = props;
+    const userRepository = (await Database).getRepository(UserSchema);
+
+    const user = await userRepository.findOne({
+      where: {
+        id: userId
+      },
+      select: {
+        id: true,
+        cpfcnpj: true,
+        name: true,
+        email: true,
+        username: true,
+        created_at: true,
+      },
+      relations: {
+        plan: { benefits: true },
+      },
+    });
+
+    return user;
+  }
+
   public async appendPlan(props: {
     planName: string;
     userId: string;

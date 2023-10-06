@@ -9,10 +9,10 @@ _"Háh precisava do back rodando também para tesatr o front"_
 
 ## **A FAZERES**
 #### *Essencial*
-- [] Criar migrations ou qualquer forma de popular o BD com apenas 1 click
+- [] Criar seeds para popular o BD com apenas 1 click
 - [] Criar lista de usuários e dados para testes e cargos na plataforma
 - [] Criar plano admin e permissões de admin para ele
-- [] Resolver bug no delete de categorias
+- [] Resolver bug no deletes
 
 #### *Importante*
 - [] Criar CRUD para:

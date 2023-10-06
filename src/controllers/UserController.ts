@@ -6,9 +6,11 @@ import { CreateUserService } from "../services/user/CreateUser";
 import { UserRepositorySqlite } from "../infra/database/sqlite/implementations/UserRepository";
 import { AppendPlanUserService } from "../services/user/AppendPlanUser";
 import { DeletePlanUserService } from "../services/user/DeletePlanUser";
+import { FindOneUserService } from "../services/user/findOneUser";
 
 const createUserService = new CreateUserService(new UserRepositorySqlite());
 const findUserService = new FindUserService(new UserRepositorySqlite());
+const findOneUserService = new FindOneUserService(new UserRepositorySqlite());
 const appendPlanUserService = new AppendPlanUserService(
   new UserRepositorySqlite()
 );
@@ -39,6 +41,22 @@ class UserController implements IUserCotroller {
     try {
       const users = await findUserService.execute();
       return res.status(201).json(users);
+    } catch (err) {
+      console.log(err.message);
+      return res.status(500).json("Unexpected error");
+    }
+  }
+
+
+  async findOneUser(req: Request, res: Response) {
+    const { userId } = req.params;
+
+    try {
+      const result = await findOneUserService.execute({userId});
+
+      if (result instanceof Error)  return res.status(404).json(result.message);
+
+      return res.status(201).json(result);
     } catch (err) {
       console.log(err.message);
       return res.status(500).json("Unexpected error");
