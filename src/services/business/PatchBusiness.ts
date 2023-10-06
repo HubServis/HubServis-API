@@ -4,7 +4,7 @@ import { IBusinessRepository, IPatchBusiness } from "../../repositories/Business
 export class PatchBusinessService {
   constructor(private BusinessRepository: IBusinessRepository) {}
 
-  public async execute(props: IPatchBusiness): Promise<Business | Error> {
+  public async execute(props: IPatchBusiness): Promise<string | Error> {
     const business = await this.BusinessRepository.patch(props);
     return business;
   }
