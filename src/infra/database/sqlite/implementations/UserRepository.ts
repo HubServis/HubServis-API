@@ -95,6 +95,8 @@ export class UserRepositorySqlite implements IUsersRepository {
       },
     });
 
+    if(!user) return new Error("User not found!");
+
     return user;
   }
 

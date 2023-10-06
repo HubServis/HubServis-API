@@ -74,6 +74,19 @@
         }
       }
     },
+    "/users/:userId": {
+      "get": {
+        "tags": ["User"],
+        "responses": {
+          "200": {
+            "description": "Body contains the data the user specified"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
     "/plans": {
       "get": {
         "tags": ["Plan"],
