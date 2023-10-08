@@ -9,12 +9,12 @@ import { Token } from "../../../../utils/token";
 
 export class SessionRepositorySqlite implements ISessionRepository {
   public async handle(props: UserRequest): Promise<Error | any> {
-    const { username, password } = props;
+    const { email, password } = props;
 
     const repo = (await Database).getRepository(UserSchema);
 
     const user = await repo.findOne({
-      where: { username: username.toLowerCase() },
+      where: { email: email },
     });
 
     if (!user) {
