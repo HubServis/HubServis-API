@@ -56,8 +56,6 @@ export class RatingRepositorySqlite implements IRatingsRepository {
 
   async delete(props: IDeleteRating): Promise<Error | any> {
     const { ratingId } = props;
-
-    console.log(ratingId);
     
     const ratingRepository = (await Database).getRepository(RatingSchema);
     const rating = await ratingRepository.findOne({
