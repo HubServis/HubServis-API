@@ -16,6 +16,7 @@ import { Professional } from "./Professional";
 import { Plan } from "./Plan";
 import Appointment from "./Appointment";
 import Category from "./Category";
+import Rating from "./Rating";
 
 @Entity("users")
 export class User extends BaseEntity {
@@ -33,6 +34,9 @@ export class User extends BaseEntity {
 
   @Column()
   password: string;
+
+  @OneToMany(() => Rating, (rating) => rating.user)
+  ratings: Rating[];
 
   @OneToMany(() => Appointment, (appointment) => appointment.user)
   appointments: Appointment[]

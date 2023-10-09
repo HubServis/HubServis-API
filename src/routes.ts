@@ -16,6 +16,7 @@ import { auth } from "./middleware/auth";
 import { can, is } from "./middleware/permissions";
 import AppointmentController from "./controllers/AppointmentController";
 import CategoryController from "./controllers/CategoryController";
+import RatingController from "./controllers/RatingController";
 
 const routes = Router();
 
@@ -121,5 +122,7 @@ routes.post("/category", auth, CategoryController.create);
 routes.get("/categories", CategoryController.find);
 routes.patch("/categories/services", CategoryController.appendService);
 routes.delete("/category/:categoryId", auth, CategoryController.delete);
+
+routes.post("/rating", auth, RatingController.create);
 
 export { routes };
