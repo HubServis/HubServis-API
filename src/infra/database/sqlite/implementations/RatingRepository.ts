@@ -1,5 +1,6 @@
 import {
   ICreateRating,
+  IDeleteRating,
   IRatingsRepository,
 } from "../../../../repositories/RatingRepository";
 import { Rating } from "../../../../entities/Rating";
@@ -13,20 +14,20 @@ export class RatingRepositorySqlite implements IRatingsRepository {
     const { comment, rating: ratingValue, serviceId, userId } = props;
 
     const serviceRepository = (await Database).getRepository(ServiceSchema);
-    const service = await serviceRepository.findOne({
-      where: { id: serviceId },
+    const service = await serviceRepository.findOneBy({
+      id: serviceId,
     });
 
     if (!service) return new Error("Service not found!");
 
     const userRepository = (await Database).getRepository(UserSchema);
-    const user = await userRepository.findOne({
-      where: { id: userId },
+    const user = await userRepository.findOneBy({
+      id: userId,
     });
 
     const newRating = new Rating({
       comment,
-      rating: ratingValue
+      rating: ratingValue,
     });
 
     const ratingRepository = (await Database).getRepository(RatingSchema);
@@ -45,5 +46,20 @@ export class RatingRepositorySqlite implements IRatingsRepository {
     //     ratings: true
     //   }
     // });
+  }
+
+  async delete(props: IDeleteRating): Promise<Error | any> {
+    const { ratingId } = props;
+
+    console.log(ratingId);
+    
+    const ratingRepository = (await Database).getRepository(RatingSchema);
+    const rating = await ratingRepository.findOneBy({
+      id: ratingId,
+    });
+
+    await ratingRepository.remove(rating);
+
+    return "Rating removed!";
   }
 }
