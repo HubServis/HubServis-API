@@ -2,6 +2,7 @@ import {
   ICreateRating,
   IDeleteRating,
   IRatingsRepository,
+  IUpdateRating,
 } from "../../../../repositories/RatingRepository";
 import { Rating } from "../../../../entities/Rating";
 import { Rating as RatingSchema } from "../models/Rating";
@@ -44,7 +45,7 @@ export class RatingRepositorySqlite implements IRatingsRepository {
     await serviceRepository.save(service);
 
     return rating;
-    
+
     // const serviceRepository = (await Database).getRepository(ServiceSchema);
     // const service = await serviceRepository.find({
     //   where: { id: serviceId },
@@ -56,17 +57,17 @@ export class RatingRepositorySqlite implements IRatingsRepository {
 
   async delete(props: IDeleteRating): Promise<Error | any> {
     const { ratingId } = props;
-    
+
     const ratingRepository = (await Database).getRepository(RatingSchema);
     const rating = await ratingRepository.findOne({
-      where: {id: ratingId},
-      relations: ["service"]
+      where: { id: ratingId },
+      relations: ["service"],
     });
 
-    if(!rating) return new Error("There is no evaluation");
+    if (!rating) return new Error("There is no evaluation");
 
     await ratingRepository.remove(rating);
-    
+
     const serviceRepository = (await Database).getRepository(ServiceSchema);
     const service = await serviceRepository.findOneBy({
       id: rating.service.id,
@@ -81,7 +82,37 @@ export class RatingRepositorySqlite implements IRatingsRepository {
     return "Rating removed!";
   }
 
-  async findAll(): Promise<Error | Rating[]> { 
+  async patch(props: IUpdateRating): Promise<Error | Rating> {
+    const { ratingId, rating: ratingValue, comment } = props;
+
+    const ratingRepository = (await Database).getRepository(RatingSchema);
+    const rating = await ratingRepository.findOne({
+      where: {
+        id: ratingId,
+      },
+      relations: ["service"]
+    });
+
+    if (!rating) return new Error("Rating not found!");
+
+    const serviceRepository = (await Database).getRepository(ServiceSchema);
+    const service = await serviceRepository.findOneBy({
+      id: rating.service.id,
+    });
+
+    service.totalValueRating = (service.totalValueRating - rating.rating) + ratingValue;
+    service.averageRating = service.totalValueRating / service.totalRatings;
+
+    rating.comment = (rating.comment != comment) ? comment : rating.comment;
+    rating.rating = (rating.rating != ratingValue) ? ratingValue : rating.rating;
+
+    await serviceRepository.save(service);
+    await ratingRepository.save(rating);
+
+    return rating;
+  }
+
+  async findAll(): Promise<Error | Rating[]> {
     const ratingRepository = (await Database).getRepository(RatingSchema);
     const rating = await ratingRepository.find();
 
