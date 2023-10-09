@@ -60,11 +60,25 @@ export class RatingRepositorySqlite implements IRatingsRepository {
     console.log(ratingId);
     
     const ratingRepository = (await Database).getRepository(RatingSchema);
-    const rating = await ratingRepository.findOneBy({
-      id: ratingId,
+    const rating = await ratingRepository.findOne({
+      where: {id: ratingId},
+      relations: ["service"]
     });
 
+    if(!rating) return new Error("There is no evaluation");
+
     await ratingRepository.remove(rating);
+    
+    const serviceRepository = (await Database).getRepository(ServiceSchema);
+    const service = await serviceRepository.findOneBy({
+      id: rating.service.id,
+    });
+
+    service.totalRatings = service.totalRatings - 1;
+    service.totalValueRating = service.totalValueRating - rating.rating;
+    service.averageRating = service.totalValueRating / service.totalRatings;
+
+    await serviceRepository.save(service);
 
     return "Rating removed!";
   }
