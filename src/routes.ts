@@ -126,5 +126,6 @@ routes.delete("/category/:categoryId", auth, CategoryController.delete);
 routes.post("/rating", auth, RatingController.create);
 routes.delete("/rating/:ratingId", RatingController.delete);
 routes.get("/rating", RatingController.findAll);
+routes.patch("/rating/:ratingId", RatingController.patch);
 
 export { routes };
