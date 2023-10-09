@@ -77,4 +77,5 @@ export interface ICategoryController {
 
 export interface IRatingController {
   create(req: Request, res: Response): Promise<Response>;
+  delete(req: Request, res: Response): Promise<Response>;
 }

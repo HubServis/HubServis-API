@@ -7,6 +7,11 @@ export interface ICreateRating{
     rating: number;
 }
 
+export interface IDeleteRating{
+    ratingId: string;
+}
+
 export interface IRatingsRepository {
     create(props: ICreateRating): Promise<Error | Rating>;
+    delete(props: IDeleteRating): Promise<Error | Rating>;
   }
