@@ -37,8 +37,14 @@ export class RatingRepositorySqlite implements IRatingsRepository {
       service,
     });
 
-    return rating;
+    service.totalRatings = service.totalRatings + 1;
+    service.totalValueRating = service.totalValueRating + newRating.rating;
+    service.averageRating = service.totalValueRating / service.totalRatings;
 
+    await serviceRepository.save(service);
+
+    return rating;
+    
     // const serviceRepository = (await Database).getRepository(ServiceSchema);
     // const service = await serviceRepository.find({
     //   where: { id: serviceId },

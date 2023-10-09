@@ -27,6 +27,15 @@ export class Service extends BaseEntity {
   @Column()
   description: string;
 
+  @Column("decimal", { default: 0 })
+  averageRating: number; // avaliação média do serviço
+
+  @Column({ default: 0 })
+  totalRatings: number; // total de avaliações feitas para esse serviço
+
+  @Column("decimal", { default: 0 })
+  totalValueRating: number; // valor total das avaliações somadas
+
   @OneToMany(() => Appointment, (appointment) => appointment.service)
   appointments: Appointment[];
 
