@@ -80,4 +80,11 @@ export class RatingRepositorySqlite implements IRatingsRepository {
 
     return "Rating removed!";
   }
+
+  async findAll(): Promise<Error | Rating[]> { 
+    const ratingRepository = (await Database).getRepository(RatingSchema);
+    const rating = await ratingRepository.find();
+
+    return rating;
+  }
 }
