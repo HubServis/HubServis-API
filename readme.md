@@ -73,3 +73,15 @@ profissional é valido? Ele trabalha no mesmo negócio do serviço?
  
  ### Categorias
   - As categorias podem ser privadas ou publicas, se for privada ela pertencerá a um negocio (business); Já se ela for publica não terá que pertencer a um negocio (business), apenas a um owner (usuario que a criou)
+
+  #### **Listagem de categorias**
+  A listagem de categorias pode ser feita de diversas formas, pois contamos com um sistema de filtragem aonde vc pode escolher oq quer listar. 
+  
+  **OBS**: Esses filtros são passados por `query params` e só aceitamos 1 por vez, caso informe mais que 1 será retornado o padrão.
+
+  Veja abaixo as opções disponiveis:
+   - O padrão da rota retorna apenas as categorias publicas.
+   - `showPrivateOnly` - retorna apenas as categorias privadas.
+   - `showAll` - retorna todas as categorias.
+
+
