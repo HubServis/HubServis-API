@@ -1,10 +1,10 @@
-import { ICategoryRepository, ICreateCategory } from "../../repositories/CategoryRepository";
+import { ICategoryRepository, ICreateCategory, IFindCategory } from "../../repositories/CategoryRepository";
 
 export class FindCategoryService {
   constructor(private categoriesRepository: ICategoryRepository) {}
 
-  public async execute() {
-    const category = await this.categoriesRepository.find();
+  public async execute(props: IFindCategory) {
+    const category = await this.categoriesRepository.find(props);
     return category;
   }
 }

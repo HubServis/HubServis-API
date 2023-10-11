@@ -17,9 +17,14 @@ export interface IDeleteCategory{
     userId: string;
 }
 
+export interface IFindCategory{
+    showAll: any,
+    showPrivateOnly: any
+}
+
 export interface ICategoryRepository {
     create(props: ICreateCategory): Promise<Error | Category>;
-    find(): Promise<Error | Category[]>;
+    find(props: IFindCategory): Promise<Error | Category[]>;
     appendService(props: IAppendCategoryService): Promise<Error | Service>;
     delete(props: IDeleteCategory): Promise<Error | string>;
     // patch(props: IPatchStatusAppointment): Promise<Error | Appointment>;
