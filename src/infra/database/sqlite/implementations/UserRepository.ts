@@ -11,7 +11,7 @@ import { sign } from "jsonwebtoken";
 
 export class UserRepositorySqlite implements IUsersRepository {
   public async create(props: User): Promise<Error | ResRegisterUser> {
-    const { id, username, email, password, name, cpfcnpj, plan } = props;
+    const { id, username, email, password, name, cpfcnpj, plan, image } = props;
 
     const existUser = (await Database).getRepository(UserSchema);
     const isExistUser = await existUser.findOne({
@@ -45,6 +45,7 @@ export class UserRepositorySqlite implements IUsersRepository {
       cpfcnpj,
       password: passwordHash,
       plan: plan,
+      image: image,
     });
 
     const token = sign({ id: user.id }, process.env.SECRET_JWT, {
@@ -65,6 +66,7 @@ export class UserRepositorySqlite implements IUsersRepository {
         email: true,
         username: true,
         created_at: true,
+        image: true,
       },
       relations: {
         plan: { benefits: true },
@@ -80,7 +82,7 @@ export class UserRepositorySqlite implements IUsersRepository {
 
     const user = await userRepository.findOne({
       where: {
-        id: userId
+        id: userId,
       },
       select: {
         id: true,
@@ -96,7 +98,42 @@ export class UserRepositorySqlite implements IUsersRepository {
       },
     });
 
-    if(!user) return new Error("User not found!");
+    if (!user) return new Error("User not found!");
+
+    return user;
+  }
+
+  public async updateUser(props: { userId: string, formData: any }): Promise<Error | User> {
+    const { userId } = props;
+    const userRepository = (await Database).getRepository(UserSchema);
+
+    const user = await userRepository.findOne({
+      where: {
+        id: userId,
+      },
+      select: {
+        id: true,
+        cpfcnpj: true,
+        name: true,
+        email: true,
+        username: true,
+        created_at: true,
+		image: true
+      },
+      relations: {
+        plan: { benefits: true },
+      },
+    });
+
+    if (!user) return new Error("User not found!");
+
+	user.name = !!props.formData.name && props.formData.name || user.name;
+	user.email = !!props.formData.email && props.formData.email || user.email;
+	user.cpfcnpj = !!props.formData.cpfcnpj && props.formData.cpfcnpj || user.cpfcnpj;
+	user.username = !!props.formData.username && props.formData.username || user.username;
+	user.password = !!props.formData.password && props.formData.password || user.password;
+	user.plan = !!props.formData.plan && props.formData.plan || user.plan;
+	user.image = !!props.formData.image && props.formData.image || user.image;
 
     return user;
   }

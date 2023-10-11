@@ -44,28 +44,31 @@ export class User extends BaseEntity {
   @OneToMany(() => Extra, (extra) => extra.user)
   extras: Extra[];
 
-  @Column()
+  @Column({ nullable: true })
+  image: string;
+
+  @Column({ type: "simple-array", nullable: true })
   permissions: Permission[];
 
-  @Column()
+  @Column({ type: "simple-array", nullable: true })
   roles: Role[];
 
-  @OneToMany(() => Appointment, (appointment) => appointment.user)
-  appointments: Appointment[]
+  @OneToMany(() => Appointment, (appointment) => appointment.user, { nullable: true })
+  appointments: Appointment[];
 
-  @OneToOne(() => Business)
-  @JoinColumn()
+  @OneToOne(() => Business, { nullable: true })
+  @JoinColumn({})
   business: Business;
 
-  @OneToOne(() => Professional)
+  @OneToOne(() => Professional, { nullable: true })
   @JoinColumn()
   professional: Professional;
 
-  @OneToOne(() => Plan)
+  @OneToOne(() => Plan, { nullable: true })
   @JoinColumn()
   plan: Plan;
 
-  @OneToOne(() => Category)
+  @OneToOne(() => Category, { nullable: true })
   @JoinColumn()
   category: Category;
 }

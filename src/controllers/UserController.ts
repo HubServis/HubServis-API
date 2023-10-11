@@ -7,23 +7,25 @@ import { UserRepositorySqlite } from "../infra/database/sqlite/implementations/U
 import { AppendPlanUserService } from "../services/user/AppendPlanUser";
 import { DeletePlanUserService } from "../services/user/DeletePlanUser";
 import { FindOneUserService } from "../services/user/findOneUser";
+import { UpdateUserService } from "../services/user/updateUserService";
 
 const createUserService = new CreateUserService(new UserRepositorySqlite());
 const findUserService = new FindUserService(new UserRepositorySqlite());
 const findOneUserService = new FindOneUserService(new UserRepositorySqlite());
+const updateUserService = new UpdateUserService(new UserRepositorySqlite());
 const appendPlanUserService = new AppendPlanUserService(
-  new UserRepositorySqlite()
+  new UserRepositorySqlite(),
 );
 const deletePlanUserService = new DeletePlanUserService(
-  new UserRepositorySqlite()
+  new UserRepositorySqlite(),
 );
 
 class UserController implements IUserCotroller {
   async create(req: Request, res: Response) {
-    const { username, email, password, name, cpfcnpj } = req.body;
+    const { username, email, password, name, cpfcnpj, image } = req.body;
 
     try {
-      const user = new User({ username, email, password, cpfcnpj, name });
+      const user = new User({ username, email, password, cpfcnpj, name, image });
       const createdUser = await createUserService.execute(user);
 
       if (createdUser instanceof Error) {
@@ -47,19 +49,36 @@ class UserController implements IUserCotroller {
     }
   }
 
-
   async findOneUser(req: Request, res: Response) {
     const { userId } = req.params;
 
     try {
-      const result = await findOneUserService.execute({userId});
+      const result = await findOneUserService.execute({ userId });
 
-      if (result instanceof Error)  return res.status(404).json(result.message);
+      if (result instanceof Error) return res.status(404).json(result.message);
 
       return res.status(201).json(result);
     } catch (err) {
       console.log(err.message);
       return res.status(500).json("Unexpected error");
+    }
+  }
+
+  async updateUser(req: Request, res: Response) {
+    const { userId } = req.params;
+    const formData = req.body;
+
+    try {
+      const result = await updateUserService.execute({
+        userId,
+        formData,
+      });
+
+      if (result instanceof Error) return res.status(404).json(result.message);
+
+      return res.status(201).json(result);
+    } catch (err) {
+      return res.status(500).json("Unexpected Error!");
     }
   }
 

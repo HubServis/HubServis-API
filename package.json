@@ -44,9 +44,9 @@
     "mongoose": "^6.9.2",
     "pnpm": "^8.4.0",
     "reflect-metadata": "^0.1.13",
-    "sqlite3": "^5.1.4",
+    "sqlite3": "^5.1.6",
     "swagger-ui-express": "^4.6.3",
-    "typeorm": "^0.3.12",
+    "typeorm": "^0.3.17",
     "typeorm-extension": "^3.0.1",
     "uuid": "^9.0.0"
   }
