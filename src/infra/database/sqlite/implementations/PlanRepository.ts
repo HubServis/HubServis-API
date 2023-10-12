@@ -37,6 +37,7 @@ export class PlansRepositorySqlite implements IPlanRepository {
       name,
       price,
       benefits: [],
+      limits: [],
       description,
       // month_price,
       // client_limit,
@@ -53,7 +54,7 @@ export class PlansRepositorySqlite implements IPlanRepository {
 
     const plan = await planRepository.find({
       where: { name: props },
-      relations: { benefits: true },
+      relations: { benefits: true, limits: true },
     });
 
     if (!plan) return new Error("This Plan not Exists!");
@@ -65,7 +66,7 @@ export class PlansRepositorySqlite implements IPlanRepository {
     const planRepository = (await Database).getRepository(PlanSchema);
 
     const plan = await planRepository.findOne({
-      where: { name: props },
+      where: { id: props },
     });
 
     if (!plan) return new Error("This Plan not Exists");
@@ -76,27 +77,23 @@ export class PlansRepositorySqlite implements IPlanRepository {
   }
 
   public async patch(props: IPlanUpdate): Promise<string | Error> {
+    const { planId, description, name, price } = props;
     const planRepository = (await Database).getRepository(PlanSchema);
 
     const plan = await planRepository.findOne({
-      where: { name: props.planName },
+      where: { id: planId },
       relations: { benefits: true },
     });
 
     if (!plan) return new Error("This Plan not Exist!");
 
-    plan.name = props.newPlan.name;
-    plan.price = props.newPlan.price;
-    plan.description = props.newPlan.description;
-    // plan.month_price = props.newPlan.month_price;
-    // plan.client_limit = props.newPlan.client_limit;
-    // plan.customer_limit = props.newPlan.customer_limit;
-    // plan.reminder_limit = props.newPlan.reminder_limit;
-    // plan.professional_limit = props.newPlan.professional_limit;
+    plan.name = name ?? plan.name;
+    plan.price = price ?? plan.price;
+    plan.description = description ?? plan.description;
 
     await planRepository.save(plan);
 
-    return `Plan with name ${props.planName} Edited Successfuly`;
+    return `Plan with name ${plan.name} Edited Successfuly`;
   }
 
   public async appendBenefit(
