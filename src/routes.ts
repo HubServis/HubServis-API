@@ -21,28 +21,34 @@ import LimitController from "./controllers/LimitController";
 
 const routes = Router();
 
+// LOGIN
 routes.post("/login", SessionController.handle);
 
+// USERS
 routes.get("/users", UserController.find);
 routes.get("/user/:userId", UserController.findOneUser);
 routes.post("/user", UserController.create);
 routes.patch("/user/:userId/:planName", UserController.appendPlan);
 routes.delete("/user/:userId", UserController.deletePlan);
 
+// BUSINESS
 routes.post("/business/create", auth, BusinessController.create);
 routes.get("/business", BusinessController.find);
 routes.get("/business/:id", BusinessController.findOne);
 routes.delete("/business/delete/:businessId", auth, BusinessController.delete);
 routes.patch("/business", auth, BusinessController.patch);
 
+// PROFESSIONAL
 routes.post("/professional/add", auth, ProfessionalController.addToBusiness);
 routes.get("/professionals", ProfessionalController.findProfessionals);
 
+// SERVICE
 routes.post("/service/create", auth, ServiceController.create);
 routes.get("/services", ServiceController.find);
 routes.get("/service/:serviceId", ServiceController.findOne);
 routes.delete("/service/:serviceId", ServiceController.delete);
 
+// ACL
 routes.post("/role", RoleController.create); //rota que será autenticada futuramente
 
 routes.post("/permission", PermissionController.create); //rota que será autenticada futuramente
@@ -55,6 +61,7 @@ routes.post("/roles/:roleId", RoleController.createRolePermission); //rota que s
 routes.post("/product", ProductController.create);
 routes.get("/products", ProductController.find);
 
+// BENEFITS
 routes.get("/benefit", BenefitController.find);
 routes.post(
   "/benefit",
@@ -78,6 +85,7 @@ routes.delete(
   BenefitController.delete
 );
 
+// PLANS
 routes.get("/plans", PlanController.find);
 routes.post(
   "/plans",
@@ -115,20 +123,24 @@ routes.delete(
   PlanController.deleteBenefit
 );
 
+// LIMITS
 routes.post("/limit", auth, LimitController.create);
 routes.get("/limits", LimitController.find);
 routes.patch("/limit", auth, LimitController.patch);
 routes.delete("/limit/:id", LimitController.delete);
 
+// APPINTMENTS
 routes.get("/appointments", AppointmentController.find);
 routes.post("/appointment/create", auth, AppointmentController.create);
 routes.patch("/appointment/:id/:status", auth, AppointmentController.patch);
 
+// CATEGORY
 routes.post("/category", auth, CategoryController.create);
 routes.get("/categories", CategoryController.find);
 routes.patch("/categories/services", CategoryController.appendService);
 routes.delete("/category/:categoryId", auth, CategoryController.delete);
 
+// RATING
 routes.post("/rating", auth, RatingController.create);
 routes.delete("/rating/:ratingId", RatingController.delete);
 routes.get("/ratings", RatingController.findAll);
