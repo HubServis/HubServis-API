@@ -77,10 +77,10 @@ class PlansController implements IPlansController {
   }
 
   async delete(req: Request, res: Response) {
-    const { name } = req.params;
+    const { idPlan: id } = req.params;
 
     try {
-      const result = await deletePlansService.execute(name);
+      const result = await deletePlansService.execute(id);
 
       if (result instanceof Error) return res.status(400).json(result.message);
 
@@ -91,36 +91,19 @@ class PlansController implements IPlansController {
   }
 
   async patch(req: Request, res: Response) {
-    const { planName } = req.params;
     const {
-      id,
+      planId,
       name,
       price,
-      benefits,
       description,
-      // month_price,
-      // client_limit,
-      // customer_limit,
-      // reminder_limit,
-      // professional_limit,
     } = req.body;
 
     try {
       const result = await updatePlansService.execute({
-        planName,
-        newPlan: {
-          id,
-          name,
-          price,
-          benefits,
-          description,
-          // month_price,
-          // client_limit,
-          // customer_limit,
-          // reminder_limit,
-          // professional_limit,
-          isPrivated: true
-        },
+        planId,
+        name,
+        price,
+        description
       });
 
       if (result instanceof Error) return res.status(400).json(result.message);

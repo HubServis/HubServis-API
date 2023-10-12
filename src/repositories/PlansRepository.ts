@@ -3,8 +3,10 @@ import { Benefit } from "../entities/Benefit";
 import { Plan } from "../entities/Plan";
 
 export interface IPlanUpdate {
-  planName: string;
-  newPlan: Plan;
+  name: string;
+  price: number;
+  planId: string;
+  description: string;
 }
 
 export interface IPlanBenefitNames {

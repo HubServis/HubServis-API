@@ -33,11 +33,11 @@ export class Plan extends BaseEntity {
   // @Column()
   // customer_limit: string;
 
-  @ManyToMany(() => Benefit)
+  @ManyToMany(() => Benefit, {cascade: true})
   @JoinTable()
   benefits: Benefit[]; //relation to benefits
 
-  @ManyToMany(() => Limit)
+  @ManyToMany(() => Limit, {cascade: true})
   @JoinTable()
   limits: Limit[]; //relation to limits
 }

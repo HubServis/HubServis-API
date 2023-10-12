@@ -59,22 +59,22 @@ routes.get("/benefit", BenefitController.find);
 routes.post(
   "/benefit",
   auth,
-  is(["dev_plan", "plano teste"]),
-  can(["create_plan"]),
+  // is(["dev_plan", "plano teste"]),
+  // can(["create_plan"]),
   BenefitController.create
 );
 
 routes.patch(
   "/benefit/:benefitName",
-  is(["dev_plan"]),
-  can(["create_plan"]),
+  // is(["dev_plan"]),
+  // can(["create_plan"]),
   BenefitController.patch
 );
 
 routes.delete(
   "/benefit/:benefitName",
-  is(["dev_plan"]),
-  can(["create_plan"]),
+  // is(["dev_plan"]),
+  // can(["create_plan"]),
   BenefitController.delete
 );
 
@@ -82,36 +82,36 @@ routes.get("/plans", PlanController.find);
 routes.post(
   "/plans",
   auth,
-  is(["dev_plan"]),
-  can(["create_plan"]),
+  // is(["dev_plan"]),
+  // can(["create_plan"]),
   PlanController.create
 );
 
 routes.patch(
-  "/plans/:planName",
-  is(["dev_plan"]),
-  can(["create_plan"]),
+  "/plans",
+  // is(["dev_plan"]),
+  // can(["create_plan"]),
   PlanController.patch
 );
 
 routes.delete(
-  "/plans/:planName",
-  is(["dev_plan"]),
-  can(["create_plan"]),
+  "/plans/:idPlan",
+  // is(["dev_plan"]),
+  // can(["create_plan"]),
   PlanController.delete
 );
 
 routes.patch(
   "/plans/:planName/:benefitName",
-  is(["dev_plan"]),
-  can(["create_plan"]),
+  // is(["dev_plan"]),
+  // can(["create_plan"]),
   PlanController.appendBenefit
 );
 
 routes.delete(
   "/plans/:planName/:benefitName",
-  is(["dev_plan"]),
-  can(["create_plan"]),
+  // is(["dev_plan"]),
+  // can(["create_plan"]),
   PlanController.deleteBenefit
 );
 
