@@ -17,11 +17,11 @@ export class PlansRepositorySqlite implements IPlanRepository {
       name,
       price,
       description,
-      month_price,
-      client_limit,
-      customer_limit,
-      reminder_limit,
-      professional_limit,
+      // month_price,
+      // client_limit,
+      // customer_limit,
+      // reminder_limit,
+      // professional_limit,
     } = props;
 
     const planRepository = (await Database).getRepository(PlanSchema);
@@ -38,11 +38,11 @@ export class PlansRepositorySqlite implements IPlanRepository {
       price,
       benefits: [],
       description,
-      month_price,
-      client_limit,
-      customer_limit,
-      reminder_limit,
-      professional_limit,
+      // month_price,
+      // client_limit,
+      // customer_limit,
+      // reminder_limit,
+      // professional_limit,
     });
 
     return plan;
@@ -88,11 +88,11 @@ export class PlansRepositorySqlite implements IPlanRepository {
     plan.name = props.newPlan.name;
     plan.price = props.newPlan.price;
     plan.description = props.newPlan.description;
-    plan.month_price = props.newPlan.month_price;
-    plan.client_limit = props.newPlan.client_limit;
-    plan.customer_limit = props.newPlan.customer_limit;
-    plan.reminder_limit = props.newPlan.reminder_limit;
-    plan.professional_limit = props.newPlan.professional_limit;
+    // plan.month_price = props.newPlan.month_price;
+    // plan.client_limit = props.newPlan.client_limit;
+    // plan.customer_limit = props.newPlan.customer_limit;
+    // plan.reminder_limit = props.newPlan.reminder_limit;
+    // plan.professional_limit = props.newPlan.professional_limit;
 
     await planRepository.save(plan);
 
