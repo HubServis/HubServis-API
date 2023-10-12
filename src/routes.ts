@@ -17,6 +17,7 @@ import { can, is } from "./middleware/permissions";
 import AppointmentController from "./controllers/AppointmentController";
 import CategoryController from "./controllers/CategoryController";
 import RatingController from "./controllers/RatingController";
+import LimitController from "./controllers/LimitController";
 
 const routes = Router();
 
@@ -114,8 +115,11 @@ routes.delete(
   PlanController.deleteBenefit
 );
 
+routes.post("/limit", auth, LimitController.create);
+routes.get("/limits", LimitController.find);
+
 routes.get("/appointments", AppointmentController.find);
-routes.post("/appointment/create", auth ,AppointmentController.create);
+routes.post("/appointment/create", auth, AppointmentController.create);
 routes.patch("/appointment/:id/:status", auth, AppointmentController.patch);
 
 routes.post("/category", auth, CategoryController.create);

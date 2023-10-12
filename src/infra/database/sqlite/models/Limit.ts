@@ -4,7 +4,7 @@ import { BaseEntity } from "./BaseEntity";
 import { Benefit } from "./Benefit";
 
 @Entity("Limits")
-export class Limits extends BaseEntity {
+export class Limit extends BaseEntity {
   @Column()
   name: string;
 
@@ -16,4 +16,7 @@ export class Limits extends BaseEntity {
 
   @Column({ default: true })
   isControllable: boolean;
+
+  @Column({ default: "" })
+  role: string;
 }
