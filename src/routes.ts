@@ -117,6 +117,8 @@ routes.delete(
 
 routes.post("/limit", auth, LimitController.create);
 routes.get("/limits", LimitController.find);
+routes.patch("/limit", auth, LimitController.patch);
+routes.delete("/limit/:id", LimitController.delete);
 
 routes.get("/appointments", AppointmentController.find);
 routes.post("/appointment/create", auth, AppointmentController.create);

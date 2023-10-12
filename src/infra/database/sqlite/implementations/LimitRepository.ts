@@ -1,23 +1,20 @@
 import Database from "../config";
 
 import { Limit as LimitSchema } from "../models/Limit";
-import { ILimitRepository } from "../../../../repositories/LimitRepository";
+import {
+  ILimitRepository,
+  ILimitUpdate,
+} from "../../../../repositories/LimitRepository";
 import { Limit } from "../../../../entities/Limit";
 
 export class LimitsRepositorySqlite implements ILimitRepository {
   public async create(props: Limit): Promise<string | Limit | Error> {
-    const {
-      name,
-      description,
-      value,
-      isControllable,
-      role,
-    } = props;
+    const { name, description, value, isControllable, role } = props;
 
     const limitRepository = (await Database).getRepository(LimitSchema);
 
     const alreadyCreated = await limitRepository.findOne({
-      where: { name: name, role: role },
+      where: [{ name: name }, { role: role }],
     });
 
     if (alreadyCreated) return new Error("This Limit Already Exists");
@@ -27,8 +24,8 @@ export class LimitsRepositorySqlite implements ILimitRepository {
       description,
       isControllable,
       role,
-      value
-    })
+      value,
+    });
 
     const limit = await limitRepository.save(newLimit);
 
@@ -43,43 +40,49 @@ export class LimitsRepositorySqlite implements ILimitRepository {
     return limit;
   }
 
-  // public async delete(props: string): Promise<string | Error> {
-  //   const planRepository = (await Database).getRepository(PlanSchema);
+  public async delete(props: string): Promise<string | Error> {
+    const limitRepository = (await Database).getRepository(LimitSchema);
 
-  //   const plan = await planRepository.findOne({
-  //     where: { name: props },
-  //   });
+    const limit = await limitRepository.findOne({
+      where: { id: props },
+    });
 
-  //   if (!plan) return new Error("This Plan not Exists");
+    if (!limit) return new Error("This limit not Exists");
 
-  //   await planRepository.remove(plan);
+    await limitRepository.remove(limit);
 
-  //   return `Plan with name ${plan} removed!`;
-  // }
+    return `Limit with name '${limit.name}' and role '${limit.role}' removed!`;
+  }
 
-  // public async patch(props: IPlanUpdate): Promise<string | Error> {
-  //   const planRepository = (await Database).getRepository(PlanSchema);
+  public async patch(props: ILimitUpdate): Promise<string | Error> {
+    const limitRepository = (await Database).getRepository(LimitSchema);
 
-  //   const plan = await planRepository.findOne({
-  //     where: { name: props.planName },
-  //     relations: { benefits: true },
-  //   });
+    if (!props.newLimit.id) return new Error("ID not informed!");
 
-  //   if (!plan) return new Error("This Plan not Exist!");
+    const limit = await limitRepository.findOne({
+      where: { id: props.newLimit.id },
+    });
 
-  //   plan.name = props.newPlan.name;
-  //   plan.price = props.newPlan.price;
-  //   plan.description = props.newPlan.description;
-  //   // plan.month_price = props.newPlan.month_price;
-  //   // plan.client_limit = props.newPlan.client_limit;
-  //   // plan.customer_limit = props.newPlan.customer_limit;
-  //   // plan.reminder_limit = props.newPlan.reminder_limit;
-  //   // plan.professional_limit = props.newPlan.professional_limit;
+    if (!limit) return new Error("This limit not Exist!");
 
-  //   await planRepository.save(plan);
+    const limitRoleExist = await limitRepository.findOne({
+      where: { role: props.newLimit.role },
+    });
 
-  //   return `Plan with name ${props.planName} Edited Successfuly`;
-  // }
+    if (limitRoleExist)
+      return new Error("There is already a limit with this role!");
+
+    limit.name = props.newLimit.name ?? limit.name;
+    limit.value = props.newLimit.value ?? limit.value;
+    limit.description = props.newLimit.description ?? limit.description;
+    limit.isControllable =
+      props.newLimit.isControllable ?? limit.isControllable;
+    limit.role = props.newLimit.role ?? limit.role;
+
+    await limitRepository.save(limit);
+
+    return `Limit with name ${props.newLimit.name} edited Successfuly`;
+  }
 
   // public async appendBenefit(
   //   props: IPlanBenefitNames
