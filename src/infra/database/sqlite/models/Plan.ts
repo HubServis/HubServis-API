@@ -2,6 +2,7 @@ import { Column, ManyToMany, Entity, JoinTable } from "typeorm";
 
 import { BaseEntity } from "./BaseEntity";
 import { Benefit } from "./Benefit";
+import { Limits } from "./Limits ";
 
 @Entity("Plans")
 export class Plan extends BaseEntity {
@@ -35,4 +36,8 @@ export class Plan extends BaseEntity {
   @ManyToMany(() => Benefit)
   @JoinTable()
   benefits: Benefit[]; //relation to benefits
+
+  @ManyToMany(() => Limits)
+  @JoinTable()
+  limits: Limits[]; //relation to limits
 }
