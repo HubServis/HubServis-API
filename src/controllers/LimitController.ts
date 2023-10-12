@@ -8,9 +8,17 @@ import { CreateLimitService } from "../services/Limits/CreateLimit";
 import { LimitsRepositorySqlite } from "../infra/database/sqlite/implementations/LimitRepository";
 import { createECDH } from "crypto";
 import { FindLimitService } from "../services/Limits/FindLimit";
+import { DeleteLimitService } from "../services/Limits/DeleteLimit";
+import { PatchLimitService } from "../services/Limits/PatchLimit";
 
-const createLimitsService = new CreateLimitService(new LimitsRepositorySqlite());
+const createLimitsService = new CreateLimitService(
+  new LimitsRepositorySqlite()
+);
 const findLimitsService = new FindLimitService(new LimitsRepositorySqlite());
+const deleteLimitsService = new DeleteLimitService(
+  new LimitsRepositorySqlite()
+);
+const patchLimitsService = new PatchLimitService(new LimitsRepositorySqlite());
 
 // const deletePlansService = new DeletePlanService(new PlansRepositorySqlite());
 // const updatePlansService = new UpdatePlanService(new PlansRepositorySqlite());
@@ -23,13 +31,7 @@ const findLimitsService = new FindLimitService(new LimitsRepositorySqlite());
 
 class LimitController implements ILimitsController {
   async create(req: Request, res: Response) {
-    const {
-      name,
-      description,
-      value,
-      isControllable,
-      role
-    } = req.body;
+    const { name, description, value, isControllable, role } = req.body;
 
     try {
       const limit = new Limit({
@@ -37,7 +39,7 @@ class LimitController implements ILimitsController {
         description,
         value: Number(value),
         isControllable,
-        role
+        role,
       });
 
       const result = await createLimitsService.execute(limit);
@@ -66,60 +68,42 @@ class LimitController implements ILimitsController {
     }
   }
 
-  // async delete(req: Request, res: Response) {
-  //   const { name } = req.params;
+  async delete(req: Request, res: Response) {
+    const { id } = req.params;
 
-  //   try {
-  //     const result = await deletePlansService.execute(name);
+    try {
+      const result = await deleteLimitsService.execute(id);
 
-  //     if (result instanceof Error) return res.status(400).json(result.message);
+      if (result instanceof Error) return res.status(400).json(result.message);
 
-  //     return res.status(201).json("OK");
-  //   } catch (err) {
-  //     return res.status(500).json(`Unexpected Error: ${err.message}`);
-  //   }
-  // }
+      return res.status(201).json(result);
+    } catch (err) {
+      return res.status(500).json(`Unexpected Error: ${err.message}`);
+    }
+  }
 
-  // async patch(req: Request, res: Response) {
-  //   const { planName } = req.params;
-  //   const {
-  //     id,
-  //     name,
-  //     price,
-  //     benefits,
-  //     description,
-  //     // month_price,
-  //     // client_limit,
-  //     // customer_limit,
-  //     // reminder_limit,
-  //     // professional_limit,
-  //   } = req.body;
+  async patch(req: Request, res: Response) {
+    const { id, name, description, value, isControllable, role } = req.body;
 
-  //   try {
-  //     const result = await updatePlansService.execute({
-  //       planName,
-  //       newPlan: {
-  //         id,
-  //         name,
-  //         price,
-  //         benefits,
-  //         description,
-  //         // month_price,
-  //         // client_limit,
-  //         // customer_limit,
-  //         // reminder_limit,
-  //         // professional_limit,
-  //         isPrivated: true
-  //       },
-  //     });
+    try {
+      const result = await patchLimitsService.execute({
+        newLimit: {
+          id,
+          name,
+          description,
+          value,
+          isControllable,
+          role,
+        },
+      });
 
-  //     if (result instanceof Error) return res.status(400).json(result.message);
+      if (result instanceof Error) return res.status(400).json(result.message);
 
-  //     return res.status(201).json("Updated!");
-  //   } catch (err) {
-  //     return res.status(500).json(`Unexpected Error: ${err.message}`);
-  //   }
-  // }
+      return res.status(201).json(result);
+    } catch (err) {
+      return res.status(500).json(`Unexpected Error: ${err.message}`);
+    }
+  }
 
   // async appendBenefit(req: Request, res: Response): Promise<Response> {
   //   const { planName, benefitName } = req.params;
