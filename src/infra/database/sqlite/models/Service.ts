@@ -1,6 +1,8 @@
 import {
   Column,
   Entity,
+  JoinColumn,
+  JoinTable,
   ManyToMany,
   ManyToOne,
   OneToMany,
@@ -9,6 +11,7 @@ import { BaseEntity } from "./BaseEntity";
 import { Business } from "./Business";
 import Appointment from "./Appointment";
 import Category from "./Category";
+import Rating from "./Rating";
 
 @Entity("service")
 export class Service extends BaseEntity {
@@ -24,8 +27,17 @@ export class Service extends BaseEntity {
   @Column()
   description: string;
 
+  @Column("decimal", { default: 0 })
+  averageRating: number; // avaliação média do serviço
+
+  @Column({ default: 0 })
+  totalRatings: number; // total de avaliações feitas para esse serviço
+
+  @Column("decimal", { default: 0 })
+  totalValueRating: number; // valor total das avaliações somadas
+
   @OneToMany(() => Appointment, (appointment) => appointment.service)
-  appointments: Appointment[]
+  appointments: Appointment[];
 
   @ManyToOne(() => Business, (business) => business.services, {
     onDelete: "CASCADE",
@@ -33,7 +45,11 @@ export class Service extends BaseEntity {
   business: Business;
 
   @ManyToMany(() => Category, (category) => category.services)
-  categories: Category[]
+  categories: Category[];
+
+  @OneToMany(() => Rating, (rating) => rating.service)
+  @JoinColumn()
+  ratings: Rating[];
 }
 
 export default Service;

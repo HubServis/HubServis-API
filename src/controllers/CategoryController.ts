@@ -50,8 +50,13 @@ class CategoryController implements ICategoryController {
   }
 
   async find(req: Request, res: Response) {
+    const { showPrivateOnly, showAll } = req.query;
+
     try {
-      const result = await findCategoryService.execute();
+      const result = await findCategoryService.execute({
+          showPrivateOnly,
+          showAll,
+      });
 
       if (result instanceof Error) {
         return res.status(400).json(result.message);

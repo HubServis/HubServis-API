@@ -1,7 +1,7 @@
 import { User } from "../entities/User";
 
 export type UserRequest = {
-  username: string;
+  email: string;
   password: string;
 };
 

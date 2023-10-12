@@ -74,3 +74,10 @@ export interface ICategoryController {
   delete(req: Request, res: Response): Promise<Response>;
   // patch(req: Request, res: Response): Promise<Response>;
 }
+
+export interface IRatingController {
+  create(req: Request, res: Response): Promise<Response>;
+  delete(req: Request, res: Response): Promise<Response>;
+  patch(req: Request, res: Response): Promise<Response>;
+  findAll(req: Request, res: Response): Promise<Response>;
+}

@@ -8,6 +8,7 @@ import {
   ICategoryRepository,
   ICreateCategory,
   IDeleteCategory,
+  IFindCategory,
 } from "../../../../repositories/CategoryRepository";
 import { Category as CategorySchema } from "../models/Category";
 import { Category } from "../../../../entities/Category";
@@ -19,6 +20,7 @@ export class CategoryRepositorySqlite implements ICategoryRepository {
     const { userId, name, description } = props;
 
     // A LOGICA ABAIXO FOI CRIADA USANDO COMO BASE O SEGUINTE CASO DE USO: O USUÁRIO É DONO DE UM NEGÓCIO MAS NÃO É ADMIN
+    // LOGO AS CATEGORIAS FORAM CRIADAS COMO PRIVADAS
 
     const userRepository = (await Database).getRepository(UserSchema);
     const user = await userRepository.findOne({
@@ -52,9 +54,33 @@ export class CategoryRepositorySqlite implements ICategoryRepository {
     return category;
   }
 
-  public async find(): Promise<Category[] | Error> {
+  public async find(props: IFindCategory): Promise<Category[] | Error> {
+    const { showAll, showPrivateOnly } = props;
+
+    if(showPrivateOnly){
+      const categoryRepository = (await Database).getRepository(CategorySchema);
+      const categories = await categoryRepository.find({
+        where: {
+          isPrivated: true
+        }
+      });
+
+      return categories;
+    }
+
+    if(showAll){
+      const categoryRepository = (await Database).getRepository(CategorySchema);
+      const categories = await categoryRepository.find({});
+  
+      return categories;
+    }
+
     const categoryRepository = (await Database).getRepository(CategorySchema);
-    const categories = await categoryRepository.find({});
+    const categories = await categoryRepository.find({
+      where: {
+        isPrivated: false
+      }
+    });
 
     return categories;
   }
