@@ -29,11 +29,11 @@ class PlansController implements IPlansController {
       name,
       price,
       description,
-      month_price,
-      client_limit,
-      customer_limit,
-      reminder_limit,
-      professional_limit,
+      // month_price,
+      // client_limit,
+      // customer_limit,
+      // reminder_limit,
+      // professional_limit,
     } = req.body;
 
     try {
@@ -42,11 +42,12 @@ class PlansController implements IPlansController {
         price,
         benefits: [],
         description,
-        month_price,
-        customer_limit,
-        client_limit,
-        reminder_limit,
-        professional_limit,
+        // month_price,
+        // customer_limit,
+        // client_limit,
+        // reminder_limit,
+        // professional_limit,
+        isPrivated: true,
       });
 
       const result = await createPlansService.execute(benefit);
@@ -97,11 +98,11 @@ class PlansController implements IPlansController {
       price,
       benefits,
       description,
-      month_price,
-      client_limit,
-      customer_limit,
-      reminder_limit,
-      professional_limit,
+      // month_price,
+      // client_limit,
+      // customer_limit,
+      // reminder_limit,
+      // professional_limit,
     } = req.body;
 
     try {
@@ -113,11 +114,12 @@ class PlansController implements IPlansController {
           price,
           benefits,
           description,
-          month_price,
-          client_limit,
-          customer_limit,
-          reminder_limit,
-          professional_limit,
+          // month_price,
+          // client_limit,
+          // customer_limit,
+          // reminder_limit,
+          // professional_limit,
+          isPrivated: true
         },
       });
 
