@@ -109,6 +109,8 @@ routes.delete(
   PlanController.delete
 );
 
+// Plan - Benefit
+
 routes.patch(
   "/plans/addBenefit",
   // is(["dev_plan"]),
@@ -122,6 +124,22 @@ routes.delete(
   // can(["create_plan"]),
   PlanController.deleteBenefit
 );
+
+// Plan - Limits
+routes.patch(
+  "/plans/addLimit",
+  // is(["dev_plan"]),
+  // can(["create_plan"]),
+  PlanController.appendLimit
+);
+
+routes.delete(
+  "/plans/:planId/:limitId",
+  // is(["dev_plan"]),
+  // can(["create_plan"]),
+  PlanController.deleteLimit
+);
+
 
 // LIMITS
 routes.post("/limit", auth, LimitController.create);

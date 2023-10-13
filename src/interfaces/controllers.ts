@@ -51,6 +51,9 @@ export interface IPlansController {
 
   appendBenefit(req: Request, res: Response): Promise<Response>;
   deleteBenefit(req: Request, res: Response): Promise<Response>;
+  
+  appendLimit(req: Request, res: Response): Promise<Response>;
+  deleteLimit(req: Request, res: Response): Promise<Response>;
 }
 
 export interface IBenefitsController {
