@@ -11,6 +11,7 @@ import { Plan } from "../../../../entities/Plan";
 import { Plan as PlanSchema } from "../models/Plan";
 import { Benefit as BenefitSchema } from "../models/Benefit";
 import { In } from "typeorm";
+import { log } from "console";
 
 export class PlansRepositorySqlite implements IPlanRepository {
   public async create(props: Plan): Promise<string | Plan | Error> {
@@ -134,25 +135,33 @@ export class PlansRepositorySqlite implements IPlanRepository {
   public async deleteBenefit(
     props: IPlanBenefitNames
   ): Promise<string | Error> {
-    const { planName, benefitName } = props;
+    const { planId, benefitId } = props;
 
     const planRepository = (await Database).getRepository(PlanSchema);
 
     const plan = await planRepository.findOne({
-      where: { name: planName },
+      where: { id: planId },
       relations: { benefits: true },
     });
 
     if (!plan) return new Error("This Plan not Exists!");
 
+    const benefitExistInPlan = plan.benefits.filter(
+      (benefit) => benefit.id == benefitId
+    );
+
+    if(benefitExistInPlan.length == 0) return new Error("Benefit informed not exist in plan!");
+
+      log(benefitExistInPlan);
+
     const reducedPlanBenefits = plan.benefits.map(
-      (benefit) => benefit.name !== benefitName && benefit
+      (benefitPlan) => benefitPlan.id !== benefitId && benefitPlan
     );
 
     plan.benefits = reducedPlanBenefits;
 
     await planRepository.save(plan);
 
-    return `Benefit ${benefitName} Successfully Removed from ${planName} plan`;
+    return `Benefit informed successfully removed from '${plan.name}' plan`;
   }
 }
