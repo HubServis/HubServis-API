@@ -134,12 +134,12 @@ class PlansController implements IPlansController {
   }
 
   async deleteBenefit(req: Request, res: Response): Promise<Response> {
-    const { planName, benefitName } = req.params;
+    const { planId, benefitId } = req.params;
 
     try {
       const result = await deletePlansBenefitService.execute({
-        planName,
-        benefitName,
+        planId,
+        benefitId,
       });
 
       if (result instanceof Error) return res.status(400).json(result.message);

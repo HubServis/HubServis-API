@@ -117,7 +117,7 @@ routes.patch(
 );
 
 routes.delete(
-  "/plans/:planName/:benefitName",
+  "/plans/:planId/:benefitId",
   // is(["dev_plan"]),
   // can(["create_plan"]),
   PlanController.deleteBenefit

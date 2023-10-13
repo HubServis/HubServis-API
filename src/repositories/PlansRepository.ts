@@ -15,8 +15,8 @@ export interface IAddBenefitsToPlan{
 }
 
 export interface IPlanBenefitNames {
-  planName: string;
-  benefitName: string;
+  planId: string;
+  benefitId: string;
 }
 
 export interface IPlanRepository {
