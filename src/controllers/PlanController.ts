@@ -84,7 +84,7 @@ class PlansController implements IPlansController {
 
       if (result instanceof Error) return res.status(400).json(result.message);
 
-      return res.status(201).json("OK");
+      return res.status(201).json(result);
     } catch (err) {
       return res.status(500).json(`Unexpected Error: ${err.message}`);
     }
