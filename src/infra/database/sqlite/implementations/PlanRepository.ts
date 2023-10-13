@@ -5,11 +5,14 @@ import {
   IPlanRepository,
   IPlanBenefitNames,
   IAddBenefitsToPlan,
+  IAddLimitsToPlan,
+  IPlanLimitNames,
 } from "../../../../repositories/PlansRepository";
 
 import { Plan } from "../../../../entities/Plan";
 import { Plan as PlanSchema } from "../models/Plan";
 import { Benefit as BenefitSchema } from "../models/Benefit";
+import { Limit as LimitSchema } from "../models/Limit";
 import { In } from "typeorm";
 import { log } from "console";
 
@@ -163,5 +166,69 @@ export class PlansRepositorySqlite implements IPlanRepository {
     await planRepository.save(plan);
 
     return `Benefit informed successfully removed from '${plan.name}' plan`;
+  }
+
+  public async appendLimit(
+    props: IAddLimitsToPlan
+  ): Promise<string | Error> {
+    const { planId, limitsId } = props;
+
+    const planRepository = (await Database).getRepository(PlanSchema);
+    const limitRepository = (await Database).getRepository(LimitSchema);
+
+    const plan = await planRepository.findOne({
+      where: { id: planId },
+      relations: { limits: true },
+    });
+
+    if (!plan) return new Error("This Plan not Exists!");
+
+    // // Checks that the benefits to be added are not duplicated
+    const limitsToAdd = limitsId.filter(limitId => !plan.limits.some(limitPlan => limitPlan.id === limitId));
+
+    if(limitsToAdd.length == 0) return new Error("These limits have already been added!");
+
+    const limits = await limitRepository.findBy({
+      id: In(limitsToAdd)
+    });
+    
+    if (limits.length == 0) return new Error("This limits not Exists!");
+
+    plan.limits = plan.limits.concat(limits);
+
+    await planRepository.save(plan);
+    
+    return "Updated limits!";
+  }
+
+  public async deleteLimit(
+    props: IPlanLimitNames
+  ): Promise<string | Error> {
+    const { planId, limitId } = props;
+
+    const planRepository = (await Database).getRepository(PlanSchema);
+
+    const plan = await planRepository.findOne({
+      where: { id: planId },
+      relations: { limits: true },
+    });
+
+    if (!plan) return new Error("This Plan not Exists!");
+
+    const limitExistInPlan = plan.limits.filter(
+      (limit) => limit.id == limitId
+    );
+
+    if(limitExistInPlan.length == 0) return new Error("Limit informed not exist in plan!");
+
+    const reducedPlanLimits = plan.limits.map(
+      (limitPlan) => limitPlan.id !== limitId && limitPlan
+    );
+
+    plan.limits = reducedPlanLimits;
+
+    await planRepository.save(plan);
+
+    return `Limit informed successfully removed from '${plan.name}' plan`;
   }
 }

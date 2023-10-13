@@ -10,16 +10,26 @@ import { FindPlanService } from "../services/Plans/FindPlans";
 import { CreatePlanService } from "../services/Plans/CreatePlan";
 import { DeletePlanService } from "../services/Plans/DeletePlan";
 import { UpdatePlanService } from "../services/Plans/UpdatePlan";
+import { AppendPlanLimitService } from "../services/Plans/AppendPlanLimits";
+import { DeletePlanLimitService } from "../services/Plans/DeletePlanLimits";
 
 const createPlansService = new CreatePlanService(new PlansRepositorySqlite());
 const findPlansService = new FindPlanService(new PlansRepositorySqlite());
 
 const deletePlansService = new DeletePlanService(new PlansRepositorySqlite());
 const updatePlansService = new UpdatePlanService(new PlansRepositorySqlite());
+
 const appendPlansBenefitService = new AppendPlanBenefitService(
   new PlansRepositorySqlite()
 );
 const deletePlansBenefitService = new DeletePlanBenefitService(
+  new PlansRepositorySqlite()
+);
+
+const appendPlansLimitService = new AppendPlanLimitService(
+  new PlansRepositorySqlite()
+);
+const deletePlansLimitService = new DeletePlanLimitService(
   new PlansRepositorySqlite()
 );
 
@@ -140,6 +150,42 @@ class PlansController implements IPlansController {
       const result = await deletePlansBenefitService.execute({
         planId,
         benefitId,
+      });
+
+      if (result instanceof Error) return res.status(400).json(result.message);
+
+      return res.status(200).json(result);
+    } catch (err) {
+      return res.status(500).json(`Unexpected Error: ${err.message}`);
+    }
+  }
+
+  async appendLimit(req: Request, res: Response): Promise<Response> {
+    const { planId, limitsId } = req.body;
+
+    try {
+      if(!limitsId || limitsId?.length == 0) return res.status(400).json("Limits ID not informed!");
+
+      const result = await appendPlansLimitService.execute({
+        planId,
+        limitsId
+      });
+
+      if (result instanceof Error) return res.status(400).json(result.message);
+
+      return res.status(200).json(result);
+    } catch (err) {
+      return res.status(500).json(`Unexpected Error: ${err.message}`);
+    }
+  }
+
+  async deleteLimit(req: Request, res: Response): Promise<Response> {
+    const { planId, limitId } = req.params;
+
+    try {
+      const result = await deletePlansLimitService.execute({
+        planId,
+        limitId,
       });
 
       if (result instanceof Error) return res.status(400).json(result.message);
