@@ -110,7 +110,7 @@ routes.delete(
 );
 
 routes.patch(
-  "/plans/:planName/:benefitName",
+  "/plans/addBenefit",
   // is(["dev_plan"]),
   // can(["create_plan"]),
   PlanController.appendBenefit
