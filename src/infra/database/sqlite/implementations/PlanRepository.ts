@@ -75,7 +75,7 @@ export class PlansRepositorySqlite implements IPlanRepository {
 
     await planRepository.remove(plan);
 
-    return `Plan with name ${plan} removed!`;
+    return `Plan with name '${plan.name}' removed!`;
   }
 
   public async patch(props: IPlanUpdate): Promise<string | Error> {
