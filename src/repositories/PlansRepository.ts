@@ -9,6 +9,11 @@ export interface IPlanUpdate {
   description: string;
 }
 
+export interface IAddBenefitsToPlan{
+  planId: string;
+  benefitsId: string[];
+}
+
 export interface IPlanBenefitNames {
   planName: string;
   benefitName: string;
@@ -20,6 +25,6 @@ export interface IPlanRepository {
   delete(props: string): Promise<Error | string>;
   patch(props: IPlanUpdate): Promise<Error | string>;
 
-  appendBenefit(props: IPlanBenefitNames): Promise<Error | string>;
+  appendBenefit(props: IAddBenefitsToPlan): Promise<Error | string>;
   deleteBenefit(props: IPlanBenefitNames): Promise<Error | string>;
 }

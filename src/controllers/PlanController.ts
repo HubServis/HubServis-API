@@ -115,12 +115,14 @@ class PlansController implements IPlansController {
   }
 
   async appendBenefit(req: Request, res: Response): Promise<Response> {
-    const { planName, benefitName } = req.params;
+    const { planId, benefitsId } = req.body;
 
     try {
+      if(!benefitsId || benefitsId?.length == 0) return res.status(400).json("Benefits ID not informed!");
+
       const result = await appendPlansBenefitService.execute({
-        planName,
-        benefitName,
+        planId,
+        benefitsId
       });
 
       if (result instanceof Error) return res.status(400).json(result.message);

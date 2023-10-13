@@ -4,11 +4,13 @@ import {
   IPlanUpdate,
   IPlanRepository,
   IPlanBenefitNames,
+  IAddBenefitsToPlan,
 } from "../../../../repositories/PlansRepository";
 
 import { Plan } from "../../../../entities/Plan";
 import { Plan as PlanSchema } from "../models/Plan";
 import { Benefit as BenefitSchema } from "../models/Benefit";
+import { In } from "typeorm";
 
 export class PlansRepositorySqlite implements IPlanRepository {
   public async create(props: Plan): Promise<string | Plan | Error> {
@@ -97,41 +99,36 @@ export class PlansRepositorySqlite implements IPlanRepository {
   }
 
   public async appendBenefit(
-    props: IPlanBenefitNames
+    props: IAddBenefitsToPlan
   ): Promise<string | Error> {
-    const { planName, benefitName } = props;
+    const { planId, benefitsId } = props;
 
     const planRepository = (await Database).getRepository(PlanSchema);
-
     const benefitRepository = (await Database).getRepository(BenefitSchema);
 
     const plan = await planRepository.findOne({
-      where: { name: planName },
+      where: { id: planId },
       relations: { benefits: true },
     });
 
     if (!plan) return new Error("This Plan not Exists!");
 
-    const benefit = await benefitRepository.findOne({
-      where: { name: benefitName },
+    // Checks that the benefits to be added are not duplicated
+    const benefitToAdd = benefitsId.filter(benefitId => !plan.benefits.some(benefitPlan => benefitPlan.id === benefitId));
+
+    if(benefitToAdd.length == 0) return new Error("These benefits have already been added!");
+
+    const benefits = await benefitRepository.findBy({
+      id: In(benefitToAdd)
     });
+    
+    if (benefits.length == 0) return new Error("This Benefits not Exists!");
 
-    if (!benefit) return new Error("This Benefit not Exists!");
-
-    const alreadyRegistered = plan.benefits.find(
-      (element) => element.name === benefitName
-    );
-
-    if (alreadyRegistered)
-      return new Error(
-        `The Benefit ${benefitName} Already Exists in the ${planName} Plan`
-      );
-
-    plan.benefits.push(benefit);
+    plan.benefits = plan.benefits.concat(benefits);
 
     await planRepository.save(plan);
-
-    return `Benefit ${benefitName} Successfully Inserted into the ${planName} plan`;
+    
+    return "Updated benefits!";
   }
 
   public async deleteBenefit(
