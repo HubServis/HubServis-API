@@ -8,15 +8,6 @@ const createExtrasService = new CreateExtraService(
   new ExtraRepositorySqlite()
 );
 
-// const deletePlansService = new DeletePlanService(new PlansRepositorySqlite());
-// const updatePlansService = new UpdatePlanService(new PlansRepositorySqlite());
-// const appendPlansBenefitService = new AppendPlanBenefitService(
-//   new PlansRepositorySqlite()
-// );
-// const deletePlansBenefitService = new DeletePlanBenefitService(
-//   new PlansRepositorySqlite()
-// );
-
 class ExtraController implements IExtrasController {
   async create(req: Request, res: Response) {
     const { name, description, value, isControllable, role } = req.body;
