@@ -1,9 +1,10 @@
-import { Column, Entity } from "typeorm";
+import { Column, Entity, ManyToOne } from "typeorm";
 
 import { BaseEntity } from "./BaseEntity";
+import { User } from "./User";
 
-@Entity("Limits")
-export class Limit extends BaseEntity {
+@Entity("extras")
+export class Extra extends BaseEntity {
   @Column()
   name: string;
 
@@ -18,4 +19,7 @@ export class Limit extends BaseEntity {
 
   @Column({ default: "" })
   role: string;
+
+  @ManyToOne(() => User, (user) => user.extras)
+  user: User;
 }

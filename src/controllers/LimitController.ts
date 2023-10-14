@@ -1,12 +1,8 @@
 import { Request, Response } from "express";
-import { PlansRepositorySqlite } from "../infra/database/sqlite/implementations/PlanRepository";
-
-import { ILimitsController, IPlansController } from "../interfaces/controllers";
-
+import { ILimitsController } from "../interfaces/controllers";
 import { Limit } from "../entities/Limit";
 import { CreateLimitService } from "../services/Limits/CreateLimit";
 import { LimitsRepositorySqlite } from "../infra/database/sqlite/implementations/LimitRepository";
-import { createECDH } from "crypto";
 import { FindLimitService } from "../services/Limits/FindLimit";
 import { DeleteLimitService } from "../services/Limits/DeleteLimit";
 import { PatchLimitService } from "../services/Limits/PatchLimit";
@@ -19,15 +15,6 @@ const deleteLimitsService = new DeleteLimitService(
   new LimitsRepositorySqlite()
 );
 const patchLimitsService = new PatchLimitService(new LimitsRepositorySqlite());
-
-// const deletePlansService = new DeletePlanService(new PlansRepositorySqlite());
-// const updatePlansService = new UpdatePlanService(new PlansRepositorySqlite());
-// const appendPlansBenefitService = new AppendPlanBenefitService(
-//   new PlansRepositorySqlite()
-// );
-// const deletePlansBenefitService = new DeletePlanBenefitService(
-//   new PlansRepositorySqlite()
-// );
 
 class LimitController implements ILimitsController {
   async create(req: Request, res: Response) {
@@ -104,40 +91,6 @@ class LimitController implements ILimitsController {
       return res.status(500).json(`Unexpected Error: ${err.message}`);
     }
   }
-
-  // async appendBenefit(req: Request, res: Response): Promise<Response> {
-  //   const { planName, benefitName } = req.params;
-
-  //   try {
-  //     const result = await appendPlansBenefitService.execute({
-  //       planName,
-  //       benefitName,
-  //     });
-
-  //     if (result instanceof Error) return res.status(400).json(result.message);
-
-  //     return res.status(200).json(result);
-  //   } catch (err) {
-  //     return res.status(500).json(`Unexpected Error: ${err.message}`);
-  //   }
-  // }
-
-  // async deleteBenefit(req: Request, res: Response): Promise<Response> {
-  //   const { planName, benefitName } = req.params;
-
-  //   try {
-  //     const result = await deletePlansBenefitService.execute({
-  //       planName,
-  //       benefitName,
-  //     });
-
-  //     if (result instanceof Error) return res.status(400).json(result.message);
-
-  //     return res.status(200).json(result);
-  //   } catch (err) {
-  //     return res.status(500).json(`Unexpected Error: ${err.message}`);
-  //   }
-  // }
 }
 
 export default new LimitController();
