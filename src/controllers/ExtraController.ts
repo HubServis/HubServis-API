@@ -10,6 +10,7 @@ const createExtrasService = new CreateExtraService(
 
 class ExtraController implements IExtrasController {
   async create(req: Request, res: Response) {
+    const { id } = req.userReq;
     const { name, description, value, isControllable, role } = req.body;
 
     try {
@@ -21,7 +22,10 @@ class ExtraController implements IExtrasController {
         role,
       });
 
-      const result = await createExtrasService.execute(extra);
+      const result = await createExtrasService.execute({
+        userId: id,
+        newExtra: extra
+      });
 
       if (result instanceof Error) {
         return res.status(400).json(result.message);

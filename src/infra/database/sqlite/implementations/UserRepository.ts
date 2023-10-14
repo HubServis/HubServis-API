@@ -91,7 +91,8 @@ export class UserRepositorySqlite implements IUsersRepository {
         created_at: true,
       },
       relations: {
-        plan: { benefits: true },
+        plan: { benefits: true, limits: true },
+        extras: true
       },
     });
 
