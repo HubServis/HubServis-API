@@ -24,7 +24,7 @@ const routes = Router();
 // LOGIN
 routes.post("/login", SessionController.handle);
 
-// USERS
+// USER
 routes.get("/users", UserController.find);
 routes.get("/user/:userId", UserController.findOneUser);
 routes.post("/user", UserController.create);
@@ -146,6 +146,9 @@ routes.post("/limit", auth, LimitController.create);
 routes.get("/limits", LimitController.find);
 routes.patch("/limit", auth, LimitController.patch);
 routes.delete("/limit/:id", LimitController.delete);
+
+// EXTRAS
+
 
 // APPINTMENTS
 routes.get("/appointments", AppointmentController.find);
