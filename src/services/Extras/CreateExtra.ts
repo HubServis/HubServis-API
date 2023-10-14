@@ -1,13 +1,11 @@
-import { Extra } from "../../entities/Extra";
-
-import { IExtraRepository } from "../../repositories/ExtraRepository";
+import { IExtraCreate, IExtraRepository } from "../../repositories/ExtraRepository";
 
 export class CreateExtraService {
-  constructor(private extrasRepository: IExtraRepository) {}
+	constructor(private extrasRepository: IExtraRepository) {}
 
-  public async execute(props: Extra) {
-    const extra = await this.extrasRepository.create(props);
+	public async execute(props: IExtraCreate) {
+		const extra = await this.extrasRepository.create(props);
 
-    return extra;
-  }
+		return extra;
+	}
 }

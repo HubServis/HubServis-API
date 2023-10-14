@@ -18,6 +18,7 @@ import AppointmentController from "./controllers/AppointmentController";
 import CategoryController from "./controllers/CategoryController";
 import RatingController from "./controllers/RatingController";
 import LimitController from "./controllers/LimitController";
+import ExtraController from "./controllers/ExtraController";
 
 const routes = Router();
 
@@ -148,7 +149,7 @@ routes.patch("/limit", auth, LimitController.patch);
 routes.delete("/limit/:id", LimitController.delete);
 
 // EXTRAS
-
+routes.post("/extra", auth, ExtraController.create);
 
 // APPINTMENTS
 routes.get("/appointments", AppointmentController.find);
