@@ -150,6 +150,9 @@ routes.delete("/limit/:id", LimitController.delete);
 
 // EXTRAS
 routes.post("/extra", auth, ExtraController.create);
+routes.get("/extra", ExtraController.find);
+routes.delete("/extra/:id", ExtraController.delete);
+routes.patch("/extra", ExtraController.patch);
 
 // APPINTMENTS
 routes.get("/appointments", AppointmentController.find);

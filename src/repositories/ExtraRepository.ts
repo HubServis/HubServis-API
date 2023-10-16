@@ -16,7 +16,7 @@ export interface IExtraCreate {
 
 export interface IExtraRepository {
 	create(props: IExtraCreate): Promise<Error | Extra | string>;
-	// find(): Promise<Error | Extra[]>;
-	// delete(props: string): Promise<Error | string>;
-	// patch(props: IExtraUpdate): Promise<Error | string>;
+	find(): Promise<Error | Extra[]>;
+	delete(props: string): Promise<Error | string>;
+	patch(props: IExtraUpdate): Promise<Error | string>;
 }

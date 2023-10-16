@@ -3,10 +3,17 @@ import { IExtrasController } from "../interfaces/controllers";
 import { Extra } from "../entities/Extra";
 import { ExtraRepositorySqlite } from "../infra/database/sqlite/implementations/ExtraRepository";
 import { CreateExtraService } from "../services/Extras/CreateExtra";
+import { FindExtraService } from "../services/Extras/FindExtra";
+import { DeleteExtraService } from "../services/Extras/DeleteExtra copy";
+import { UpdateExtraService } from "../services/Extras/UpdateExtra";
 
 const createExtrasService = new CreateExtraService(
   new ExtraRepositorySqlite()
 );
+
+const findExtrasService = new FindExtraService(new ExtraRepositorySqlite());
+const deleteExtrasService = new DeleteExtraService(new ExtraRepositorySqlite());
+const updateExtraService = new UpdateExtraService(new ExtraRepositorySqlite());
 
 class ExtraController implements IExtrasController {
   async create(req: Request, res: Response) {
@@ -37,56 +44,52 @@ class ExtraController implements IExtrasController {
     }
   }
 
-  // async find(req: Request, res: Response) {
-  //   // const { name } = req.params;
+  async find(req: Request, res: Response) {
+    try {
+      const result = await findExtrasService.execute();
 
-  //   try {
-  //     const result = await findLimitsService.execute();
+      return res.status(200).json(result);
+    } catch (err) {
+      return res.status(500).json(`Unexpected Error: ${err.message}`);
+    }
+  }
 
-  //     // if (result instanceof Error) return res.status(400).json(result.message);
+  async delete(req: Request, res: Response) {
+    const { id } = req.params;
 
-  //     return res.status(200).json(result);
-  //   } catch (err) {
-  //     return res.status(500).json(`Unexpected Error: ${err.message}`);
-  //   }
-  // }
+    try {
+      const result = await deleteExtrasService.execute(id);
 
-  // async delete(req: Request, res: Response) {
-  //   const { id } = req.params;
+      if (result instanceof Error) return res.status(400).json(result.message);
 
-  //   try {
-  //     const result = await deleteLimitsService.execute(id);
+      return res.status(201).json(result);
+    } catch (err) {
+      return res.status(500).json(`Unexpected Error: ${err.message}`);
+    }
+  }
 
-  //     if (result instanceof Error) return res.status(400).json(result.message);
+  async patch(req: Request, res: Response) {
+    const { id, name, description, value, isControllable, role } = req.body;
 
-  //     return res.status(201).json(result);
-  //   } catch (err) {
-  //     return res.status(500).json(`Unexpected Error: ${err.message}`);
-  //   }
-  // }
+    try {
+      const result = await updateExtraService.execute({
+        newExtra: {
+          id,
+          name,
+          description,
+          value,
+          isControllable,
+          role,
+        },
+      });
 
-  // async patch(req: Request, res: Response) {
-  //   const { id, name, description, value, isControllable, role } = req.body;
+      if (result instanceof Error) return res.status(400).json(result.message);
 
-  //   try {
-  //     const result = await patchLimitsService.execute({
-  //       newLimit: {
-  //         id,
-  //         name,
-  //         description,
-  //         value,
-  //         isControllable,
-  //         role,
-  //       },
-  //     });
-
-  //     if (result instanceof Error) return res.status(400).json(result.message);
-
-  //     return res.status(201).json(result);
-  //   } catch (err) {
-  //     return res.status(500).json(`Unexpected Error: ${err.message}`);
-  //   }
-  // }
+      return res.status(201).json(result);
+    } catch (err) {
+      return res.status(500).json(`Unexpected Error: ${err.message}`);
+    }
+  }
 }
 
 export default new ExtraController();
