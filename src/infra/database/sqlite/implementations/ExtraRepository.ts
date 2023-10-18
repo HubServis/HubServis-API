@@ -1,5 +1,9 @@
 import { Extra } from "../../../../entities/Extra";
-import { IExtraCreate, IExtraRepository, IExtraUpdate } from "../../../../repositories/ExtraRepository";
+import {
+	IExtraCreate,
+	IExtraRepository,
+	IExtraUpdate,
+} from "../../../../repositories/ExtraRepository";
 import { Extra as ExtraSchema } from "../models/Extra";
 import { User as UserSchema } from "../models/User";
 import Database from "../config";
@@ -65,23 +69,27 @@ export class ExtraRepositorySqlite implements IExtraRepository {
 	}
 
 	public async patch(props: IExtraUpdate): Promise<string | Error> {
-		const { newExtra: { id, description, isControllable, name, role, value } } = props;
+		const {
+			newExtra: { id, description, isControllable, name, role, value },
+		} = props;
 		const extraRepository = (await Database).getRepository(ExtraSchema);
 
 		if (!id) return new Error("ID not informed!");
 
 		const extra = await extraRepository.findOne({
-			where: { id: id},
+			where: { id: id },
 		});
 
 		if (!extra) return new Error("This extra not Exist!");
 
-		const extraRoleExist = await extraRepository.findOne({
-			where: { role: role },
-		});
+		if (role) {
+			const extraRoleExist = await extraRepository.findOne({
+				where: { role: role },
+			});
 
-		if (extraRoleExist)
-			return new Error("There is already a extra with this role!");
+			if (extraRoleExist)
+				return new Error("There is already a extra with this role!");
+		}
 
 		extra.name = name ?? extra.name;
 		extra.value = value ?? extra.value;
