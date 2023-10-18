@@ -4,7 +4,7 @@ import { Extra } from "../entities/Extra";
 import { ExtraRepositorySqlite } from "../infra/database/sqlite/implementations/ExtraRepository";
 import { CreateExtraService } from "../services/Extras/CreateExtra";
 import { FindExtraService } from "../services/Extras/FindExtra";
-import { DeleteExtraService } from "../services/Extras/DeleteExtra copy";
+import { DeleteExtraService } from "../services/Extras/DeleteExtra";
 import { UpdateExtraService } from "../services/Extras/UpdateExtra";
 
 const createExtrasService = new CreateExtraService(
