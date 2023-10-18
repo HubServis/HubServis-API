@@ -8,35 +8,42 @@ import {
   ResRegisterUser,
 } from "../../../../repositories/UsersRepository";
 import { sign } from "jsonwebtoken";
+import fs from "fs";
+import { File } from "buffer";
+import { upload } from "../../../aws";
+import { config } from 'dotenv';
 
 export class UserRepositorySqlite implements IUsersRepository {
   public async create(props: User): Promise<Error | ResRegisterUser> {
     const { id, username, email, password, name, cpfcnpj, plan, image } = props;
 
-    const existUser = (await Database).getRepository(UserSchema);
-    const isExistUser = await existUser.findOne({
+    const userRepository = (await Database).getRepository(UserSchema);
+    const planRepository = (await Database).getRepository(PlanSchema);
+
+    const userExists = await userRepository.findOne({
       where: {
         username: username.toLowerCase(),
       },
     });
 
-    const isExistCpfCnpjUser = await existUser.findOne({
+    if (userExists) return new Error("User already exists");
+
+    const userCpfCnfpExists = await userRepository.findOne({
       where: {
         cpfcnpj: cpfcnpj,
       },
     });
 
-    if (isExistUser) {
-      return new Error("User already exists");
-    }
+    if (userCpfCnfpExists) return new Error("Cpf or cnpj already exists");
 
-    if (isExistCpfCnpjUser) {
-      return new Error("Cpf or cnpj already exists");
-    }
+    const defaultPlan = await planRepository.findOne({
+      where: {
+        name: "Default Plan",
+      },
+    });
 
     const passwordHash = await hash(password, 8);
 
-    const userRepository = (await Database).getRepository(UserSchema);
     const user = await userRepository.save({
       id,
       username: username.toLowerCase(),
@@ -45,7 +52,7 @@ export class UserRepositorySqlite implements IUsersRepository {
       cpfcnpj,
       password: passwordHash,
       plan: plan,
-      image: image,
+      image: null,
     });
 
     const token = sign({ id: user.id }, process.env.SECRET_JWT, {
@@ -103,7 +110,10 @@ export class UserRepositorySqlite implements IUsersRepository {
     return user;
   }
 
-  public async updateUser(props: { userId: string, formData: any }): Promise<Error | User> {
+  public async updateUser(props: {
+    userId: string;
+    formData: any;
+  }): Promise<Error | User> {
     const { userId } = props;
     const userRepository = (await Database).getRepository(UserSchema);
 
@@ -118,7 +128,7 @@ export class UserRepositorySqlite implements IUsersRepository {
         email: true,
         username: true,
         created_at: true,
-		image: true
+        image: true,
       },
       relations: {
         plan: { benefits: true },
@@ -127,13 +137,37 @@ export class UserRepositorySqlite implements IUsersRepository {
 
     if (!user) return new Error("User not found!");
 
-	user.name = !!props.formData.name && props.formData.name || user.name;
-	user.email = !!props.formData.email && props.formData.email || user.email;
-	user.cpfcnpj = !!props.formData.cpfcnpj && props.formData.cpfcnpj || user.cpfcnpj;
-	user.username = !!props.formData.username && props.formData.username || user.username;
-	user.password = !!props.formData.password && props.formData.password || user.password;
-	user.plan = !!props.formData.plan && props.formData.plan || user.plan;
-	user.image = !!props.formData.image && props.formData.image || user.image;
+    let newImageName = props.formData?.image?.name;
+
+    if (newImageName) {
+      try {
+        const imageBuffer = Buffer.from(props.formData.image.content, "base64");
+
+        const response = await upload(
+          newImageName,
+          props.formData?.image?.content,
+          props.formData.image?.format,
+        );
+      } catch (err) {
+        return new Error(`There had an error saving this image: ${err}`);
+      }
+    }
+
+	//Dotenv
+	config();
+
+    user.name = (!!props.formData.name && props.formData.name) || user.name;
+    user.email = (!!props.formData.email && props.formData.email) || user.email;
+    user.cpfcnpj =
+      (!!props.formData.cpfcnpj && props.formData.cpfcnpj) || user.cpfcnpj;
+    user.username =
+      (!!props.formData.username && props.formData.username) || user.username;
+    user.password =
+      (!!props.formData.password && props.formData.password) || user.password;
+    user.plan = (!!props.formData.plan && props.formData.plan) || user.plan;
+    user.image =
+      (!!props.formData.image && `${process.env.S3_URL}/${props.formData.image.name}`) ||
+      user.image;
 
     return user;
   }

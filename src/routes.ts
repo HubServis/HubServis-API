@@ -29,8 +29,8 @@ routes.post("/login", SessionController.handle);
 routes.get("/users", UserController.find);
 routes.get("/user/:userId", UserController.findOneUser);
 routes.post("/user", UserController.create);
-routes.patch("/user/:userId/:planName", UserController.appendPlan);
 routes.patch("/user/update/:userId", UserController.updateUser);
+routes.patch("/user/:userId/:planName", UserController.appendPlan);
 routes.delete("/user/:userId", UserController.deletePlan);
 
 // BUSINESS

@@ -25,7 +25,14 @@ class UserController implements IUserCotroller {
     const { username, email, password, name, cpfcnpj, image } = req.body;
 
     try {
-      const user = new User({ username, email, password, cpfcnpj, name, image });
+      const user = new User({
+        username,
+        email,
+        password,
+        cpfcnpj,
+        name,
+        image,
+      });
       const createdUser = await createUserService.execute(user);
 
       if (createdUser instanceof Error) {
@@ -69,6 +76,7 @@ class UserController implements IUserCotroller {
     const formData = req.body;
 
     try {
+
       const result = await updateUserService.execute({
         userId,
         formData,
