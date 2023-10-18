@@ -1,4 +1,4 @@
-import { Benefit } from "../../entities/Benefits";
+import { Benefit } from "../../entities/Benefit";
 
 import { IBenefitRepository } from "../../repositories/BenefitsRepository";
 

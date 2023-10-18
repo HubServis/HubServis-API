@@ -11,6 +11,7 @@ export interface IUsersRepository {
   create(props: User): Promise<Error | ResRegisterUser>;
   find(): Promise<User[]>;
   findOneUser(props: { userId: string }): Promise<Error | User>;
+  updateUser(props: { userId: string, formData: any }): Promise<Error | User>;
   appendPlan(props: {
     planName: string;
     userId: string;
