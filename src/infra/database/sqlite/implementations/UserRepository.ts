@@ -131,7 +131,8 @@ export class UserRepositorySqlite implements IUsersRepository {
         image: true,
       },
       relations: {
-        plan: { benefits: true },
+        plan: { benefits: true, limits: true },
+        extras: true
       },
     });
 

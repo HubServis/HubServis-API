@@ -18,8 +18,6 @@ import Appointment from "./Appointment";
 import Category from "./Category";
 import Rating from "./Rating";
 import { Extra } from "./Extra";
-import Permission from "./Permission";
-import Role from "./Role";
 
 @Entity("users")
 export class User extends BaseEntity {
