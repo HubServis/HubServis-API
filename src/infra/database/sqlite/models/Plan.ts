@@ -41,3 +41,4 @@ export class Plan extends BaseEntity {
   @JoinTable()
   limits: Limit[]; //relation to limits
 }
+
