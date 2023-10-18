@@ -45,12 +45,6 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   image: string;
 
-  @Column({ type: "simple-array", nullable: true })
-  permissions: Permission[];
-
-  @Column({ type: "simple-array", nullable: true })
-  roles: Role[];
-
   @OneToMany(() => Appointment, (appointment) => appointment.user, { nullable: true })
   appointments: Appointment[];
 

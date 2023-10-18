@@ -1,6 +1,4 @@
 import { User as UserSchema } from "../models/User";
-import { Permission as PermissionSchema } from "../models/Permission";
-import { Business as BusinessSchema } from "../models/Business";
 import { Service as ServiceSchema } from "../models/Service";
 import Database from "../config";
 import {
