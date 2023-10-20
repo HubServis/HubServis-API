@@ -2,85 +2,110 @@ import { Service } from "../../../../entities/Service";
 import { Service as ServiceSchema } from "../models/Service";
 import { User as UserSchema } from "../models/User";
 import Database from "../config";
-import { IDeleteService, IFindOneService, IServicesRepository } from "../../../../repositories/ServicesRepository";
+import {
+	IDeleteService,
+	IFindOneService,
+	IFindServiceHighlight,
+	IServicesRepository,
+} from "../../../../repositories/ServicesRepository";
+import { MoreThan } from "typeorm";
 
 export class ServiceRepositorySqlite implements IServicesRepository {
-  public async create(
-    props: Service,
-    userId: string
-  ): Promise<Error | Service> {
-    const { id, name, duration, price, description } = props;
+	public async create(
+		props: Service,
+		userId: string
+	): Promise<Error | Service> {
+		const { id, name, duration, price, description } = props;
 
-    const serviceRepository = (await Database).getRepository(ServiceSchema);
-    const userRepository = (await Database).getRepository(UserSchema);
+		const serviceRepository = (await Database).getRepository(ServiceSchema);
+		const userRepository = (await Database).getRepository(UserSchema);
 
-    const user = await userRepository.findOne({
-      where: {
-        id: userId,
-      },
-      relations: ["business"],
-    });
+		const user = await userRepository.findOne({
+			where: {
+				id: userId,
+			},
+			relations: ["business"],
+		});
 
-    if (!user) {
-      return new Error("User not found!");
-    }
+		if (!user) {
+			return new Error("User not found!");
+		}
 
-    if (!user.business) {
-      return new Error("The user does not have a business!");
-    }
+		if (!user.business) {
+			return new Error("The user does not have a business!");
+		}
 
-    const service = await serviceRepository.save({
-      id,
-      name,
-      duration,
-      price,
-      description,
-      business: user.business,
-    });
+		const service = await serviceRepository.save({
+			id,
+			name,
+			duration,
+			price,
+			description,
+			business: user.business,
+		});
 
-    return service;
-  }
+		return service;
+	}
 
-  public async find(): Promise<Error | Service[]> {
-    const serviceRepository = (await Database).getRepository(ServiceSchema);
+	public async find(): Promise<Error | Service[]> {
+		const serviceRepository = (await Database).getRepository(ServiceSchema);
 
-    const service = await serviceRepository.find({
-      relations: ["business", "categories"],
-    });
+		const service = await serviceRepository.find({
+			relations: ["business", "categories"],
+		});
 
-    return service;
-  }
-  
-  public async findOne(props: IFindOneService): Promise<Error | Service> {
-    const { serviceId } = props;
-    const serviceRepository = (await Database).getRepository(ServiceSchema);
+		return service;
+	}
 
-    const service = await serviceRepository.findOne({
-      where: {
-        id: serviceId,
-      },
-      relations: ["business", "categories"]
-    });
+	public async findOne(props: IFindOneService): Promise<Error | Service> {
+		const { serviceId } = props;
+		const serviceRepository = (await Database).getRepository(ServiceSchema);
 
-    if(!service) return new Error("Service not found!");
+		const service = await serviceRepository.findOne({
+			where: {
+				id: serviceId,
+			},
+			relations: ["business", "categories"],
+		});
 
-    return service;
-  }
+		if (!service) return new Error("Service not found!");
 
-  public async delete(props: IDeleteService): Promise<Error | string> {
-    const { serviceId } = props;
-    const serviceRepository = (await Database).getRepository(ServiceSchema);
+		return service;
+	}
 
-    const service = await serviceRepository.find({
-      where: {
-        id: serviceId,
-      },
-    });
+	public async delete(props: IDeleteService): Promise<Error | string> {
+		const { serviceId } = props;
+		const serviceRepository = (await Database).getRepository(ServiceSchema);
 
-    if(!service) return new Error("Service not found!");
+		const service = await serviceRepository.find({
+			where: {
+				id: serviceId,
+			},
+		});
 
-    await serviceRepository.remove(service);
+		if (!service) return new Error("Service not found!");
 
-    return "Remove service with name Sla!";
-  }
+		await serviceRepository.remove(service);
+
+		return "Remove service with name Sla!";
+	}
+
+	public async findServicesHighlight(
+		props: IFindServiceHighlight
+	): Promise<Service[] | Error> {
+    const { averageRating, limit } = props;
+
+		const serviceRepository = (await Database).getRepository(ServiceSchema);
+		const services = await serviceRepository.find({
+			where: {
+				averageRating: MoreThan((averageRating != 0 && averageRating != null) ? averageRating : 4),
+			},
+			order: {
+				averageRating: "DESC",
+			},
+			take: limit ?? 8,
+		});
+
+		return services;
+	}
 }
