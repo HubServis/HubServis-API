@@ -9,6 +9,7 @@ export class User {
   public username: string;
   public password: string;
   public plan?: Plan;
+  public image?: string;
 
   constructor(props: Omit<User, "id">, id: string = null) {
     Object.assign(this, props);

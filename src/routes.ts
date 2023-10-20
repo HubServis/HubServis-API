@@ -3,9 +3,6 @@ import { Router } from "express";
 import UserController from "./controllers/UserController";
 import SessionController from "./controllers/SessionController";
 import ProductController from "./controllers/ProductController";
-import RoleController from "./controllers/RoleController";
-import PermissionController from "./controllers/PermissionController";
-import UserACLController from "./controllers/UserACLController";
 import BusinessController from "./controllers/BusinessController";
 import ServiceController from "./controllers/ServiceController";
 import ProfessionalController from "./controllers/ProfessionalController";
@@ -29,6 +26,7 @@ routes.post("/login", SessionController.handle);
 routes.get("/users", UserController.find);
 routes.get("/user/:userId", UserController.findOneUser);
 routes.post("/user", UserController.create);
+routes.patch("/user/update/:userId", UserController.updateUser);
 routes.patch("/user/:userId/:planName", UserController.appendPlan);
 routes.delete("/user/:userId", UserController.deletePlan);
 
@@ -48,15 +46,6 @@ routes.post("/service/create", auth, ServiceController.create);
 routes.get("/services", ServiceController.find);
 routes.get("/service/:serviceId", ServiceController.findOne);
 routes.delete("/service/:serviceId", ServiceController.delete);
-
-// ACL
-routes.post("/role", RoleController.create); //rota que será autenticada futuramente
-
-routes.post("/permission", PermissionController.create); //rota que será autenticada futuramente
-
-routes.post("/users/acl", auth, UserACLController.create); //rota que será autenticada futuramente - ela adiciona permissões e regras à usuários.
-
-routes.post("/roles/:roleId", RoleController.createRolePermission); //rota que será autenticada futuramente
 
 // remover essas rotas depois talvez
 routes.post("/product", ProductController.create);

@@ -1,5 +1,4 @@
 import { Professional } from "../../entities/Professional";
-import { Role } from "../../entities/Role";
 import { IProfessionalsRepository } from "../../repositories/ProfessionalsRepository";
 
 export class FindProfessionalsService {

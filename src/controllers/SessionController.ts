@@ -15,6 +15,8 @@ class SessionController {
         return res.status(400).json(result.message);
       }
 
+	  const cookie = res.cookie('hubservis', 'test', { maxAge: 24000, httpOnly: true })
+
       return res.status(201).json(result);
     } catch (err) {
       console.log(err.message);
