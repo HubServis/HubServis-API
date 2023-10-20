@@ -100,6 +100,9 @@ export class ServiceRepositorySqlite implements IServicesRepository {
 			where: {
 				averageRating: MoreThan((averageRating != 0 && averageRating != null) ? averageRating : 4),
 			},
+			relations: {
+				business: true,
+			},
 			order: {
 				averageRating: "DESC",
 			},
