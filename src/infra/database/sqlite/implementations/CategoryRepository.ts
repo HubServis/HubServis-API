@@ -12,6 +12,7 @@ import { Category as CategorySchema } from "../models/Category";
 import { Category } from "../../../../entities/Category";
 import { In } from "typeorm";
 import { Service } from "../../../../entities/Service";
+import { formatStringForFieldLoweCase } from "../../../../utils/stringParse";
 
 export class CategoryRepositorySqlite implements ICategoryRepository {
   public async create(props: ICreateCategory): Promise<Category | Error> {
@@ -35,12 +36,22 @@ export class CategoryRepositorySqlite implements ICategoryRepository {
     }
 
     const newCategory = new Category({
-      name,
-      description,
-      isPrivated: true, //privado se for criada por algum dono de negócio
-    });
+			name,
+			description,
+			isPrivated: true, //privado se for criada por algum dono de negócio
+			nameId: formatStringForFieldLoweCase(name),
+		});
 
     const categoryRepository = (await Database).getRepository(CategorySchema);
+
+    const categoryExistis = await categoryRepository.find({
+			where: {
+				nameId: formatStringForFieldLoweCase(name),
+			},
+		});
+
+    if(categoryExistis) return new Error("This category exists!")
+
     const category = await categoryRepository.save(
       {
         ...newCategory,

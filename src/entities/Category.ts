@@ -3,6 +3,7 @@ import { v4 as uuid } from "uuid";
 export class Category {
   public id: string;
   public name: string;
+  public nameId: string;
   public isPrivated: boolean;
   public description: string;
 
