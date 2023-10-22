@@ -62,16 +62,20 @@ profissional é valido? Ele trabalha no mesmo negócio do serviço?
    - `showPrivateOnly` - retorna apenas as categorias privadas.
    - `showAll` - retorna todas as categorias.
 
-### Serviços em Destaque
-- Atualmente listamos o serviços em destaque baseado na sua avaliação, quanto mais alta, mais chances de vc aparecer na home de destaques. 
-- Futuramente será implementado um algoritmo para melhor diversificação dos destaques.
+   #### **Listagem de serviços por categoria**
+   A listagem de serviços por categoria é feita através da query `categoryNameId` passada como parametro na url da rota. Esse parametro recebe o nameId da categoria e caso não seja passado será retornado um erro.
+   
+### Serviços
+   #### **Serviços em Destaque**
+   - Atualmente listamos o serviços em destaque baseado na sua avaliação, quanto mais alta, mais chances de vc aparecer na home de destaques. 
+   - Futuramente será implementado um algoritmo para melhor diversificação dos destaques.
 
-As opções da rota de destaques `/service/highlight` são:
-- `averageRating`
-   - usado para definir o número minimo de avaliação que um serviço deve ter para entrar nos destaques.
-   - recebe um numero de 1 á 5. Mas por padrão é 4.
-- `limit` 
-   - usado para definir o limite de serviços retornados
-   - por padrão é 8.
+   As opções da rota de destaques `/service/highlight` são:
+   - `averageRating`
+      - usado para definir o número minimo de avaliação que um serviço deve ter para entrar nos destaques.
+      - recebe um numero de 1 á 5. Mas por padrão é 4.
+   - `limit` 
+      - usado para definir o limite de serviços retornados
+      - por padrão é 8.
 
 

@@ -154,6 +154,7 @@ routes.post("/category", auth, CategoryController.create);
 routes.get("/categories", CategoryController.find);
 routes.patch("/categories/services", CategoryController.appendService);
 routes.delete("/category/:categoryId", auth, CategoryController.delete);
+routes.get("/services/category", CategoryController.listServicesCategory);
 
 // RATING
 routes.post("/rating", auth, RatingController.create);

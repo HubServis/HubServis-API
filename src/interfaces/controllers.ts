@@ -86,11 +86,12 @@ export interface IAppointmentController {
 }
 
 export interface ICategoryController {
-  create(req: Request, res: Response): Promise<Response>;
-  find(req: Request, res: Response): Promise<Response>;
-  appendService(req: Request, res: Response): Promise<Response>;
-  delete(req: Request, res: Response): Promise<Response>;
-  // patch(req: Request, res: Response): Promise<Response>;
+	create(req: Request, res: Response): Promise<Response>;
+	find(req: Request, res: Response): Promise<Response>;
+	appendService(req: Request, res: Response): Promise<Response>;
+	delete(req: Request, res: Response): Promise<Response>;
+	listServicesCategory(req: Request, res: Response): Promise<Response>;
+	// patch(req: Request, res: Response): Promise<Response>;
 }
 
 export interface IRatingController {
