@@ -1,12 +1,12 @@
 import { Service } from "../../entities/Service";
 import { User } from "../../entities/User";
-import { IServicesRepository } from "../../repositories/ServicesRepository";
+import { IFindServices, IServicesRepository } from "../../repositories/ServicesRepository";
 
 export class FindServiceService {
-  constructor(private servicesRepository: IServicesRepository) {}
+	constructor(private servicesRepository: IServicesRepository) {}
 
-  public async execute(): Promise<Error | Service[]> {
-    const services = await this.servicesRepository.find();
-    return services;
-  }
+	public async execute(props: IFindServices): Promise<Error | Service[]> {
+		const services = await this.servicesRepository.find(props);
+		return services;
+	}
 }

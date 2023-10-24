@@ -6,6 +6,7 @@ import {
 	IDeleteService,
 	IFindOneService,
 	IFindServiceHighlight,
+	IFindServices,
 	IServicesRepository,
 } from "../../../../repositories/ServicesRepository";
 import { MoreThan } from "typeorm";
@@ -47,14 +48,29 @@ export class ServiceRepositorySqlite implements IServicesRepository {
 		return service;
 	}
 
-	public async find(): Promise<Error | Service[]> {
-		const serviceRepository = (await Database).getRepository(ServiceSchema);
+	public async find(props: IFindServices): Promise<Error | Service[]> {
+		const { limit, showRankingDESC } = props;
 
-		const service = await serviceRepository.find({
-			relations: ["business", "categories"],
-		});
+		if((limit != null || limit) && showRankingDESC){
+			const serviceRepository = (await Database).getRepository(ServiceSchema);
+			const service = await serviceRepository.find({
+				order: {
+					averageRating: "DESC",
+				},
+				take: limit,
+				relations: ["business", "categories"],
+			});
 
-		return service;
+			return service;
+		}
+
+		// const serviceRepository = (await Database).getRepository(ServiceSchema);
+
+		// const service = await serviceRepository.find({
+		// 	relations: ["business", "categories"],
+		// });
+
+		// return service;
 	}
 
 	public async findOne(props: IFindOneService): Promise<Error | Service> {

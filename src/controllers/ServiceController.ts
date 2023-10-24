@@ -53,8 +53,13 @@ class ServiceController implements IServiceCotroller {
   }
 
   async find(req: Request, res: Response) {
+    const { limit, showRankingDESC } = req.query;
+
     try {
-      const result = await findServiceService.execute();
+      const result = await findServiceService.execute({
+				limit,
+				showRankingDESC,
+			});
 
       if (result instanceof Error) {
         return res.status(400).json(result.message);
