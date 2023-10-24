@@ -51,7 +51,7 @@ export class ServiceRepositorySqlite implements IServicesRepository {
 	public async find(props: IFindServices): Promise<Error | Service[]> {
 		const { limit, showRankingDESC } = props;
 
-		if((limit != null || limit) && showRankingDESC){
+		if(limit != null || limit){
 			const serviceRepository = (await Database).getRepository(ServiceSchema);
 			const service = await serviceRepository.find({
 				order: {
@@ -64,13 +64,13 @@ export class ServiceRepositorySqlite implements IServicesRepository {
 			return service;
 		}
 
-		// const serviceRepository = (await Database).getRepository(ServiceSchema);
+		const serviceRepository = (await Database).getRepository(ServiceSchema);
 
-		// const service = await serviceRepository.find({
-		// 	relations: ["business", "categories"],
-		// });
+		const service = await serviceRepository.find({
+			relations: ["business", "categories"],
+		});
 
-		// return service;
+		return service;
 	}
 
 	public async findOne(props: IFindOneService): Promise<Error | Service> {

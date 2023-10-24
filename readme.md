@@ -84,7 +84,5 @@ profissional é valido? Ele trabalha no mesmo negócio do serviço?
    Filtros disponiveis:
    - O padrão da rota retorna todos os serviços publicos registrados na plataforma.
    - `limit`
-      - Usado junto do `showRankingDESC`, o `limit` define um limite de serviços que serão retornados na requisição
-   - `showRankingDESC`
-      - Usado junto do `limit`, serve para retornar os serviços baseado na sua avaliação e dia criado do maior para o menor.
-
+      - Define um limite de serviços que serão retornados na requisição
+      - Lembrando que quando usado os serviços são listados por ranking de avaliação, do com a melhor avaliação para os com avaliações menores
