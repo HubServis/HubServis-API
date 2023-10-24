@@ -6,14 +6,16 @@ const sessionService = new SessionService(new SessionRepositorySqlite());
 
 class SessionController {
   async handle(req: Request, res: Response): Promise<Response> {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
     try {
-      const result = await sessionService.execute({ username, password });
+      const result = await sessionService.execute({ email, password });
 
       if (result instanceof Error) {
         return res.status(400).json(result.message);
       }
+
+	  const cookie = res.cookie('hubservis', 'test', { maxAge: 24000, httpOnly: true })
 
       return res.status(201).json(result);
     } catch (err) {

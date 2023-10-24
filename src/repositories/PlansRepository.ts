@@ -3,13 +3,30 @@ import { Benefit } from "../entities/Benefit";
 import { Plan } from "../entities/Plan";
 
 export interface IPlanUpdate {
-  planName: string;
-  newPlan: Plan;
+  name: string;
+  price: number;
+  planId: string;
+  description: string;
+}
+
+export interface IAddBenefitsToPlan{
+  planId: string;
+  benefitsId: string[];
+}
+
+export interface IAddLimitsToPlan{
+  planId: string;
+  limitsId: string[];
 }
 
 export interface IPlanBenefitNames {
-  planName: string;
-  benefitName: string;
+  planId: string;
+  benefitId: string;
+}
+
+export interface IPlanLimitNames {
+  planId: string;
+  limitId: string;
 }
 
 export interface IPlanRepository {
@@ -18,6 +35,9 @@ export interface IPlanRepository {
   delete(props: string): Promise<Error | string>;
   patch(props: IPlanUpdate): Promise<Error | string>;
 
-  appendBenefit(props: IPlanBenefitNames): Promise<Error | string>;
+  appendBenefit(props: IAddBenefitsToPlan): Promise<Error | string>;
   deleteBenefit(props: IPlanBenefitNames): Promise<Error | string>;
+  
+  appendLimit(props: IAddLimitsToPlan): Promise<Error | string>;
+  deleteLimit(props: IPlanLimitNames): Promise<Error | string>;
 }

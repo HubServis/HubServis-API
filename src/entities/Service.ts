@@ -5,6 +5,7 @@ export class Service {
   public name: string;
   public price: string;
   public duration: string;
+  public description: string;
 
   constructor(props: Omit<Service, "id">, id: string = null) {
     Object.assign(this, props);

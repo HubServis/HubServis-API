@@ -1,7 +1,5 @@
 import { v4 as uuid } from "uuid";
 
-import { Plan } from "./Plan";
-
 export class Benefit {
   public id: string;
   public name: string;

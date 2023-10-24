@@ -5,7 +5,7 @@ export class FindBusinessService {
   constructor(private BusinessRepository: IBusinessRepository) {}
 
   public async execute(): Promise<Business[]> {
-    const users = await this.BusinessRepository.find();
-    return users;
+    const business = await this.BusinessRepository.find();
+    return business;
   }
 }

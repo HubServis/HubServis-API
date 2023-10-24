@@ -1,29 +1,39 @@
 import {
   Column,
   Entity,
-  JoinColumn,
-  JoinTable,
-  OneToMany,
-  OneToOne,
+  ManyToOne
 } from "typeorm";
 import { BaseEntity } from "./BaseEntity";
 import { User } from "./User";
 import Service from "./Service";
 import { Professional } from "./Professional";
+import Business from "./Business";
+import { StatusAppointment } from '../../../../enums/models';
 
 @Entity("appointments")
-export class Business extends BaseEntity {
-  @Column()
-  name: string;
+export class Appointment extends BaseEntity {
+  @Column({type: "varchar"})
+  status: StatusAppointment;
+  /* STATUS pode conter uma das opções abaixo:
+   CONCLUIDO
+   PENDENTE
+   CANCELADO
+  */
 
-  @OneToOne(() => User, (user) => user.business)
+  @Column()
+  date_time: string;
+
+  @ManyToOne(() => User, (user) => user.appointments)
   user: User;
 
-  @OneToMany(() => Service, (service) => service.business)
-  services: Service[];
+  @ManyToOne(() => Business, (business) => business.appointments)
+  business: Business;
 
-  @OneToMany(() => Professional, (professional) => professional.business)
-  professionals: Professional[];
+  @ManyToOne(() => Service, (service) => service.appointments)
+  service: Service;
+
+  @ManyToOne(() => Professional, (professional) => professional.appointments)
+  professional: Professional;
 }
 
-export default Business;
+export default Appointment;
