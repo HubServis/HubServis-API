@@ -49,11 +49,14 @@ export class ServiceRepositorySqlite implements IServicesRepository {
 	}
 
 	public async find(props: IFindServices): Promise<Error | Service[]> {
-		const { limit, showRankingDESC } = props;
+		const { limit } = props;
 
 		if(limit != null || limit){
 			const serviceRepository = (await Database).getRepository(ServiceSchema);
 			const service = await serviceRepository.find({
+				where: {
+					isPrivated: false
+				},
 				order: {
 					averageRating: "DESC",
 				},

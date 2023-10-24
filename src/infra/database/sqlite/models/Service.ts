@@ -1,11 +1,11 @@
 import {
-  Column,
-  Entity,
-  JoinColumn,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-  OneToMany,
+	Column,
+	Entity,
+	JoinColumn,
+	JoinTable,
+	ManyToMany,
+	ManyToOne,
+	OneToMany,
 } from "typeorm";
 import { BaseEntity } from "./BaseEntity";
 import { Business } from "./Business";
@@ -15,41 +15,44 @@ import Rating from "./Rating";
 
 @Entity("service")
 export class Service extends BaseEntity {
-  @Column()
-  name: string;
+	@Column()
+	name: string;
 
-  @Column()
-  price: string;
+	@Column()
+	price: string;
 
-  @Column()
-  duration: string;
+	@Column()
+	duration: string;
 
-  @Column()
-  description: string;
+	@Column()
+	description: string;
 
-  @Column("decimal", { default: 0 })
-  averageRating: number; // avaliação média do serviço
+	@Column({ default: false })
+	isPrivated: boolean;
 
-  @Column({ default: 0 })
-  totalRatings: number; // total de avaliações feitas para esse serviço
+	@Column("decimal", { default: 0 })
+	averageRating: number; // avaliação média do serviço
 
-  @Column("decimal", { default: 0 })
-  totalValueRating: number; // valor total das avaliações somadas
+	@Column({ default: 0 })
+	totalRatings: number; // total de avaliações feitas para esse serviço
 
-  @OneToMany(() => Appointment, (appointment) => appointment.service)
-  appointments: Appointment[];
+	@Column("decimal", { default: 0 })
+	totalValueRating: number; // valor total das avaliações somadas
 
-  @ManyToOne(() => Business, (business) => business.services, {
-    onDelete: "CASCADE",
-  })
-  business: Business;
+	@OneToMany(() => Appointment, (appointment) => appointment.service)
+	appointments: Appointment[];
 
-  @ManyToMany(() => Category, (category) => category.services)
-  categories: Category[];
+	@ManyToOne(() => Business, (business) => business.services, {
+		onDelete: "CASCADE",
+	})
+	business: Business;
 
-  @OneToMany(() => Rating, (rating) => rating.service)
-  @JoinColumn()
-  ratings: Rating[];
+	@ManyToMany(() => Category, (category) => category.services)
+	categories: Category[];
+
+	@OneToMany(() => Rating, (rating) => rating.service)
+	@JoinColumn()
+	ratings: Rating[];
 }
 
 export default Service;

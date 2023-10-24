@@ -53,12 +53,11 @@ class ServiceController implements IServiceCotroller {
   }
 
   async find(req: Request, res: Response) {
-    const { limit, showRankingDESC } = req.query;
+    const { limit } = req.query;
 
     try {
       const result = await findServiceService.execute({
-				limit,
-				showRankingDESC,
+				limit
 			});
 
       if (result instanceof Error) {

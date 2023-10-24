@@ -15,7 +15,6 @@ export interface IFindServiceHighlight {
 
 export interface IFindServices {
 	limit?: any;
-	showRankingDESC?: any;
 }
 
 export interface IServicesRepository {
