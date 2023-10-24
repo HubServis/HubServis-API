@@ -6,6 +6,9 @@ import { Service } from "../entities/Service";
 import { ServiceRepositorySqlite } from "../infra/database/sqlite/implementations/ServiceRepository";
 import { FindOneServiceService } from "../services/service/FindOneService";
 import { DeleteServiceService } from "../services/service/DeleteService";
+import { FindServicesHighlightService } from "../services/service/FindServicesHighlightService";
+import { ParamsDictionary } from "express-serve-static-core";
+import { ParsedQs } from "qs";
 
 const createServiceService = new CreateServiceService(
   new ServiceRepositorySqlite()
@@ -22,6 +25,10 @@ const findOneServiceService = new FindOneServiceService(
 const deleteServiceService = new DeleteServiceService(
   new ServiceRepositorySqlite()
 )
+
+const findServicesHighlightService = new FindServicesHighlightService(
+  new ServiceRepositorySqlite()
+);
 
 class ServiceController implements IServiceCotroller {
   async create(req: Request, res: Response) {
@@ -95,6 +102,22 @@ class ServiceController implements IServiceCotroller {
       console.log(err.message);
       return res.status(500).json("Unexpected error");
     }
+  }
+
+  async findServicesHighlight(req: Request, res: Response): Promise<Response> {
+      const { averageRating, limit } = req.query;
+      
+      try {
+        const result = await findServicesHighlightService.execute({
+          averageRating,
+          limit
+        });
+
+        return res.status(200).json(result);
+      } catch (err) {
+        console.log(err.message);
+				return res.status(500).json("Unexpected error");
+      }
   }
 }
 

@@ -6,28 +6,6 @@ _"Háh precisava do back rodando também para tesatr o front"_
 **OBS:** _No front-end do projeto HubServis contém todo o guia de como rodar tanto o ambiente front-end quanto o back-end juntos_
 
 ---
-
-## **A FAZERES**
-#### *Essencial*
-- [] Criar seeds para popular o BD com apenas 1 click
-- [] Criar lista de usuários e dados para testes e cargos na plataforma
-- [] Criar plano admin e permissões de admin para ele
-- [] Resolver bug no deletes
-
-#### *Importante*
-- [] Criar CRUD para:
-   - [x] BUSINESS
-   - [] PROFESSIONAL
-   - [x] SERVICES
-   
-- [] Verificações que precisam ser feitas o quanto antes:
-   - [] verificação de criação de categoria publica ou privada
-      - [] Configurar verificações de permissões
-   - [] verificação de delete business
-   - [] verificação admin patch business
-   - [] verificação admin e user, na rota delete service
-
-
 #### *Urgente*
 
 #### *Assim que der*
@@ -83,5 +61,22 @@ profissional é valido? Ele trabalha no mesmo negócio do serviço?
    - O padrão da rota retorna apenas as categorias publicas.
    - `showPrivateOnly` - retorna apenas as categorias privadas.
    - `showAll` - retorna todas as categorias.
+
+   #### **Listagem de serviços por categoria**
+   A listagem de serviços por categoria é feita através da query `categoryNameId` passada como parametro na url da rota. Esse parametro recebe o nameId da categoria e caso não seja passado será retornado um erro.
+   
+### Serviços
+   #### **Serviços em Destaque**
+   - Atualmente listamos o serviços em destaque baseado na sua avaliação, quanto mais alta, mais chances de vc aparecer na home de destaques. 
+   - Futuramente será implementado um algoritmo para melhor diversificação dos destaques.
+
+   As opções da rota de destaques `/service/highlight` são:
+   - `averageRating`
+      - usado para definir o número minimo de avaliação que um serviço deve ter para entrar nos destaques.
+      - recebe um numero de 1 á 5. Mas por padrão é 4.
+   - `limit` 
+      - usado para definir o limite de serviços retornados
+      - por padrão é 8.
+
 
 

@@ -15,24 +15,27 @@ import { StatusAppointment } from '../../../../enums/models';
 
 @Entity("category")
 export class Category extends BaseEntity {
-  @Column()
-  name: string;
+	@Column()
+	name: string;
 
-  @Column()
-  description: string;
+	@Column()
+	nameId: string;
 
-  @Column()
-  isPrivated: boolean;
+	@Column()
+	description: string;
 
-  @OneToOne(() => User, (user) => user.category)
-  owner: User;
+	@Column()
+	isPrivated: boolean;
 
-  @ManyToOne(() => Business, (business) => business.categories)
-  business: Business;
+	@OneToOne(() => User, (user) => user.category)
+	owner: User;
 
-  @ManyToMany(() => Service, (service) => service.categories)
-  @JoinTable()
-  services: Service[]
+	@ManyToOne(() => Business, (business) => business.categories)
+	business: Business;
+
+	@ManyToMany(() => Service, (service) => service.categories)
+	@JoinTable()
+	services: Service[];
 }
 
 export default Category;

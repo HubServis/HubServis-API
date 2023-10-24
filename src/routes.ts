@@ -46,6 +46,7 @@ routes.post("/service/create", auth, ServiceController.create);
 routes.get("/services", ServiceController.find);
 routes.get("/service/:serviceId", ServiceController.findOne);
 routes.delete("/service/:serviceId", ServiceController.delete);
+routes.get("/services/highlight", ServiceController.findServicesHighlight);
 
 // remover essas rotas depois talvez
 routes.post("/product", ProductController.create);
@@ -153,6 +154,7 @@ routes.post("/category", auth, CategoryController.create);
 routes.get("/categories", CategoryController.find);
 routes.patch("/categories/services", CategoryController.appendService);
 routes.delete("/category/:categoryId", auth, CategoryController.delete);
+routes.get("/services/category", CategoryController.listServicesCategory);
 
 // RATING
 routes.post("/rating", auth, RatingController.create);
