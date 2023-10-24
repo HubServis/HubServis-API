@@ -9,6 +9,7 @@ import { DeleteServiceService } from "../services/service/DeleteService";
 import { FindServicesHighlightService } from "../services/service/FindServicesHighlightService";
 import { ParamsDictionary } from "express-serve-static-core";
 import { ParsedQs } from "qs";
+import { FindManyServicesService } from "../services/service/FindManyService";
 
 const createServiceService = new CreateServiceService(
   new ServiceRepositorySqlite()
@@ -30,99 +31,122 @@ const findServicesHighlightService = new FindServicesHighlightService(
   new ServiceRepositorySqlite()
 );
 
+const findManyServicesService = new FindManyServicesService(
+  new ServiceRepositorySqlite()
+)
+
 class ServiceController implements IServiceCotroller {
-  async create(req: Request, res: Response) {
-    const { name, price, duration, description } = req.body;
+	async create(req: Request, res: Response) {
+		const { name, price, duration, description } = req.body;
 
-    try {
-      const service = new Service({ name, price, duration, description });
-      const result = await createServiceService.execute(
-        service,
-        req.userReq.id
-      );
+		try {
+			const service = new Service({ name, price, duration, description });
+			const result = await createServiceService.execute(
+				service,
+				req.userReq.id
+			);
 
-      if (result instanceof Error) {
-        return res.status(400).json(result.message);
-      }
+			if (result instanceof Error) {
+				return res.status(400).json(result.message);
+			}
 
-      return res.status(201).json(result);
-    } catch (err) {
-      console.log(err.message);
-      return res.status(500).json("Unexpected error");
-    }
-  }
+			return res.status(201).json(result);
+		} catch (err) {
+			console.log(err.message);
+			return res.status(500).json("Unexpected error");
+		}
+	}
 
-  async find(req: Request, res: Response) {
-    const { limit } = req.query;
+	async find(req: Request, res: Response) {
+		const { limit } = req.query;
 
-    try {
-      const result = await findServiceService.execute({
-				limit
+		try {
+			const result = await findServiceService.execute({
+				limit,
 			});
 
-      if (result instanceof Error) {
-        return res.status(400).json(result.message);
-      }
+			if (result instanceof Error) {
+				return res.status(400).json(result.message);
+			}
 
-      return res.status(201).json(result);
-    } catch (err) {
-      console.log(err.message);
-      return res.status(500).json("Unexpected error");
-    }
-  }
-  
-  async findOne(req: Request, res: Response) {
-    const { serviceId } = req.params;
+			return res.status(201).json(result);
+		} catch (err) {
+			console.log(err.message);
+			return res.status(500).json("Unexpected error");
+		}
+	}
 
-    try {
-      const result = await findOneServiceService.execute({
-        serviceId,
-      });
+	async findOne(req: Request, res: Response) {
+		const { serviceId } = req.params;
 
-      if (result instanceof Error) {
-        return res.status(400).json(result.message);
-      }
+		try {
+			const result = await findOneServiceService.execute({
+				serviceId,
+			});
 
-      return res.status(201).json(result);
-    } catch (err) {
-      console.log(err.message);
-      return res.status(500).json("Unexpected error");
-    }
-  }
+			if (result instanceof Error) {
+				return res.status(400).json(result.message);
+			}
 
-  async delete(req: Request, res: Response) {
-    const { serviceId } = req.params;
-    try {
-      const result = await deleteServiceService.execute({
-        serviceId,
-      });
+			return res.status(201).json(result);
+		} catch (err) {
+			console.log(err.message);
+			return res.status(500).json("Unexpected error");
+		}
+	}
 
-      if (result instanceof Error) {
-        return res.status(400).json(result.message);
-      }
+	async delete(req: Request, res: Response) {
+		const { serviceId } = req.params;
+		try {
+			const result = await deleteServiceService.execute({
+				serviceId,
+			});
 
-      return res.status(201).json(result);
-    } catch (err) {
-      console.log(err.message);
-      return res.status(500).json("Unexpected error");
-    }
-  }
+			if (result instanceof Error) {
+				return res.status(400).json(result.message);
+			}
 
-  async findServicesHighlight(req: Request, res: Response): Promise<Response> {
-      const { averageRating, limit } = req.query;
-      
-      try {
-        const result = await findServicesHighlightService.execute({
-          averageRating,
-          limit
-        });
+			return res.status(201).json(result);
+		} catch (err) {
+			console.log(err.message);
+			return res.status(500).json("Unexpected error");
+		}
+	}
 
-        return res.status(200).json(result);
-      } catch (err) {
-        console.log(err.message);
-				return res.status(500).json("Unexpected error");
-      }
-  }
+	async findServicesHighlight(req: Request, res: Response): Promise<Response> {
+		const { averageRating, limit } = req.query;
+
+		try {
+			const result = await findServicesHighlightService.execute({
+				averageRating,
+				limit,
+			});
+
+			return res.status(200).json(result);
+		} catch (err) {
+			console.log(err.message);
+			return res.status(500).json("Unexpected error");
+		}
+	}
+
+	async findMany(req: Request, res: Response) {
+		const { servicesId } = req.body;
+
+		try {
+			const result = await findManyServicesService.execute({
+				servicesId,
+			});
+
+			if (result instanceof Error) {
+				return res.status(404).json(result.message);
+			}
+
+			return res.status(201).json(result);
+		} catch (err) {
+			console.log(err.message);
+			return res.status(500).json("Unexpected error");
+		}
+	}
 }
 
 export default new ServiceController();

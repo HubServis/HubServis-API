@@ -45,6 +45,7 @@ routes.get("/professionals", ProfessionalController.findProfessionals);
 routes.post("/service/create", auth, ServiceController.create);
 routes.get("/services", ServiceController.find);
 routes.get("/service/:serviceId", ServiceController.findOne);
+routes.post("/services/many", ServiceController.findMany);
 routes.delete("/service/:serviceId", ServiceController.delete);
 routes.get("/services/highlight", ServiceController.findServicesHighlight);
 
