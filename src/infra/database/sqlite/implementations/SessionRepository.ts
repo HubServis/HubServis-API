@@ -15,6 +15,10 @@ export class SessionRepositorySqlite implements ISessionRepository {
 
     const user = await repo.findOne({
       where: { email: email },
+      select: {
+        id: true,
+		password: true
+      },
     });
 
     if (!user) {
@@ -29,6 +33,6 @@ export class SessionRepositorySqlite implements ISessionRepository {
 
     const token = new Token().sign(user);
 
-    return { token };
+    return { token, userId: user.id };
   }
 }
