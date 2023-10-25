@@ -11,6 +11,8 @@ import PlanController from "./controllers/PlanController";
 
 import { auth } from "./middleware/auth";
 import { can, is } from "./middleware/permissions";
+import { cookieGateway } from './middleware/cookie'; 
+
 import AppointmentController from "./controllers/AppointmentController";
 import CategoryController from "./controllers/CategoryController";
 import RatingController from "./controllers/RatingController";
@@ -22,7 +24,7 @@ import BlockingController from "./controllers/BlockingController";
 const routes = Router();
 
 // LOGIN
-routes.post("/login", SessionController.handle);
+routes.post("/login", SessionController.handle, cookieGateway);
 
 // USER
 routes.get("/users", UserController.find);
