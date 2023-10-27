@@ -141,7 +141,7 @@ class ServiceController implements IServiceCotroller {
 				return res.status(404).json(result.message);
 			}
 
-			return res.status(201).json(result);
+			return res.status(200).json(result);
 		} catch (err) {
 			console.log(err.message);
 			return res.status(500).json("Unexpected error");
