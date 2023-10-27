@@ -4,11 +4,13 @@ import { User as UserSchema } from "../models/User";
 import Database from "../config";
 import {
 	IDeleteService,
+	IFindManyServices,
 	IFindOneService,
 	IFindServiceHighlight,
+	IFindServices,
 	IServicesRepository,
 } from "../../../../repositories/ServicesRepository";
-import { MoreThan } from "typeorm";
+import { In, MoreThan, ServerOpeningEvent } from "typeorm";
 
 export class ServiceRepositorySqlite implements IServicesRepository {
 	public async create(
@@ -47,7 +49,25 @@ export class ServiceRepositorySqlite implements IServicesRepository {
 		return service;
 	}
 
-	public async find(): Promise<Error | Service[]> {
+	public async find(props: IFindServices): Promise<Error | Service[]> {
+		const { limit } = props;
+
+		if (limit != null || limit) {
+			const serviceRepository = (await Database).getRepository(ServiceSchema);
+			const service = await serviceRepository.find({
+				where: {
+					isPrivated: false,
+				},
+				order: {
+					averageRating: "DESC",
+				},
+				take: limit,
+				relations: ["business", "categories"],
+			});
+
+			return service;
+		}
+
 		const serviceRepository = (await Database).getRepository(ServiceSchema);
 
 		const service = await serviceRepository.find({
@@ -93,12 +113,14 @@ export class ServiceRepositorySqlite implements IServicesRepository {
 	public async findServicesHighlight(
 		props: IFindServiceHighlight
 	): Promise<Service[] | Error> {
-    const { averageRating, limit } = props;
+		const { averageRating, limit } = props;
 
 		const serviceRepository = (await Database).getRepository(ServiceSchema);
 		const services = await serviceRepository.find({
 			where: {
-				averageRating: MoreThan((averageRating != 0 && averageRating != null) ? averageRating : 4),
+				averageRating: MoreThan(
+					averageRating != 0 && averageRating != null ? averageRating : 4
+				),
 			},
 			relations: {
 				business: true,
@@ -108,6 +130,22 @@ export class ServiceRepositorySqlite implements IServicesRepository {
 			},
 			take: limit ?? 8,
 		});
+
+		return services;
+	}
+
+	public async findMany(props: IFindManyServices): Promise<Error | Service[]> {
+		const { servicesId } = props;
+		const serviceRepository = (await Database).getRepository(ServiceSchema);
+
+		const services = await serviceRepository.find({
+			where: {
+				id: In(servicesId),
+			},
+			relations: ["business", "categories"],
+		});
+
+		if (!services || services.length == 0) return new Error("Services not found!");
 
 		return services;
 	}

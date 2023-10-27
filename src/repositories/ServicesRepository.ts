@@ -13,10 +13,19 @@ export interface IFindServiceHighlight {
 	limit: any;
 }
 
+export interface IFindServices {
+	limit?: any;
+}
+
+export interface IFindManyServices {
+	servicesId: string[];
+}
+
 export interface IServicesRepository {
 	create(props: Service, userId: string): Promise<Error | Service>;
-	find(): Promise<Error | Service[]>;
+	find(props: IFindServices): Promise<Error | Service[]>;
 	findOne(props: IFindOneService): Promise<Error | Service>;
+	findMany(props: IFindManyServices): Promise<Error | Service[]>;
 	delete(props: IDeleteService): Promise<Error | string>;
 	findServicesHighlight(
 		props: IFindServiceHighlight

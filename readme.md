@@ -78,5 +78,11 @@ profissional é valido? Ele trabalha no mesmo negócio do serviço?
       - usado para definir o limite de serviços retornados
       - por padrão é 8.
 
+   #### **Listagem de todos serviços**
+   - Essa rota lista todos os serviços registrados na plataforma, porém há alguns filtros implementados, dos quais estão abaixo junto do para que ele serve.
 
-
+   Filtros disponiveis:
+   - O padrão da rota retorna todos os serviços publicos registrados na plataforma.
+   - `limit`
+      - Define um limite de serviços que serão retornados na requisição
+      - Lembrando que quando usado os serviços são listados por ranking de avaliação, do com a melhor avaliação para os com avaliações menores
