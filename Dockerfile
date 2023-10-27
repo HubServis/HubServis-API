@@ -6,11 +6,12 @@ RUN apk add --no-cache curl \
 
 WORKDIR /app
 
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+
+COPY package.json ./
 
 RUN pnpm install
 
-COPY . .
+COPY --chown=node:node . .
 
 EXPOSE 3000
 

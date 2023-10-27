@@ -7,8 +7,6 @@ import { ServiceRepositorySqlite } from "../infra/database/sqlite/implementation
 import { FindOneServiceService } from "../services/service/FindOneService";
 import { DeleteServiceService } from "../services/service/DeleteService";
 import { FindServicesHighlightService } from "../services/service/FindServicesHighlightService";
-import { ParamsDictionary } from "express-serve-static-core";
-import { ParsedQs } from "qs";
 import { FindManyServicesService } from "../services/service/FindManyService";
 
 const createServiceService = new CreateServiceService(
