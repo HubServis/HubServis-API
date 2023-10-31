@@ -13,7 +13,6 @@ export async function auth(req: Request, res: Response, next: NextFunction) {
     return res.status(400).json({ message: "Token not informed!" });
   }
 
-
   jwt.verify(token, process.env.SECRET_JWT, (err: Error, token: ITokenUser) => {
     if (err) {
       return res.status(401).json({ message: "Unauthorized" });

@@ -44,7 +44,7 @@ routes.post("/professional/add", auth, ProfessionalController.addToBusiness);
 routes.get("/professionals", ProfessionalController.findProfessionals);
 
 // SERVICE
-routes.post("/service/create", auth, ServiceController.create);
+routes.post("/service/create", cookieGateway, ServiceController.create);
 routes.get("/services", ServiceController.find);
 routes.get("/service/:serviceId", ServiceController.findOne);
 routes.post("/services/many", ServiceController.findMany);
