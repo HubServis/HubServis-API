@@ -6,6 +6,7 @@ export interface IUserCotroller {
   findOneUser(req: Request, res: Response): Promise<Response>;
   appendPlan(req: Request, res: Response): Promise<Response>;
   deletePlan(req: Request, res: Response): Promise<Response>;
+  getUserPermissions(req: Request, res: Response): Promise<Response>
 }
 
 export interface IUserACLCotroller {

@@ -11,7 +11,7 @@ import PlanController from "./controllers/PlanController";
 
 import { auth } from "./middleware/auth";
 import { can, is } from "./middleware/permissions";
-import { cookieGateway } from './middleware/cookie'; 
+import { cookieGateway } from "./middleware/cookie";
 
 import AppointmentController from "./controllers/AppointmentController";
 import CategoryController from "./controllers/CategoryController";
@@ -22,7 +22,7 @@ import ExtraController from "./controllers/ExtraController";
 const routes = Router();
 
 // LOGIN
-routes.post("/login", SessionController.handle, cookieGateway);
+routes.post("/login", SessionController.handle, cookieGateway([]));
 
 // USER
 routes.get("/users", UserController.find);
@@ -44,7 +44,11 @@ routes.post("/professional/add", auth, ProfessionalController.addToBusiness);
 routes.get("/professionals", ProfessionalController.findProfessionals);
 
 // SERVICE
-routes.post("/service/create", cookieGateway, ServiceController.create);
+routes.post(
+  "/service/create",
+  cookieGateway(['createService']),
+  ServiceController.create,
+);
 routes.get("/services", ServiceController.find);
 routes.get("/service/:serviceId", ServiceController.findOne);
 routes.post("/services/many", ServiceController.findMany);
@@ -62,21 +66,21 @@ routes.post(
   auth,
   // is(["dev_plan", "plano teste"]),
   // can(["create_plan"]),
-  BenefitController.create
+  BenefitController.create,
 );
 
 routes.patch(
   "/benefit/:benefitName",
   // is(["dev_plan"]),
   // can(["create_plan"]),
-  BenefitController.patch
+  BenefitController.patch,
 );
 
 routes.delete(
   "/benefit/:benefitName",
   // is(["dev_plan"]),
   // can(["create_plan"]),
-  BenefitController.delete
+  BenefitController.delete,
 );
 
 // PLANS
@@ -86,21 +90,21 @@ routes.post(
   auth,
   // is(["dev_plan"]),
   // can(["create_plan"]),
-  PlanController.create
+  PlanController.create,
 );
 
 routes.patch(
   "/plans",
   // is(["dev_plan"]),
   // can(["create_plan"]),
-  PlanController.patch
+  PlanController.patch,
 );
 
 routes.delete(
   "/plans/:idPlan",
   // is(["dev_plan"]),
   // can(["create_plan"]),
-  PlanController.delete
+  PlanController.delete,
 );
 
 // Plan - Benefit
@@ -109,14 +113,14 @@ routes.patch(
   "/plans/addBenefit",
   // is(["dev_plan"]),
   // can(["create_plan"]),
-  PlanController.appendBenefit
+  PlanController.appendBenefit,
 );
 
 routes.delete(
   "/plans/:planId/:benefitId",
   // is(["dev_plan"]),
   // can(["create_plan"]),
-  PlanController.deleteBenefit
+  PlanController.deleteBenefit,
 );
 
 // Plan - Limits
@@ -124,16 +128,15 @@ routes.patch(
   "/plans/addLimit",
   // is(["dev_plan"]),
   // can(["create_plan"]),
-  PlanController.appendLimit
+  PlanController.appendLimit,
 );
 
 routes.delete(
   "/plans/:planId/:limitId",
   // is(["dev_plan"]),
   // can(["create_plan"]),
-  PlanController.deleteLimit
+  PlanController.deleteLimit,
 );
-
 
 // LIMITS
 routes.post("/limit", auth, LimitController.create);

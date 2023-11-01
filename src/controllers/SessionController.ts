@@ -5,7 +5,11 @@ import { SessionRepositorySqlite } from "../infra/database/sqlite/implementation
 const sessionService = new SessionService(new SessionRepositorySqlite());
 
 class SessionController {
-  async handle(req: Request, res: Response, next: NextFunction): Promise<Response> {
+  async handle(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<Response> {
     const { email, password } = req.body;
 
     try {
@@ -15,9 +19,10 @@ class SessionController {
         return res.status(400).json(result.message);
       }
 
-	  res.locals = result;
+      res.locals = result;
 
-	  next();
+      next();
+	  // res.json('logged').status(201);
     } catch (err) {
       console.log(err.message);
       return res.status(500).json("Unexpected error");

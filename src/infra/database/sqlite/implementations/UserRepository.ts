@@ -11,7 +11,7 @@ import { sign } from "jsonwebtoken";
 import fs from "fs";
 import { File } from "buffer";
 import { upload } from "../../../aws";
-import { config } from 'dotenv';
+import { config } from "dotenv";
 
 export class UserRepositorySqlite implements IUsersRepository {
   public async create(props: User): Promise<Error | ResRegisterUser> {
@@ -101,7 +101,7 @@ export class UserRepositorySqlite implements IUsersRepository {
       },
       relations: {
         plan: { benefits: true, limits: true },
-        extras: true
+        extras: true,
       },
     });
 
@@ -132,7 +132,7 @@ export class UserRepositorySqlite implements IUsersRepository {
       },
       relations: {
         plan: { benefits: true, limits: true },
-        extras: true
+        extras: true,
       },
     });
 
@@ -154,8 +154,8 @@ export class UserRepositorySqlite implements IUsersRepository {
       }
     }
 
-	//Dotenv
-	config();
+    //Dotenv
+    config();
 
     user.name = (!!props.formData.name && props.formData.name) || user.name;
     user.email = (!!props.formData.email && props.formData.email) || user.email;
@@ -167,7 +167,8 @@ export class UserRepositorySqlite implements IUsersRepository {
       (!!props.formData.password && props.formData.password) || user.password;
     user.plan = (!!props.formData.plan && props.formData.plan) || user.plan;
     user.image =
-      (!!props.formData.image && `${process.env.S3_URL}/${props.formData.image.name}`) ||
+      (!!props.formData.image &&
+        `${process.env.S3_URL}/${props.formData.image.name}`) ||
       user.image;
 
     return user;
@@ -223,4 +224,28 @@ export class UserRepositorySqlite implements IUsersRepository {
 
     return `The Plan Has Been Deleted from user ${user.name}`;
   }
+
+  public async getUserPermissions(props: {
+    userId: string;
+    requestedPermissions: string[];
+  }): Promise<boolean | Error> {
+    const userRepository = (await Database).getRepository(UserSchema);
+
+    const user = await userRepository.findOne({
+      where: { id: props.userId },
+      relations: { plan: true },
+    });
+
+    if (!user) return new Error("This User not Exists");
+
+    if (user.plan === null)
+      return new Error("The user does not have permission!");
+
+    // const hasPermission = user.plan.benefits.filter((benefit) => props.requestedPermissions.some(benefit.name));
+
+    // if (!hasPermission) return false;
+
+    return false;
+  }
+  //  }
 }

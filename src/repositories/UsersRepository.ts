@@ -17,4 +17,5 @@ export interface IUsersRepository {
     userId: string;
   }): Promise<Error | string>;
   deletePlan(props: { userId: string }): Promise<Error | string>;
+  getUserPermissions(props: { userId: string, requestedPermissions: string[] }): Promise<boolean | Error>
 }
