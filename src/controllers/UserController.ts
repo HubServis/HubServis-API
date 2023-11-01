@@ -8,6 +8,7 @@ import { AppendPlanUserService } from "../services/user/AppendPlanUser";
 import { DeletePlanUserService } from "../services/user/DeletePlanUser";
 import { FindOneUserService } from "../services/user/findOneUser";
 import { UpdateUserService } from "../services/user/updateUserService";
+import { GetUserPermissions } from "../services/user/getUserPermissions";
 
 const createUserService = new CreateUserService(new UserRepositorySqlite());
 const findUserService = new FindUserService(new UserRepositorySqlite());
@@ -19,6 +20,7 @@ const appendPlanUserService = new AppendPlanUserService(
 const deletePlanUserService = new DeletePlanUserService(
   new UserRepositorySqlite(),
 );
+const getUserPermissions = new GetUserPermissions(new UserRepositorySqlite());
 
 class UserController implements IUserCotroller {
   async create(req: Request, res: Response) {
@@ -76,7 +78,6 @@ class UserController implements IUserCotroller {
     const formData = req.body;
 
     try {
-
       const result = await updateUserService.execute({
         userId,
         formData,
@@ -111,6 +112,22 @@ class UserController implements IUserCotroller {
       const result = await deletePlanUserService.execute({ userId });
 
       if (result instanceof Error) return res.status(400).json(result.message);
+
+      return res.status(201).json(result);
+    } catch (err) {
+      return res.status(500).json(err.message);
+    }
+  }
+
+  async getUserPermissions(req: Request, res: Response): Promise<Response> {
+    try {
+      const { userId } = req.params;
+
+      const result = await getUserPermissions.execute({ userId });
+
+      if (result instanceof Error) return res.status(400).json(result.message);
+
+      return res.status(201).json(result);
 
       return res.status(201).json(result);
     } catch (err) {

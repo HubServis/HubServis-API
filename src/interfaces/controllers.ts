@@ -6,6 +6,7 @@ export interface IUserCotroller {
   findOneUser(req: Request, res: Response): Promise<Response>;
   appendPlan(req: Request, res: Response): Promise<Response>;
   deletePlan(req: Request, res: Response): Promise<Response>;
+  getUserPermissions(req: Request, res: Response): Promise<Response>
 }
 
 export interface IUserACLCotroller {
@@ -100,7 +101,6 @@ export interface IRatingController {
   patch(req: Request, res: Response): Promise<Response>;
   findAll(req: Request, res: Response): Promise<Response>;
 }
-
 export interface IExpedientController {
 	create(req: Request, res: Response): Promise<Response>;
 	find(req: Request, res: Response): Promise<Response>;

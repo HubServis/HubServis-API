@@ -12,7 +12,7 @@
   ],
   "rules": {
     "prettier/prettier": [
-      "warn",
+      "error",
       {
         "endOfLine": "lf",
         "doubleQuote": true,
