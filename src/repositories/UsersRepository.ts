@@ -4,7 +4,6 @@ import { User } from "../entities/User";
 
 export interface ResRegisterUser {
   user: User;
-  token: string;
 }
 
 export interface IUsersRepository {

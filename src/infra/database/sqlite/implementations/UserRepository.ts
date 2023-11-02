@@ -55,11 +55,7 @@ export class UserRepositorySqlite implements IUsersRepository {
       image: null,
     });
 
-    const token = sign({ id: user.id }, process.env.SECRET_JWT, {
-      expiresIn: "4h",
-    });
-
-    return { user: user, token: token };
+    return { user: user };
   }
 
   public async find(): Promise<User[]> {
@@ -231,21 +227,35 @@ export class UserRepositorySqlite implements IUsersRepository {
   }): Promise<boolean | Error> {
     const userRepository = (await Database).getRepository(UserSchema);
 
-    const user = await userRepository.findOne({
+    const userAccess = await userRepository.findOne({
       where: { id: props.userId },
-      relations: { plan: true },
+      relations: {
+        plan: {
+          benefits: true,
+        },
+      },
     });
 
-    if (!user) return new Error("This User not Exists");
+    if (!userAccess || userAccess === null || !userAccess.plan) return false;
 
-    if (user.plan === null)
-      return new Error("The user does not have permission!");
+    const planPermission = props.requestedPermissions.some(
+      (permission) => permission === userAccess.plan.name,
+    );
 
-    // const hasPermission = user.plan.benefits.filter((benefit) => props.requestedPermissions.some(benefit.name));
+    if (planPermission) return true;
 
-    // if (!hasPermission) return false;
+    const hasPermission = props.requestedPermissions.some((permission) => {
+      let valid = 0;
+
+      userAccess.plan.benefits.forEach(
+        (benefit) => benefit.role === permission && valid++,
+      );
+
+      (valid > 0 && true) || false;
+    });
+
+    if (!hasPermission) return true;
 
     return false;
   }
-  //  }
 }

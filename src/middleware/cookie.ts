@@ -7,13 +7,14 @@ import { ICookie } from "../interfaces/cookie";
 import { GetUserPermissions } from "../services/user/getUserPermissions";
 
 import { config } from "dotenv";
+import { log } from "console";
 
 const getUserPermissions = new GetUserPermissions(new UserRepositorySqlite());
 
 export const cookieGateway = (permissions?: string[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      if (req.path === "/login") {
+      if (req.path === "/login" || req.path === "/user") {
         const result = createCookie(req, res);
 
         return res.json(result).status(200);
@@ -23,7 +24,6 @@ export const cookieGateway = (permissions?: string[]) => {
         const result = await verifyAccess(req, res, next, permissions);
 
         if (result !== true) return res.end();
-
         else next();
       }
     } catch (err) {
@@ -42,7 +42,7 @@ const createCookie = (req: Request, res: Response) => {
       JSON.stringify({
         token: token,
         userId: userId,
-        access: JSON.stringify(["basic"]),
+        access: [],
       }),
     );
 
@@ -71,42 +71,12 @@ const createCookie = (req: Request, res: Response) => {
   }
 };
 
-const verifyAccess = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-  permissions: string[],
-): Promise<Boolean | Error | Response> => {
-  try {
-    config();
-
-    const cookie = req.cookies[process.env.COOKIE_DOMAIN];
-
-    if (!cookie || cookie === undefined)
-      return res.status(401).json("user does not have cookie");
-
-    const buffCookie = Buffer.from(cookie, "base64");
-    const cookieData: { token: string; userId: string; access: string[] } =
-      JSON.parse(buffCookie.toString("ascii"));
-
-    const result = await getUserPermissions.execute({
-      userId: cookieData,
-      requestedPermissions: permissions,
-    });
-
-    if (result !== true) { return result };
-
-    next();
-  } catch (err) {
-    return res.status(500).json(`There was an error on verifyAccess: ${err}`);
-  }
-};
-
 const revalidateCookie = (req: Request, res: Response) => {
   try {
     config();
 
     const cookie = req.cookies[process.env.COOKIE_DOMAIN];
+
     const revalidate = req.cookies["resigned"];
 
     if (!cookie && !revalidate)
@@ -125,5 +95,52 @@ const revalidateCookie = (req: Request, res: Response) => {
     return true;
   } catch (err) {
     new Error("Error revalidate Cookie: ", err);
+  }
+};
+
+const verifyAccess = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+  permissions: string[],
+): Promise<Boolean | Error | Response> => {
+  try {
+    config();
+
+    const cookie = req.cookies[process.env.COOKIE_DOMAIN];
+
+    if (!cookie || cookie === undefined)
+      return res.status(401).json("user does not have cookie");
+
+    const buffCookie = Buffer.from(cookie, "base64");
+    const cookieData: { token: string; userId: string; access: any } =
+      JSON.parse(buffCookie.toString("ascii"));
+
+    if (cookieData.access.some((access) => access === req.path)) return true;
+
+    const result = await getUserPermissions.execute({
+      userId: cookieData.userId,
+      requestedPermissions: permissions,
+    });
+
+    if (result !== true) return res.status(401).json("User not have access!");
+
+    cookieData.access.push(req.path);
+
+    const reasignedCookie = btoa(JSON.stringify(cookieData));
+
+    res.cookie(process.env.COOKIE_DOMAIN, reasignedCookie, {
+      maxAge: 60 * 1000,
+      httpOnly: true,
+      domain: process.env.COOKIE_DOMAIN,
+      sameSite: "lax",
+      // secure: true, use it when https is enabled = on server
+      // signed: true, on server
+      path: "/",
+    });
+
+    return true;
+  } catch (err) {
+    return res.status(500).json(`There was an error on verifyAccess: ${err}`);
   }
 };
