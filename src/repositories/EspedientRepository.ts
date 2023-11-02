@@ -9,5 +9,5 @@ export interface ICreateExpedient {
 
 export interface IExpediencysRepository {
 	create(props: ICreateExpedient): Promise<Error | string>;
-    find(): Promise<Error | Espedient>;
+    find(): Promise<Error | Espedient[]>;
 }

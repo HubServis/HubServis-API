@@ -166,5 +166,6 @@ routes.patch("/rating/:ratingId", RatingController.patch);
 
 // ESPEDIENT
 routes.post("/espedient", auth, EspedientController.create);
+routes.get("/expediencys", EspedientController.find);
 
 export { routes };
