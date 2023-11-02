@@ -7,7 +7,6 @@ import { ICookie } from "../interfaces/cookie";
 import { GetUserPermissions } from "../services/user/getUserPermissions";
 
 import { config } from "dotenv";
-import { log } from "console";
 
 const getUserPermissions = new GetUserPermissions(new UserRepositorySqlite());
 
@@ -133,7 +132,7 @@ const verifyAccess = async (
       maxAge: 60 * 1000,
       httpOnly: true,
       domain: process.env.COOKIE_DOMAIN,
-      sameSite: "lax",
+      sameSite: "strict",
       // secure: true, use it when https is enabled = on server
       // signed: true, on server
       path: "/",
