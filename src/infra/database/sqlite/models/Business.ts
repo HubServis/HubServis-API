@@ -12,28 +12,32 @@ import Service from "./Service";
 import { Professional } from "./Professional";
 import Appointment from "./Appointment";
 import Category from "./Category";
+import { Expedient } from "./Espedient";
 
 @Entity("business")
 export class Business extends BaseEntity {
-  @Column()
-  name: string;
+	@Column()
+	name: string;
 
-  @OneToMany(() => Appointment, (appointment) => appointment.business)
-  appointments: Appointment[]
+	@OneToMany(() => Appointment, (appointment) => appointment.business)
+	appointments: Appointment[];
 
-  @OneToMany(() => Category, (category) => category.business)
-  categories: Category[]
+	@OneToMany(() => Category, (category) => category.business)
+	categories: Category[];
 
-  @OneToOne(() => User, (user) => user.business)
-  user: User;
+	@OneToOne(() => User, (user) => user.business)
+	user: User;
 
-  @OneToMany(() => Service, (service) => service.business, {
-    cascade: true,
-  })
-  services: Service[];
+	@OneToMany(() => Service, (service) => service.business, {
+		cascade: true,
+	})
+	services: Service[];
 
-  @OneToMany(() => Professional, (professional) => professional.business)
-  professionals: Professional[];
+	@OneToMany(() => Professional, (professional) => professional.business)
+	professionals: Professional[];
+
+	@OneToMany(() => Expedient, (expedient) => expedient.business)
+	expediencys: Expedient[];
 }
 
 export default Business;

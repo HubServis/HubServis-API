@@ -100,3 +100,7 @@ export interface IRatingController {
   patch(req: Request, res: Response): Promise<Response>;
   findAll(req: Request, res: Response): Promise<Response>;
 }
+
+export interface IExpedientController {
+  create(req: Request, res: Response): Promise<Response>;
+}

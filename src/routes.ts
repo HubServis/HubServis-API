@@ -16,6 +16,7 @@ import CategoryController from "./controllers/CategoryController";
 import RatingController from "./controllers/RatingController";
 import LimitController from "./controllers/LimitController";
 import ExtraController from "./controllers/ExtraController";
+import EspedientController from "./controllers/EspedientController";
 
 const routes = Router();
 
@@ -162,5 +163,8 @@ routes.post("/rating", auth, RatingController.create);
 routes.delete("/rating/:ratingId", RatingController.delete);
 routes.get("/ratings", RatingController.findAll);
 routes.patch("/rating/:ratingId", RatingController.patch);
+
+// ESPEDIENT
+routes.post("/espedient", auth, EspedientController.create);
 
 export { routes };
