@@ -104,4 +104,5 @@ export interface IRatingController {
 export interface IExpedientController {
 	create(req: Request, res: Response): Promise<Response>;
 	find(req: Request, res: Response): Promise<Response>;
+  patch(req: Request, res: Response): Promise<Response>;
 }

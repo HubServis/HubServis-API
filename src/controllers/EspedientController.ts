@@ -4,12 +4,18 @@ import { CreateEspedientService } from "../services/Espedient/CreateEspedient";
 import { EspedientRepositorySqlite } from "../infra/database/sqlite/implementations/EspedientRepository";
 import { Espedient } from "../entities/Espedient";
 import { FindEspedientService } from "../services/Espedient/FindEspedient";
+import { PatchEspedientService } from "../services/Espedient/PatchEspedient";
+import { CustomError } from "../interfaces/errors";
 
 const createEspedientService = new CreateEspedientService(
 	new EspedientRepositorySqlite()
 );
 
 const findEspedientService = new FindEspedientService(
+	new EspedientRepositorySqlite()
+);
+
+const patchEspedientService = new PatchEspedientService(
 	new EspedientRepositorySqlite()
 );
 
@@ -26,7 +32,7 @@ class EspedientController implements IExpedientController {
 				expediencysInfos,
 			});
 
-			if (result instanceof Error) return res.status(404).json(result);
+			if (result instanceof Error) return res.status(404).json(result.message);
 
 			return res.status(200).json(result);
 		} catch (err) {
@@ -36,10 +42,36 @@ class EspedientController implements IExpedientController {
 	}
 
 	async find(req: Request, res: Response): Promise<Response> {
-		try {
-			const result = await findEspedientService.execute();
+		const { businessId } = req.params;
 
-			if (result instanceof Error) return res.status(404).json(result);
+		try {
+			const result = await findEspedientService.execute(businessId);
+
+			if (result instanceof Error) return res.status(404).json(result.message);
+
+			return res.status(200).json(result);
+		} catch (err) {
+			console.log(err.message);
+			return res.status(500).json("Unexpected error");
+		}
+	}
+
+	async patch(req: Request, res: Response): Promise<Response> {
+		const { name, description, expediencysInfos } = req.body;
+		const { espedientId } = req.params;
+		const { id: userId } = req.userReq;
+		
+
+		try {
+			const result = await patchEspedientService.execute({
+				userId,
+				name,
+				description,
+				expediencysInfos,
+				espedientId,
+			});
+
+			if(result instanceof CustomError) return res.status(result.statusCode).json(result.message);
 
 			return res.status(200).json(result);
 		} catch (err) {
