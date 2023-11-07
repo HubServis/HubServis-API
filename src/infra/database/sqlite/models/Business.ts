@@ -13,6 +13,7 @@ import { Professional } from "./Professional";
 import Appointment from "./Appointment";
 import Category from "./Category";
 import { Expedient } from "./Espedient";
+import Blocking from "./Blocking";
 
 @Entity("business")
 export class Business extends BaseEntity {
@@ -38,6 +39,9 @@ export class Business extends BaseEntity {
 
 	@OneToMany(() => Expedient, (expedient) => expedient.business)
 	expediencys: Expedient[];
+
+	@OneToMany(() => Blocking, (blocking) => blocking.business)
+	blockings: Blocking[];
 }
 
 export default Business;

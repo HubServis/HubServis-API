@@ -8,7 +8,10 @@ import {
 } from "../../../../repositories/EspedientRepository";
 import Database from "../config";
 import { User as UserSchema } from "../models/User";
+import { Business as BusinessSchema } from "../models/Business";
+import { Professional as ProfessionalSchema } from "../models/Professional";
 import { CustomError } from "../../../../interfaces/errors";
+import { In } from "typeorm";
 
 export class EspedientRepositorySqlite implements IExpediencysRepository {
 	public async create(props: ICreateExpedient): Promise<Error | string> {
@@ -55,6 +58,7 @@ export class EspedientRepositorySqlite implements IExpediencysRepository {
 					const expediencys = await this.find({
 						relations: {
 							business: true,
+							professionals: true,
 						},
 						where: {
 							business: {
@@ -86,9 +90,15 @@ export class EspedientRepositorySqlite implements IExpediencysRepository {
 	public async patch(
 		props: IUpdateEspedient
 	): Promise<Error | Espedient | CustomError | string> {
-		const { description, espedientId, expediencysInfos, name, userId } = props;
-
-		
+		const {
+			description,
+			espedientId,
+			expediencysInfos,
+			name,
+			businessId,
+			professionals,
+			professioanlsAll,
+		} = props;
 
 		const newExpediencysInfosBase64 = Buffer.from(
 			JSON.stringify(expediencysInfos)
@@ -105,8 +115,8 @@ export class EspedientRepositorySqlite implements IExpediencysRepository {
 		const espedient = await espedientRepository.findOne({
 			where: { id: espedientId },
 			relations: {
-				business: true
-			}
+				business: true,
+			},
 		});
 
 		if (!espedient)
@@ -116,34 +126,55 @@ export class EspedientRepositorySqlite implements IExpediencysRepository {
 				message: "Espedient don't exists",
 			});
 
-		const userRepository = (await Database).getRepository(UserSchema);
-		const user = await userRepository.findOne({
+		const businessRepository = (await Database).getRepository(BusinessSchema);
+		const business = await businessRepository.findOne({
 			where: {
-				id: userId,
+				id: businessId,
 			},
 			relations: {
-				business: true,
+				user: true,
+				professionals: true,
 			},
 		});
 
-		if (!user)
+		if (!business)
 			return new CustomError({
 				type: "error",
 				message: "User not found!",
 				statusCode: 404,
 			});
 
-		if (espedient.business?.id !== user.business?.id)
+		if (espedient.business?.id !== business?.id)
 			return new CustomError({
 				type: "error",
 				message: "Este espediente não pertence à sua empresa.",
 				statusCode: 403,
 			});
 
+		const professionalRepository = (await Database).getRepository(
+			ProfessionalSchema
+		);
+
+		let professionalsFind: any[];
+
+		if (professioanlsAll) {
+			professionalsFind = business.professionals;
+		}
+
+		if (!professioanlsAll) {
+			professionalsFind = await professionalRepository.find({
+				where: { id: In(professionals) },
+			});
+		}
+
 		espedient.name = name ?? espedient.name;
 		espedient.description = description ?? espedient.description;
-		espedient.expediencysInfos = newExpediencysInfosBase64 == espedient.expediencysInfos ? espedient.expediencysInfos : newExpediencysInfosBase64;
-		
+		espedient.expediencysInfos =
+			newExpediencysInfosBase64 == espedient.expediencysInfos
+				? espedient.expediencysInfos
+				: newExpediencysInfosBase64;
+		espedient.professionals = professionalsFind;
+
 		await espedientRepository.save(espedient);
 
 		return "Espedient updated!";

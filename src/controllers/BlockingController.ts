@@ -19,7 +19,7 @@ const patchEspedientService = new PatchEspedientService(
 	new EspedientRepositorySqlite()
 );
 
-class EspedientController implements IExpedientController {
+class BlockingController implements IExpedientController {
 	async create(req: Request, res: Response): Promise<Response> {
 		const { name, description, expediencysInfos } = req.body;
 		const { id: userId } = req.userReq;
@@ -57,25 +57,18 @@ class EspedientController implements IExpedientController {
 	}
 
 	async patch(req: Request, res: Response): Promise<Response> {
-		const {
-			name,
-			description,
-			expediencysInfos,
-			professionals,
-			professioanlsAll,
-		} = req.body;
-		const { espedientId, businessId } = req.params;
+		const { name, description, expediencysInfos } = req.body;
+		const { espedientId } = req.params;
+		const { id: userId } = req.userReq;
 		
 
 		try {
 			const result = await patchEspedientService.execute({
-				businessId,
+				userId,
 				name,
 				description,
 				expediencysInfos,
 				espedientId,
-				professionals,
-				professioanlsAll,
 			});
 
 			if(result instanceof CustomError) return res.status(result.statusCode).json(result.message);
@@ -88,4 +81,4 @@ class EspedientController implements IExpedientController {
 	}
 }
 
-export default new EspedientController();
+export default new BlockingController();

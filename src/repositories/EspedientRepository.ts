@@ -9,11 +9,13 @@ export interface ICreateExpedient {
 }
 
 export interface IUpdateEspedient {
-	userId: string;
+	businessId: string;
 	name: string;
 	description: string;
 	expediencysInfos: [];
 	espedientId: string;
+	professionals: [];
+	professioanlsAll: boolean;
 }
 
 export interface IExpediencysRepository {

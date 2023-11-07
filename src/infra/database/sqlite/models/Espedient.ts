@@ -1,11 +1,13 @@
 import {
   Column,
   Entity,
-  ManyToOne
+  ManyToOne,
+  OneToMany
 } from "typeorm";
 import { BaseEntity } from "./BaseEntity";
 import { v4 as uuid } from "uuid";
 import Business from "./Business";
+import { Professional } from "./Professional";
 
 @Entity("expediencys")
 export class Expedient extends BaseEntity {
@@ -21,7 +23,8 @@ export class Expedient extends BaseEntity {
 	@ManyToOne(() => Business, (business) => business.expediencys)
 	business: Business;
 
-	// fazer relacionamento com professionals
+	@OneToMany(() => Professional, (professional) => professional.expediencys)
+	professionals: Professional[];
 }
 
 export default Expedient;

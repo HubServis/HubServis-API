@@ -3,28 +3,36 @@ import { BaseEntity } from "./BaseEntity";
 import Business from "./Business";
 import { User } from "./User";
 import Appointment from "./Appointment";
+import Blocking from "./Blocking";
+import Expedient from "./Espedient";
 
 @Entity("professional")
 export class Professional extends BaseEntity {
-  @Column({
-    nullable: true,
-  })
-  name: string;
+	@Column({
+		nullable: true,
+	})
+	name: string;
 
-  @Column({
-    nullable: true,
-  })
-  cpfcnpj: string;
+	@Column({
+		nullable: true,
+	})
+	cpfcnpj: string;
 
-  @Column()
-  isRegistred: boolean;
+	@Column()
+	isRegistred: boolean;
 
-  @OneToOne(() => User, (user) => user.professional, { nullable: true })
-  user: User;
+	@OneToOne(() => User, (user) => user.professional, { nullable: true })
+	user: User;
 
-  @ManyToOne(() => Business, (business) => business.services)
-  business: Business;
+	@ManyToOne(() => Business, (business) => business.services)
+	business: Business;
 
-  @OneToMany(() => Appointment, (appointment) => appointment.professional)
-  appointments: Appointment[]
+	@OneToMany(() => Appointment, (appointment) => appointment.professional)
+	appointments: Appointment[];
+
+	@ManyToOne(() => Blocking, (blocking) => blocking.professional)
+	blockings: Blocking;
+
+	@ManyToOne(() => Expedient, (espedient) => espedient.professionals)
+	expediencys: Expedient;
 }
