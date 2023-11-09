@@ -71,7 +71,10 @@ export class ProfessionalRepositorySqlite implements IProfessionalsRepository {
       ProfessionalSchema
     );
     const professionals = await professionalRepository.find({
-      relations: ["business", "user"],
+      relations: {
+        business: true,
+        user: true,
+      },
       select: {
         user: {
           username: true,
