@@ -61,14 +61,14 @@ routes.get("/products", ProductController.find);
 
 // BENEFITS
 routes.get("/benefit", BenefitController.find);
-routes.post("/benefit", /* cookieGateway(['appAdmin']), */ BenefitController.create);
-routes.patch("/benefit/:benefitName", /* cookieGateway(['appAdmin']), */ BenefitController.patch);
+routes.post("/benefit", cookieGateway(['appAdmin']), BenefitController.create);
+routes.patch("/benefit/:benefitName", cookieGateway(['appAdmin']), BenefitController.patch);
 routes.delete("/benefit/:benefitName", cookieGateway(['appAdmin']), BenefitController.delete);
 
 // PLANS
 routes.get("/plans", cookieGateway(['admin', 'appAdmin']), PlanController.find);
-routes.post("/plans", /* cookieGateway(['appAdmin']), */ PlanController.create);
-routes.patch("/plans", /* cookieGateway(['appAdmin']), */ PlanController.patch);
+routes.post("/plans", cookieGateway(['appAdmin']), PlanController.create);
+routes.patch("/plans", cookieGateway(['appAdmin']), PlanController.patch);
 routes.delete("/plans/:idPlan", cookieGateway(['appAdmin']), PlanController.delete);
 
 // LIMITS
@@ -79,11 +79,11 @@ routes.delete("/limit/:id", cookieGateway(['appAdmin']), LimitController.delete)
 
 // Plan - Benefit
 
-routes.patch("/plans/addBenefit", /* cookieGateway(['appAdmin']), */ PlanController.appendBenefit);
+routes.patch("/plans/addBenefit", cookieGateway(['appAdmin']), PlanController.appendBenefit);
 routes.delete("/plans/:planId/:benefitId", cookieGateway(['appAdmin']), PlanController.deleteBenefit);
 
 // Plan - Limits
-routes.patch("/plans/addLimit", /* cookieGateway(['appAdmin']), */ PlanController.appendLimit);
+routes.patch("/plans/addLimit", cookieGateway(['appAdmin']), PlanController.appendLimit);
 routes.delete("/plans/:planId/:limitId", cookieGateway(['appAdmin']), PlanController.deleteLimit);
 
 // EXTRAS
