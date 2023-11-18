@@ -1,13 +1,11 @@
 import { Request, Response } from "express";
 import { IBlockingController } from "../interfaces/controllers";
-import { CreateEspedientService } from "../services/Espedient/CreateEspedient";
-import { EspedientRepositorySqlite } from "../infra/database/sqlite/implementations/EspedientRepository";
-import { FindEspedientService } from "../services/Espedient/FindEspedient";
-import { PatchEspedientService } from "../services/Espedient/PatchEspedient";
+import { BlockingRepositorySqlite } from "../infra/database/sqlite/implementations/BlockingRepository";
+import { CreateBlockingService } from "../services/Blocking/CreateBlocking";
 
-// const createEspedientService = new CreateEspedientService(
-// 	new EspedientRepositorySqlite()
-// );
+const createBlockingService = new CreateBlockingService(
+	new BlockingRepositorySqlite()
+);
 
 // const findEspedientService = new FindEspedientService(
 // 	new EspedientRepositorySqlite()
@@ -18,23 +16,36 @@ import { PatchEspedientService } from "../services/Espedient/PatchEspedient";
 // );
 
 class BlockingController implements IBlockingController {
-	// async create(req: Request, res: Response): Promise<Response> {
-	// 	const { name, description, expediencysInfos } = req.body;
-	// 	const { id: userId } = req.userReq;
-	// 	try {
-	// 		const result = await createEspedientService.execute({
-	// 			userId,
-	// 			name,
-	// 			description,
-	// 			expediencysInfos,
-	// 		});
-	// 		if (result instanceof Error) return res.status(404).json(result.message);
-	// 		return res.status(200).json(result);
-	// 	} catch (err) {
-	// 		console.log(err.message);
-	// 		return res.status(500).json("Unexpected error");
-	// 	}
-	// }
+	async create(req: Request, res: Response): Promise<Response> {
+		const {
+			DateTimeStart,
+			DateTimeEnd,
+			description,
+			allDay,
+			allProfessionals,
+			professional,
+			businessId,
+		} = req.body;
+
+		try {
+			const result = await createBlockingService.execute({
+				DateTimeStart,
+				DateTimeEnd,
+				description,
+				allDay,
+				allProfessionals,
+				professional,
+				businessId,
+			});
+
+			if (result instanceof Error) return res.status(404).json(result.message);
+			return res.status(200).json(result);
+		} catch (err) {
+			console.log(err.message);
+			return res.status(500).json("Unexpected error");
+		}
+	}
+
 	// async find(req: Request, res: Response): Promise<Response> {
 	// 	const { businessId } = req.params;
 	// 	try {

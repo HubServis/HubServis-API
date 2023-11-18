@@ -6,6 +6,7 @@ export class Blocking {
 	public DateTimeEnd: string;
 	public description: string;
 	public allDay?: boolean;
+	public allProfessionals?: boolean;
 
 	constructor(props: Omit<Blocking, "id">, id: string = null) {
 		Object.assign(this, props);

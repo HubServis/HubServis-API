@@ -17,6 +17,7 @@ import RatingController from "./controllers/RatingController";
 import LimitController from "./controllers/LimitController";
 import ExtraController from "./controllers/ExtraController";
 import EspedientController from "./controllers/EspedientController";
+import BlockingController from "./controllers/BlockingController";
 
 const routes = Router();
 
@@ -171,5 +172,7 @@ routes.patch(
 	"/espedient/update/:espedientId/:businessId",
 	EspedientController.patch
 );
+
+routes.post('/blocking', BlockingController.create)
 
 export { routes };

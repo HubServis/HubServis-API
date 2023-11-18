@@ -15,8 +15,11 @@ export class Blocking extends BaseEntity {
 	@Column()
 	description: string;
 
-	@Column({ default: true })
+	@Column({ default: false })
 	allDay: boolean;
+
+	@Column({ default: true })
+	allProfessionals: boolean;
 
 	@ManyToOne(() => Business, (business) => business.blockings)
 	business: Business;
