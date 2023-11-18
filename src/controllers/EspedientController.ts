@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { IExpedientController } from "../interfaces/controllers";
 import { CreateEspedientService } from "../services/Espedient/CreateEspedient";
 import { EspedientRepositorySqlite } from "../infra/database/sqlite/implementations/EspedientRepository";
-import { Espedient } from "../entities/Espedient";
 import { FindEspedientService } from "../services/Espedient/FindEspedient";
 import { PatchEspedientService } from "../services/Espedient/PatchEspedient";
 import { CustomError } from "../interfaces/errors";

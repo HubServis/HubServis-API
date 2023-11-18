@@ -106,3 +106,10 @@ export interface IExpedientController {
 	find(req: Request, res: Response): Promise<Response>;
   patch(req: Request, res: Response): Promise<Response>;
 }
+
+
+export interface IBlockingController {
+	// create(req: Request, res: Response): Promise<Response>;
+	// find(req: Request, res: Response): Promise<Response>;
+	// patch(req: Request, res: Response): Promise<Response>;
+}
