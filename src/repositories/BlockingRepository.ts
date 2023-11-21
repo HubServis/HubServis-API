@@ -1,3 +1,5 @@
+import Blocking from "../infra/database/sqlite/models/Blocking";
+
 export interface ICreateBlocking {
 	DateTimeStart: string;
 	DateTimeEnd: string;
@@ -10,7 +12,7 @@ export interface ICreateBlocking {
 
 export interface IBlockingRepository {
 	create(props: ICreateBlocking): Promise<Error | string>;
-	// find(props: string): Promise<Error | Espedient[]>;
+	find(): Promise<Blocking[] | Error>;
 	// patch(
 	// 	props: IUpdateEspedient
 	// ): Promise<Error | Espedient | CustomError | string>;

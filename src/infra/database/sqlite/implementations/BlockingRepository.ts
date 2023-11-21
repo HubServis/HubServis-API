@@ -78,4 +78,13 @@ export class BlockingRepositorySqlite implements IBlockingRepository {
 
 		return "Blocking Created!";
 	}
+
+	public async find(): Promise<Error | BlockingSchema[]> {
+		const blockingRepository = (await Database).getRepository(BlockingSchema);
+		const blockings = await blockingRepository.find({});
+
+		if(!blockings) return new Error("Blockings not found!");
+
+		return blockings;
+	}
 }

@@ -173,6 +173,7 @@ routes.patch(
 	EspedientController.patch
 );
 
-routes.post('/blocking', BlockingController.create)
+routes.post('/blocking', BlockingController.create);
+routes.get("/blockings", BlockingController.find);
 
 export { routes };

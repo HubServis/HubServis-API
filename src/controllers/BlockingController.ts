@@ -2,14 +2,15 @@ import { Request, Response } from "express";
 import { IBlockingController } from "../interfaces/controllers";
 import { BlockingRepositorySqlite } from "../infra/database/sqlite/implementations/BlockingRepository";
 import { CreateBlockingService } from "../services/Blocking/CreateBlocking";
+import { FindBlockingService } from "../services/Blocking/FindBlocking";
 
 const createBlockingService = new CreateBlockingService(
 	new BlockingRepositorySqlite()
 );
 
-// const findEspedientService = new FindEspedientService(
-// 	new EspedientRepositorySqlite()
-// );
+const findBlockingService = new FindBlockingService(
+	new BlockingRepositorySqlite()
+);
 
 // const patchEspedientService = new PatchEspedientService(
 // 	new EspedientRepositorySqlite()
@@ -46,17 +47,21 @@ class BlockingController implements IBlockingController {
 		}
 	}
 
-	// async find(req: Request, res: Response): Promise<Response> {
-	// 	const { businessId } = req.params;
-	// 	try {
-	// 		const result = await findEspedientService.execute(businessId);
-	// 		if (result instanceof Error) return res.status(404).json(result.message);
-	// 		return res.status(200).json(result);
-	// 	} catch (err) {
-	// 		console.log(err.message);
-	// 		return res.status(500).json("Unexpected error");
-	// 	}
-	// }
+	async find(req: Request, res: Response): Promise<Response> {
+		// const { businessId } = req.params;
+		try {
+			const result = await findBlockingService.execute();
+
+			if (result instanceof Error) return res.status(404).json(result.message);
+			
+			return res.status(200).json(result);
+		} catch (err) {
+			console.log(err.message);
+			return res.status(500).json("Unexpected error");
+		}
+	}
+
+
 	// async patch(req: Request, res: Response): Promise<Response> {
 	// 	const { name, description, expediencysInfos } = req.body;
 	// 	const { espedientId } = req.params;
