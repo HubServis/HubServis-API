@@ -33,6 +33,14 @@ usuário é valido?
 negocio é valido?
 profissional é valido? Ele trabalha no mesmo negócio do serviço?
 
+- Padrão de Data e Hora dentro da plataforma.
+   - Dentro da plataforma buscamos sempre utilizar o seguinte padrão de data e hora: 
+   
+      ```2015-03-25T12:00:00Z```
+
+- TEMPO MINIMO DE UM AGENDAMENTO É DE 30 MIN
+      
+
 ### env's
 - SECRET_JWT
 
