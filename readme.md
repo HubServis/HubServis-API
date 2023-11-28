@@ -38,7 +38,7 @@ profissional é valido? Ele trabalha no mesmo negócio do serviço?
    
       ```2015-03-25T12:00:00Z```
 
-- TEMPO MINIMO DE UM AGENDAMENTO É DE 30 MIN
+- TEMPO MINIMO DE UM AGENDAMENTO É DE 15 MIN
       
 
 ### env's

@@ -4,6 +4,7 @@ import { User as UserSchema } from "../models/User";
 import { Service as ServiceSchema } from "../models/Service";
 import { Professional as ProfessionalSchema } from "../models/Professional";
 import { Business as BusinessSchema } from "../models/Business";
+import { Expedient as ExpedientSchema } from "../models/Espedient";
 import Database from "../config";
 import {
 	IAppointmentsRepository,
@@ -15,6 +16,7 @@ import { v4 as uuid } from "uuid";
 import { StatusAppointment } from "../../../../enums/models";
 import { log } from "console";
 import { isAfter, isExists, isFuture, isPast, isValid } from "date-fns";
+import exp from "constants";
 
 const parseTimeToMinutes = (time) => {
 	const [hours, minutes] = time.split(":");
@@ -41,12 +43,6 @@ const verifyAppointment = ({
 	const endNewTime: Number =
 		dateNewTime.getTime() + (timeServiceNewAppointment + tempoDescanso) * 60000;
 
-	log("tempoDescanso", tempoDescanso);
-	log("tempoServico", tempoServico);
-	log("timeServiceNewAppointment", timeServiceNewAppointment);
-	log("dateTimeBd", dateTime, dateTimeBd);
-	log("dateNewTime", dateNewTimeProps, dateNewTime);
-
 	if (dateNewTime < dateTimeBd && endNewTime >= dateTimeBd) {
 		return false;
 	}
@@ -57,6 +53,88 @@ const verifyAppointment = ({
 
 	return true;
 };
+
+function isWorkingTime(dateTimeString, dateTimeEndString, schedule = []) {
+	const startDate = new Date(dateTimeString);
+	const endDate = new Date(dateTimeEndString);
+	const weekDay = getWeekDay(startDate);
+
+	// Encontrar o dia da semana no array de expediente
+	const workingDay = schedule.find((day) => day.weekDay === weekDay);
+
+	if (!workingDay) {
+		return false; // Não é um dia de trabalho
+	}
+
+	// Verificar se a hora inicial está dentro do expediente
+	const startTime = new Date(`1970-01-01T${workingDay.timeStart}:00`);
+	const endTime = new Date(`1970-01-01T${workingDay.timeEnd}:00`);
+	const startDateTime = new Date(
+		`1970-01-01T${getFormattedTime(startDate)}:00`
+	);
+
+	if (startDateTime < startTime || startDateTime > endTime) {
+		return false;
+	}
+
+	// Verificar se há horário de almoço e se o agendamento está dentro do expediente
+	if (workingDay.lunchStart !== "00:00" && workingDay.lunchEnd !== "00:00") {
+		const lunchStartTime = new Date(`1970-01-01T${workingDay.lunchStart}:00`);
+		const lunchEndTime = new Date(`1970-01-01T${workingDay.lunchEnd}:00`);
+
+		// Verificar se o agendamento está totalmente fora do horário de almoço
+		if (
+			(startDateTime < lunchStartTime && endDate <= lunchStartTime) ||
+			(startDateTime >= lunchEndTime && endDate > lunchEndTime)
+		) {
+			return true;
+		}
+
+		// Verificar se o agendamento não colide com o horário de almoço
+		if (
+			(startDateTime < lunchStartTime && endDate > lunchStartTime) ||
+			(startDateTime < lunchEndTime && endDate > lunchEndTime)
+		) {
+			return false; // Conflito com horário de almoço
+		}
+	}
+
+	// Verificar se a hora final está dentro do expediente
+	const endDateTime = new Date(`1970-01-01T${getFormattedTime(endDate)}:00`);
+	if (endDateTime < startTime || endDateTime > endTime) {
+		return false;
+	}
+
+	return true;
+}
+
+function getWeekDay(date) {
+	const daysOfWeek = ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"];
+	return daysOfWeek[date.getDay()];
+}
+
+function getFormattedTime(date) {
+	return date.toTimeString().slice(0, 5);
+}
+
+function addHourMinute(dateString, hourMinuteString) {
+	const date = new Date(dateString);
+	const [hour, minute] = hourMinuteString.split(":");
+	date.setHours(date.getHours() + parseInt(hour, 10));
+	date.setMinutes(date.getMinutes() + parseInt(minute, 10));
+
+	const newDateString = `${date.getFullYear()}-${padZero(
+		date.getMonth() + 1
+	)}-${padZero(date.getDate())}T${padZero(date.getHours())}:${padZero(
+		date.getMinutes()
+	)}:${padZero(date.getSeconds())}`;
+
+	return newDateString;
+}
+
+function padZero(number) {
+	return number < 10 ? `0${number}` : number;
+}
 
 export class AppointmentRepositorySqlite implements IAppointmentsRepository {
 	public async create(props: ICreateAppointment): Promise<Error | Appointment> {
@@ -73,6 +151,7 @@ export class AppointmentRepositorySqlite implements IAppointmentsRepository {
 			ProfessionalSchema
 		);
 		const businessRepository = (await Database).getRepository(BusinessSchema);
+		const expedientRepository = (await Database).getRepository(ExpedientSchema);
 
 		/*
 			const user = await userRepository.findOne({
@@ -121,12 +200,6 @@ export class AppointmentRepositorySqlite implements IAppointmentsRepository {
 			})
 			.getMany();
 
-		// log(appointments);
-
-		// log("CHEGOU NO FIM");
-
-		// -------------------
-
 		const user = await userRepository.findOne({
 			where: {
 				id: props.client,
@@ -158,6 +231,39 @@ export class AppointmentRepositorySqlite implements IAppointmentsRepository {
 			return new Error("Professional does not belong to the service company!");
 		}
 
+		const expedient = await expedientRepository.find({
+			relations: {
+				business: true,
+			},
+			where: {
+				business: {
+					id: business.id,
+				},
+			},
+		});
+
+		if (!expedient || expedient.length == 0) {
+			return new Error(
+				"This business does not have opening hours to schedule a service"
+			);
+		}
+
+		if (
+			!isWorkingTime(
+				date_time,
+				addHourMinute(date_time, service.duration),
+				JSON.parse(
+					Buffer.from(expedient[0]?.expediencysInfos, "base64").toString(
+						"utf-8"
+					)
+				)
+			)
+		) {
+			return new Error(
+				"It was not possible to schedule an appointment as the schedule is not in our working hours!"
+			);
+		}
+
 		if (appointments.length > 0) {
 			for (let i = 0; i < appointments.length; i++) {
 				if (
@@ -169,44 +275,44 @@ export class AppointmentRepositorySqlite implements IAppointmentsRepository {
 						restTime: restTimeBusiness,
 					})
 				) {
-					// const appointment = await appointmentRepository.save({
-					// 	id: uuid(),
-					// 	date_time: props.date_time,
-					// 	status: StatusAppointment.PENDING,
-					// 	professional,
-					// 	service,
-					// 	user,
-					// 	business,
-					// 	// professional: "489336ae-9c9d-4c02-8ef0-c047848da272",
-					// 	// service: "f692f8a3-7dd5-4f5c-a108-98eb36ff1d4f",
-					// 	// business: "cded4e7f-4a56-4f29-9bf6-71dc80782e48",
-					// 	// user: "a7a24e6b-cada-4329-9265-ce55726cbb8d"
-					// });
+					const appointment = await appointmentRepository.save({
+						id: uuid(),
+						date_time: props.date_time,
+						status: StatusAppointment.PENDING,
+						professional,
+						service,
+						user,
+						business,
+						// professional: "489336ae-9c9d-4c02-8ef0-c047848da272",
+						// service: "f692f8a3-7dd5-4f5c-a108-98eb36ff1d4f",
+						// business: "cded4e7f-4a56-4f29-9bf6-71dc80782e48",
+						// user: "a7a24e6b-cada-4329-9265-ce55726cbb8d"
+					});
 
-					// return appointment;
-					return new Error("Agendado!");
+					return appointment;
+					// return new Error("Agendado!");
 				}
 			}
 
 			return new Error("Não foi possivel agendar!");
 		}
 
-		// const appointment = await appointmentRepository.save({
-		//   id: uuid(),
-		//   date_time: props.date_time,
-		//   status: StatusAppointment.PENDING,
-		//   professional,
-		//   service,
-		//   user,
-		//   business,
-		//   // professional: "489336ae-9c9d-4c02-8ef0-c047848da272",
-		//   // service: "f692f8a3-7dd5-4f5c-a108-98eb36ff1d4f",
-		//   // business: "cded4e7f-4a56-4f29-9bf6-71dc80782e48",
-		//   // user: "a7a24e6b-cada-4329-9265-ce55726cbb8d"
-		// });
+		const appointment = await appointmentRepository.save({
+		  id: uuid(),
+		  date_time: props.date_time,
+		  status: StatusAppointment.PENDING,
+		  professional,
+		  service,
+		  user,
+		  business,
+		  // professional: "489336ae-9c9d-4c02-8ef0-c047848da272",
+		  // service: "f692f8a3-7dd5-4f5c-a108-98eb36ff1d4f",
+		  // business: "cded4e7f-4a56-4f29-9bf6-71dc80782e48",
+		  // user: "a7a24e6b-cada-4329-9265-ce55726cbb8d"
+		});
 
-		// return appointment;
-		return new Error("Agendado! 2");
+		return appointment;
+		// return new Error("Agendado! 2");
 		// return new Error("Bom Jú");
 	}
 
