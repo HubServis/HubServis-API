@@ -152,21 +152,7 @@ export class AppointmentRepositorySqlite implements IAppointmentsRepository {
 		);
 		const businessRepository = (await Database).getRepository(BusinessSchema);
 		const expedientRepository = (await Database).getRepository(ExpedientSchema);
-
-		/*
-			const user = await userRepository.findOne({
-			where: {
-				id: userId,
-			},
-			relations: ["business"],
-			});
-
-			if (!user.business) {
-			return new Error("The user does not have a business!");
-			}
-		*/
-
-		// ---------------------------------------
+		
 		if (
 			!isExists(
 				new Date(date_time).getFullYear(),
