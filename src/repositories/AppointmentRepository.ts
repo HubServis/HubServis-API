@@ -15,7 +15,8 @@ export interface IPatchStatusAppointment{
 }
 
 export interface IAppointmentsRepository {
-  create(props: ICreateAppointment): Promise<Error | Appointment>;
-  find(): Promise<Error | Appointment[]>;
-  patch(props: IPatchStatusAppointment): Promise<Error | Appointment>;
+	create(props: ICreateAppointment): Promise<Error | Appointment>;
+	find(): Promise<Error | Appointment[]>;
+	findAppointmentsUser(props: string): Promise<Error | Appointment[]>;
+	patch(props: IPatchStatusAppointment): Promise<Error | Appointment>;
 }

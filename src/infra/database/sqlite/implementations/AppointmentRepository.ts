@@ -152,7 +152,7 @@ export class AppointmentRepositorySqlite implements IAppointmentsRepository {
 		);
 		const businessRepository = (await Database).getRepository(BusinessSchema);
 		const expedientRepository = (await Database).getRepository(ExpedientSchema);
-		
+
 		if (
 			!isExists(
 				new Date(date_time).getFullYear(),
@@ -284,17 +284,17 @@ export class AppointmentRepositorySqlite implements IAppointmentsRepository {
 		}
 
 		const appointment = await appointmentRepository.save({
-		  id: uuid(),
-		  date_time: props.date_time,
-		  status: StatusAppointment.PENDING,
-		  professional,
-		  service,
-		  user,
-		  business,
-		  // professional: "489336ae-9c9d-4c02-8ef0-c047848da272",
-		  // service: "f692f8a3-7dd5-4f5c-a108-98eb36ff1d4f",
-		  // business: "cded4e7f-4a56-4f29-9bf6-71dc80782e48",
-		  // user: "a7a24e6b-cada-4329-9265-ce55726cbb8d"
+			id: uuid(),
+			date_time: props.date_time,
+			status: StatusAppointment.PENDING,
+			professional,
+			service,
+			user,
+			business,
+			// professional: "489336ae-9c9d-4c02-8ef0-c047848da272",
+			// service: "f692f8a3-7dd5-4f5c-a108-98eb36ff1d4f",
+			// business: "cded4e7f-4a56-4f29-9bf6-71dc80782e48",
+			// user: "a7a24e6b-cada-4329-9265-ce55726cbb8d"
 		});
 
 		return appointment;
@@ -309,6 +309,28 @@ export class AppointmentRepositorySqlite implements IAppointmentsRepository {
 
 		const appointment = await appointmentRepository.find({
 			relations: ["user", "business", "professional"],
+		});
+
+		return appointment;
+	}
+
+	public async findAppointmentsUser(props: string): Promise<Error | Appointment[]> {
+		const userId = props;
+
+		const appointmentRepository = (await Database).getRepository(
+			AppointmentSchema
+		);
+
+		const appointment = await appointmentRepository.find({
+			relations: ["user", "business", "professional"],
+			where: {
+				user: {
+					id: userId,
+				},
+			},
+			order: {
+				date_time: "DESC",
+			},
 		});
 
 		return appointment;

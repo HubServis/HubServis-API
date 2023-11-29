@@ -149,6 +149,7 @@ routes.patch("/extra", ExtraController.patch);
 
 // APPINTMENTS
 routes.get("/appointments", AppointmentController.find);
+routes.get("/appointments/user", auth, AppointmentController.findAppointmentsUser);
 routes.post("/appointment/create", auth, AppointmentController.create);
 routes.patch("/appointment/:id/:status", auth, AppointmentController.patch);
 
