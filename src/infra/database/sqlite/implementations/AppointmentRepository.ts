@@ -322,7 +322,7 @@ export class AppointmentRepositorySqlite implements IAppointmentsRepository {
 		);
 
 		const appointment = await appointmentRepository.find({
-			relations: ["user", "business", "professional"],
+			relations: ["user", "business", "professional", "service"],
 			where: {
 				user: {
 					id: userId,
