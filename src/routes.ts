@@ -24,12 +24,15 @@ import BlockingController from "./controllers/BlockingController";
 const routes = Router();
 
 // LOGIN
+routes.get("/logout", cookieGateway([]));
 routes.post("/login", SessionController.handle, cookieGateway([]));
 
 // USER
 routes.get("/users", UserController.find);
+routes.get("/user", UserController.findOneUser);
 routes.get("/user/:userId", UserController.findOneUser);
 routes.post("/user", UserController.create, cookieGateway([]));
+routes.post("/user/permissions", cookieGateway([]));
 routes.patch("/user/update/:userId", UserController.updateUser);
 routes.patch("/user/:userId/:planName", UserController.appendPlan);
 routes.delete("/user/:userId", UserController.deletePlan);

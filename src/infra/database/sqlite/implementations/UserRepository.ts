@@ -12,6 +12,7 @@ import fs from "fs";
 import { File } from "buffer";
 import { upload } from "../../../aws";
 import { config } from "dotenv";
+import { log } from "console";
 
 export class UserRepositorySqlite implements IUsersRepository {
   public async create(props: User): Promise<Error | ResRegisterUser> {
@@ -251,11 +252,11 @@ export class UserRepositorySqlite implements IUsersRepository {
         (benefit) => benefit.role === permission && valid++,
       );
 
-      (valid > 0 && true) || false;
+      return valid > 0 ? true : false;
     });
 
-    if (!hasPermission) return true;
+    if (!hasPermission) return false;
 
-    return false;
+    return true;
   }
 }

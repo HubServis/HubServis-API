@@ -9,6 +9,8 @@ import { DeletePlanUserService } from "../services/user/DeletePlanUser";
 import { FindOneUserService } from "../services/user/findOneUser";
 import { UpdateUserService } from "../services/user/updateUserService";
 import { GetUserPermissions } from "../services/user/getUserPermissions";
+import { on } from "events";
+import { cookieGateway, decriptCookie } from "../middleware/cookie";
 
 const createUserService = new CreateUserService(new UserRepositorySqlite());
 const findUserService = new FindUserService(new UserRepositorySqlite());
@@ -59,7 +61,14 @@ class UserController implements IUserCotroller {
   }
 
   async findOneUser(req: Request, res: Response) {
-    const { userId } = req.params;
+    let userId;
+
+    //@ts-ignore
+    const hasCookieId = decriptCookie(req, res).userId;
+
+    hasCookieId ? (userId = hasCookieId) : (userId = req.params);
+
+    if (!userId) return res.status(400).json("request not have userId!");
 
     try {
       const result = await findOneUserService.execute({ userId });

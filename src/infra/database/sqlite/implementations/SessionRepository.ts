@@ -17,7 +17,7 @@ export class SessionRepositorySqlite implements ISessionRepository {
       where: { email: email },
       select: {
         id: true,
-		password: true
+        password: true,
       },
     });
 

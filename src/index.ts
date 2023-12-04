@@ -15,13 +15,13 @@ const app = express();
 
 //Reduce sniff chances to succecede
 app.disable('x-powered-by')
-app.use(cors({ credentials: true }));
+app.use(cors({ credentials: true, origin: "http://hubservis.io" }));
 /* use it when on server
 	app.use(cookieParser('somekeycodetosecurecookiewithsomecaracters'));
 */
 app.use(cookieParser());
-app.use(express.urlencoded({ limit: '5mb', extended: true }))
-app.use(express.json({ limit: '5mb' }));
+app.use(express.urlencoded({ limit: '15mb', extended: true }))
+app.use(express.json({ limit: '15mb' }));
 app.use(routes);
 
 app.use(
