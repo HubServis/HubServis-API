@@ -5,6 +5,7 @@ import { AppointmentRepositorySqlite } from "../infra/database/sqlite/implementa
 import { CreateAppointmentService } from "../services/Appointment/CreateAppointment";
 import { PatchAppointmentService } from "../services/Appointment/PatchAppointment";
 import { FindAppointmentUserService } from "../services/Appointment/FindAppointmentUser";
+import { decriptCookie } from "../middleware/cookie";
 
 const createAppointmentService = new CreateAppointmentService(
   new AppointmentRepositorySqlite()
@@ -26,10 +27,14 @@ class AppointmentController implements IAppointmentController {
 	async create(req: Request, res: Response) {
 		const { date_time, client, service, professional } = req.body;
 
+		const cookie = decriptCookie(req, res);
+
+		if(!cookie) return res.status(401).json('user is not logged');
+
 		try {
 			const result = await createAppointmentService.execute({
 				date_time,
-				client,
+				client: cookie.userId,
 				service,
 				professional,
 			});
@@ -61,7 +66,12 @@ class AppointmentController implements IAppointmentController {
 	}
 
 	async findAppointmentsUser(req: Request, res: Response) {
-    const { id } = req.userReq;
+		const cookie = decriptCookie(req, res);
+
+		if(!cookie) return res.status(401).json('user not autenticated!');
+
+		const { userId: id } = cookie
+
 		try {
 			const result = await findAppointmentUserService.execute(id);
 

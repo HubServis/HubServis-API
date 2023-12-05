@@ -99,9 +99,9 @@ routes.patch("/extra", ExtraController.patch);
 
 // APPINTMENTS
 routes.get("/appointments", AppointmentController.find);
-routes.get("/appointments/user", auth, AppointmentController.findAppointmentsUser);
-routes.post("/appointment/create", auth, AppointmentController.create);
-routes.patch("/appointment/:id/:status", auth, AppointmentController.patch);
+routes.get("/appointments/user", cookieGateway([]), AppointmentController.findAppointmentsUser);
+routes.post("/appointment/create", cookieGateway([]), AppointmentController.create);
+routes.patch("/appointment/:id/:status", cookieGateway([]), AppointmentController.patch);
 
 // CATEGORY
 routes.post("/category", cookieGateway(['owner', 'manager', 'categoryManager', 'admin']), CategoryController.create);
@@ -117,10 +117,11 @@ routes.get("/ratings", RatingController.findAll);
 routes.patch("/rating/:ratingId", cookieGateway(['basic']), RatingController.patch);
 
 // ESPEDIENT
-routes.post("/espedient", auth, EspedientController.create);
+routes.post("/espedient", cookieGateway([]), EspedientController.create);
 routes.get("/expediencys/:businessId", EspedientController.find);
 routes.patch(
 	"/espedient/update/:espedientId/:businessId",
+	cookieGateway([]),
 	EspedientController.patch
 );
 

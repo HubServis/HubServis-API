@@ -34,11 +34,13 @@ export const cookieGateway = (permissions?: string[]) => {
       }
 
       {
-        // revalidateCookie(req, res);
+        // if(!req.cookies["hubservis"])
+        // 	revalidateCookie(req, res);
 
         const result = await verifyAccess(req, res, next, permissions);
 
-        if (result !== true) return res.end();
+        if (result !== true)
+          return res.status(401).json("User not passed on verifyAccess!");
         else next();
       }
     } catch (err) {
@@ -127,7 +129,7 @@ const verifyAccess = async (
 
     const cookieData = decriptCookie(req, res);
 
-    if (!cookieData) return res.json("User not have cookie");
+    if (!cookieData) return res.status(401).json("User not have cookie");
 
     if (cookieData.access.some((access) => access === req.path)) return true;
 
@@ -151,6 +153,8 @@ const verifyAccess = async (
       // signed: true, on server
       path: "/",
     });
+
+    return result;
   } catch (err) {
     return res.status(500).json(`There was an error on verifyAccess: ${err}`);
   }

@@ -144,12 +144,12 @@ export class EspedientRepositorySqlite implements IExpediencysRepository {
 				statusCode: 404,
 			});
 
-		if (espedient.business?.id !== business?.id)
-			return new CustomError({
-				type: "error",
-				message: "Este espediente não pertence à sua empresa.",
-				statusCode: 403,
-			});
+		// if (espedient.business?.id !== business?.id)
+		// 	return new CustomError({
+		// 		type: "error",
+		// 		message: "Este espediente não pertence à sua empresa.",
+		// 		statusCode: 403,
+		// 	});
 
 		const professionalRepository = (await Database).getRepository(
 			ProfessionalSchema

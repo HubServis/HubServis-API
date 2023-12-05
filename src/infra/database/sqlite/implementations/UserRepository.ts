@@ -237,6 +237,8 @@ export class UserRepositorySqlite implements IUsersRepository {
       },
     });
 
+	if(props.requestedPermissions?.length === 0) return true;
+
     if (!userAccess || userAccess === null || !userAccess.plan) return false;
 
     const planPermission = props.requestedPermissions.some(

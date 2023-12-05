@@ -5,6 +5,7 @@ import { EspedientRepositorySqlite } from "../infra/database/sqlite/implementati
 import { FindEspedientService } from "../services/Espedient/FindEspedient";
 import { PatchEspedientService } from "../services/Espedient/PatchEspedient";
 import { CustomError } from "../interfaces/errors";
+import { decriptCookie } from "../middleware/cookie";
 
 const createEspedientService = new CreateEspedientService(
 	new EspedientRepositorySqlite()
@@ -21,7 +22,12 @@ const patchEspedientService = new PatchEspedientService(
 class EspedientController implements IExpedientController {
 	async create(req: Request, res: Response): Promise<Response> {
 		const { name, description, expediencysInfos } = req.body;
-		const { id: userId } = req.userReq;
+
+		const cookie = decriptCookie(req, res);
+
+		if(!cookie) return res.status(401).json('user not autenticated!');
+
+		const { userId } = cookie
 
 		try {
 			const result = await createEspedientService.execute({
