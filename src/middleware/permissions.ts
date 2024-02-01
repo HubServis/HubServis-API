@@ -1,8 +1,8 @@
-import Database from "../infra/database/sqlite/config";
+import Database from "../infra/database/postgres/config";
 
 import { Request, Response, NextFunction } from "express";
 
-import { User as UserSchema } from "../infra/database/sqlite/models/User";
+import { User as UserSchema } from "../infra/database/postgres/models/User";
 
 // Verifica assinatura para ver o nível de permissão
 export function is(permissionsRoutes: string[]) {

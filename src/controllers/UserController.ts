@@ -3,7 +3,7 @@ import { IUserCotroller } from "../interfaces/controllers";
 import { User } from "../entities/User";
 import { FindUserService } from "../services/user/findUsers";
 import { CreateUserService } from "../services/user/CreateUser";
-import { UserRepositorySqlite } from "../infra/database/sqlite/implementations/UserRepository";
+import { UserRepositoryPostgres } from "../infra/database/postgres/implementations/UserRepository";
 import { AppendPlanUserService } from "../services/user/AppendPlanUser";
 import { DeletePlanUserService } from "../services/user/DeletePlanUser";
 import { FindOneUserService } from "../services/user/findOneUser";
@@ -12,17 +12,17 @@ import { GetUserPermissions } from "../services/user/getUserPermissions";
 import { on } from "events";
 import { cookieGateway, decriptCookie } from "../middleware/cookie";
 
-const createUserService = new CreateUserService(new UserRepositorySqlite());
-const findUserService = new FindUserService(new UserRepositorySqlite());
-const findOneUserService = new FindOneUserService(new UserRepositorySqlite());
-const updateUserService = new UpdateUserService(new UserRepositorySqlite());
+const createUserService = new CreateUserService(new UserRepositoryPostgres());
+const findUserService = new FindUserService(new UserRepositoryPostgres());
+const findOneUserService = new FindOneUserService(new UserRepositoryPostgres());
+const updateUserService = new UpdateUserService(new UserRepositoryPostgres());
 const appendPlanUserService = new AppendPlanUserService(
-  new UserRepositorySqlite(),
+  new UserRepositoryPostgres(),
 );
 const deletePlanUserService = new DeletePlanUserService(
-  new UserRepositorySqlite(),
+  new UserRepositoryPostgres(),
 );
-const getUserPermissions = new GetUserPermissions(new UserRepositorySqlite());
+const getUserPermissions = new GetUserPermissions(new UserRepositoryPostgres());
 
 class UserController implements IUserCotroller {
   async create(req: Request, res: Response) {

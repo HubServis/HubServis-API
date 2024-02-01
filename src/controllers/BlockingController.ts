@@ -1,19 +1,19 @@
 import { Request, Response } from "express";
 import { IBlockingController } from "../interfaces/controllers";
-import { BlockingRepositorySqlite } from "../infra/database/sqlite/implementations/BlockingRepository";
+import { BlockingRepositoryPostgres } from "../infra/database/postgres/implementations/BlockingRepository";
 import { CreateBlockingService } from "../services/Blocking/CreateBlocking";
 import { FindBlockingService } from "../services/Blocking/FindBlocking";
 
 const createBlockingService = new CreateBlockingService(
-	new BlockingRepositorySqlite()
+	new BlockingRepositoryPostgres()
 );
 
 const findBlockingService = new FindBlockingService(
-	new BlockingRepositorySqlite()
+	new BlockingRepositoryPostgres()
 );
 
 // const patchEspedientService = new PatchEspedientService(
-// 	new EspedientRepositorySqlite()
+// 	new EspedientRepositoryPostgres()
 // );
 
 class BlockingController implements IBlockingController {

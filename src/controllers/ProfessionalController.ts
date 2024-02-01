@@ -1,15 +1,15 @@
 import { Response, Request } from "express";
 import { IProfessionalCotroller } from "../interfaces/controllers";
 import { CreateProfessionalService } from "../services/professional/CreateProfessional";
-import { ProfessionalRepositorySqlite } from "../infra/database/sqlite/implementations/ProfessionalRepository";
+import { ProfessionalRepositoryPostgres } from "../infra/database/postgres/implementations/ProfessionalRepository";
 import { Professional } from "../entities/Professional";
 import { FindProfessionalsService } from "../services/professional/FindProfessionals";
 
 const createProfessionalService = new CreateProfessionalService(
-  new ProfessionalRepositorySqlite()
+  new ProfessionalRepositoryPostgres()
 );
 const findProfessionalsService = new FindProfessionalsService(
-  new ProfessionalRepositorySqlite()
+  new ProfessionalRepositoryPostgres()
 );
 
 class ProfessionalController implements IProfessionalCotroller {

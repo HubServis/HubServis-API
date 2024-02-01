@@ -9,8 +9,6 @@ import ProfessionalController from "./controllers/ProfessionalController";
 import BenefitController from "./controllers/BenefitController";
 import PlanController from "./controllers/PlanController";
 
-import { auth } from "./middleware/auth";
-import { can, is } from "./middleware/permissions";
 import { cookieGateway } from "./middleware/cookie";
 
 import AppointmentController from "./controllers/AppointmentController";
@@ -45,7 +43,8 @@ routes.delete("/business/delete/:businessId", cookieGateway(["owner"]), Business
 routes.patch("/business", cookieGateway(["owner"]), BusinessController.patch);
 
 // PROFESSIONAL
-routes.post("/professional/add", auth, ProfessionalController.addToBusiness);
+routes.post("/professional/add", cookieGateway(['test']), ProfessionalController.addToBusiness);
+
 routes.get("/professionals", ProfessionalController.findProfessionals);
 
 // SERVICE

@@ -1,8 +1,8 @@
 import { Response, Request, NextFunction } from "express";
 import { SessionService } from "../services/session/SessionServices";
-import { SessionRepositorySqlite } from "../infra/database/sqlite/implementations/SessionRepository";
+import { SessionRepositoryPostgres } from "../infra/database/postgres/implementations/SessionRepository";
 
-const sessionService = new SessionService(new SessionRepositorySqlite());
+const sessionService = new SessionService(new SessionRepositoryPostgres());
 
 class SessionController {
   async handle(

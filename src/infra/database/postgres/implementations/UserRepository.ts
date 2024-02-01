@@ -14,7 +14,7 @@ import { upload } from "../../../aws";
 import { config } from "dotenv";
 import { log } from "console";
 
-export class UserRepositorySqlite implements IUsersRepository {
+export class UserRepositoryPostgres implements IUsersRepository {
   public async create(props: User): Promise<Error | ResRegisterUser> {
     const { id, username, email, password, name, cpfcnpj, plan, image } = props;
 
@@ -237,7 +237,7 @@ export class UserRepositorySqlite implements IUsersRepository {
       },
     });
 
-	console.log('userAccess on UserRepositorySqlite (240)', userAccess)
+	console.log('userAccess on UserRepositoryPostgres (240)', userAccess)
 
 	if(props.requestedPermissions?.length === 0) return true;
 

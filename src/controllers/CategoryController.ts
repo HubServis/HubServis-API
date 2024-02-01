@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
 import { ICategoryController } from "../interfaces/controllers";
-import { CategoryRepositorySqlite } from "../infra/database/sqlite/implementations/CategoryRepository";
+import { CategoryRepositoryPostgres } from "../infra/database/postgres/implementations/CategoryRepository";
 import { CreateCategoryService } from "../services/Category/CreateCategory";
 import { FindCategoryService } from "../services/Category/FindCategory";
 import { AppendCategoryServiceService } from "../services/Category/AppendCategoryService";
@@ -9,23 +9,23 @@ import { ListServicesCategoryService } from "../services/Category/ListServicesCa
 import { CustomError } from "../interfaces/errors";
 
 const createAppointmentService = new CreateCategoryService(
-  new CategoryRepositorySqlite()
+  new CategoryRepositoryPostgres()
 );
 
 const findCategoryService = new FindCategoryService(
-  new CategoryRepositorySqlite()
+  new CategoryRepositoryPostgres()
 );
 
 const appendCategoryServiceService = new AppendCategoryServiceService(
-  new CategoryRepositorySqlite()
+  new CategoryRepositoryPostgres()
 );
 
 const deleteCategoryService = new DeleteCategoryService(
-  new CategoryRepositorySqlite()
+  new CategoryRepositoryPostgres()
 );
 
 const listServicesCategoryService = new ListServicesCategoryService(
-  new CategoryRepositorySqlite()
+  new CategoryRepositoryPostgres()
 );
 
 class CategoryController implements ICategoryController {

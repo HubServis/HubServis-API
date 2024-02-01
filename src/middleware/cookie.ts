@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-import { UserRepositorySqlite } from "../infra/database/sqlite/implementations/UserRepository";
+import { UserRepositoryPostgres } from "../infra/database/postgres/implementations/UserRepository";
 
 import { ICookie } from "../interfaces/cookie";
 
@@ -9,35 +9,49 @@ import { GetUserPermissions } from "../services/user/getUserPermissions";
 import { config } from "dotenv";
 import { log } from "console";
 
-const getUserPermissions = new GetUserPermissions(new UserRepositorySqlite());
+const getUserPermissions = new GetUserPermissions(new UserRepositoryPostgres());
 
 export const cookieGateway = (permissions?: string[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
+    console.log("entered on gateway");
+
     try {
       if (req.path === "/login" || req.path === "/user") {
         const result = createCookie(req, res);
+
+        console.log("createCookie cookie result", result);
 
         return res.json(result).status(200);
       }
 
       if (req.path === "/user/permissions") {
-        const result = await verifyAccess(req, res, next, req.body.permissions);
+        const result: Boolean | Response | Error = await verifyAccess(
+          req,
+          res,
+          next,
+          req.body.permissions,
+        );
+
+        // console.log("verifyAccess result (30)", result);
 
         if (result !== true) return res.json(false).status(401);
         else return res.json(true).status(200);
       }
 
       if (req.path === "/logout") {
+        console.log(`user ${req.cookies}, logged out (37)`);
         logout(req, res);
 
         return;
       }
 
       {
-        // if(!req.cookies["hubservis"])
-        // 	revalidateCookie(req, res);
+        /* if(!req.cookies["hubservis"])
+        	revalidateCookie(req, res); */
 
         const result = await verifyAccess(req, res, next, permissions);
+
+        console.log("verifyAccess result (49)", result);
 
         if (result !== true)
           return res.status(401).json("User not passed on verifyAccess!");
@@ -133,10 +147,14 @@ const verifyAccess = async (
 
     if (cookieData.access.some((access) => access === req.path)) return true;
 
+    console.log("cookieData on (145)", cookieData);
+
     const result = await getUserPermissions.execute({
       userId: cookieData.userId,
       requestedPermissions: permissions,
     });
+
+    console.log("this is the result for getUserPermissions (152)", result);
 
     if (result !== true) return res.status(401).json("User not have access!");
 

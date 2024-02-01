@@ -3,13 +3,13 @@ import { IProductCotroller } from "../interfaces/controllers";
 import { Product } from "../entities/Product";
 import { CreateProductService } from "../services/product/CreateProduct";
 import { FindProductService } from "../services/product/findProducts";
-import { ProductRepositorySqlite } from "../infra/database/sqlite/implementations/ProductRepository";
+import { ProductRepositoryPostgres } from "../infra/database/postgres/implementations/ProductRepository";
 
 const createProductService = new CreateProductService(
-  new ProductRepositorySqlite()
+  new ProductRepositoryPostgres()
 );
 const findProductService = new FindProductService(
-  new ProductRepositorySqlite()
+  new ProductRepositoryPostgres()
 );
 
 class ProductController implements IProductCotroller {

@@ -3,34 +3,34 @@ import { CreateServiceService } from "../services/service/CreateService";
 import { FindServiceService } from "../services/service/FindService";
 import { IServiceCotroller } from "../interfaces/controllers";
 import { Service } from "../entities/Service";
-import { ServiceRepositorySqlite } from "../infra/database/sqlite/implementations/ServiceRepository";
+import { ServiceRepositoryPostgres } from "../infra/database/postgres/implementations/ServiceRepository";
 import { FindOneServiceService } from "../services/service/FindOneService";
 import { DeleteServiceService } from "../services/service/DeleteService";
 import { FindServicesHighlightService } from "../services/service/FindServicesHighlightService";
 import { FindManyServicesService } from "../services/service/FindManyService";
 
 const createServiceService = new CreateServiceService(
-  new ServiceRepositorySqlite()
+  new ServiceRepositoryPostgres()
 );
 
 const findServiceService = new FindServiceService(
-  new ServiceRepositorySqlite()
+  new ServiceRepositoryPostgres()
 );
 
 const findOneServiceService = new FindOneServiceService(
-  new ServiceRepositorySqlite()
+  new ServiceRepositoryPostgres()
 );
 
 const deleteServiceService = new DeleteServiceService(
-  new ServiceRepositorySqlite()
+  new ServiceRepositoryPostgres()
 )
 
 const findServicesHighlightService = new FindServicesHighlightService(
-  new ServiceRepositorySqlite()
+  new ServiceRepositoryPostgres()
 );
 
 const findManyServicesService = new FindManyServicesService(
-  new ServiceRepositorySqlite()
+  new ServiceRepositoryPostgres()
 )
 
 class ServiceController implements IServiceCotroller {

@@ -4,28 +4,28 @@ import { IBusinessCotroller } from "../interfaces/controllers";
 import { CreateBusinessService } from "../services/business/CreateBusiness";
 import { FindBusinessService } from "../services/business/FindBusiness";
 import { Business } from "../entities/Business";
-import { BusinessRepositorySqlite } from "../infra/database/sqlite/implementations/BusinessRepository";
+import { BusinessRepositoryPostgres } from "../infra/database/postgres/implementations/BusinessRepository";
 import { FindOneBusinessService } from "../services/business/FindOneBusiness";
 import { DeleteBusinessService } from "../services/business/DeleteBusiness";
 import { PatchBusinessService } from "../services/business/PatchBusiness";
 
 const createBusinessService = new CreateBusinessService(
-  new BusinessRepositorySqlite()
+  new BusinessRepositoryPostgres()
 );
 const findBusinessService = new FindBusinessService(
-  new BusinessRepositorySqlite()
+  new BusinessRepositoryPostgres()
 );
 
 const findOneBusinessService = new FindOneBusinessService(
-  new BusinessRepositorySqlite()
+  new BusinessRepositoryPostgres()
 );
 
 const deleteBusinessService = new DeleteBusinessService(
-  new BusinessRepositorySqlite()
+  new BusinessRepositoryPostgres()
 );
 
 const patchBusinessService = new PatchBusinessService(
-  new BusinessRepositorySqlite()
+  new BusinessRepositoryPostgres()
 );
 
 class BusinessController implements IBusinessCotroller {

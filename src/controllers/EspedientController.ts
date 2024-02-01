@@ -1,22 +1,22 @@
 import { Request, Response } from "express";
 import { IExpedientController } from "../interfaces/controllers";
 import { CreateEspedientService } from "../services/Espedient/CreateEspedient";
-import { EspedientRepositorySqlite } from "../infra/database/sqlite/implementations/EspedientRepository";
+import { EspedientRepositoryPostgres } from "../infra/database/postgres/implementations/EspedientRepository";
 import { FindEspedientService } from "../services/Espedient/FindEspedient";
 import { PatchEspedientService } from "../services/Espedient/PatchEspedient";
 import { CustomError } from "../interfaces/errors";
 import { decriptCookie } from "../middleware/cookie";
 
 const createEspedientService = new CreateEspedientService(
-	new EspedientRepositorySqlite()
+	new EspedientRepositoryPostgres()
 );
 
 const findEspedientService = new FindEspedientService(
-	new EspedientRepositorySqlite()
+	new EspedientRepositoryPostgres()
 );
 
 const patchEspedientService = new PatchEspedientService(
-	new EspedientRepositorySqlite()
+	new EspedientRepositoryPostgres()
 );
 
 class EspedientController implements IExpedientController {

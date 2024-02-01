@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 import { Benefit } from "../entities/Benefit";
-import { BenefitRepositorySqlite } from "../infra/database/sqlite/implementations/BenefitRepository";
+import { BenefitRepositoryPostgres } from "../infra/database/postgres/implementations/BenefitRepository";
 
 import { IBenefitsController } from "../interfaces/controllers";
 
@@ -11,16 +11,16 @@ import { FindBenefitService } from "../services/Benefits/FindBenefits";
 import { UpdateBenefitService } from "../services/Benefits/UpdateBenefit";
 
 const createBenefitService = new CreateBenefitService(
-  new BenefitRepositorySqlite()
+  new BenefitRepositoryPostgres()
 );
 const findBenefitService = new FindBenefitService(
-  new BenefitRepositorySqlite()
+  new BenefitRepositoryPostgres()
 );
 const deleteBenefitService = new DeleteBenefitService(
-  new BenefitRepositorySqlite()
+  new BenefitRepositoryPostgres()
 );
 const updateBenefitService = new UpdateBenefitService(
-  new BenefitRepositorySqlite()
+  new BenefitRepositoryPostgres()
 );
 
 class BenefitsController implements IBenefitsController {

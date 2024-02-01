@@ -1,25 +1,25 @@
 import { Response, Request } from "express";
 import { IRatingController } from "../interfaces/controllers";
 import { CreateRatingService } from "../services/rating/CreateRating";
-import { RatingRepositorySqlite } from "../infra/database/sqlite/implementations/RatingRepository";
+import { RatingRepositoryPostgres } from "../infra/database/postgres/implementations/RatingRepository";
 import { DeleteRatingService } from "../services/rating/DeleteRating";
 import { FindRatingService } from "../services/rating/FindAllRating";
 import { PatchRatingService } from "../services/rating/PatchRating";
 
 const createRatingService = new CreateRatingService(
-  new RatingRepositorySqlite()
+  new RatingRepositoryPostgres()
 );
 
 const deleteRatingService = new DeleteRatingService(
-  new RatingRepositorySqlite()
+  new RatingRepositoryPostgres()
 );
 
 const findAllRatingService = new FindRatingService(
-  new RatingRepositorySqlite()
+  new RatingRepositoryPostgres()
 );
 
 const patchRatingService = new PatchRatingService(
-  new RatingRepositorySqlite()
+  new RatingRepositoryPostgres()
 );
 
 class RatingController implements IRatingController {

@@ -1,19 +1,19 @@
 import { Request, Response } from "express";
 import { IExtrasController } from "../interfaces/controllers";
 import { Extra } from "../entities/Extra";
-import { ExtraRepositorySqlite } from "../infra/database/sqlite/implementations/ExtraRepository";
+import { ExtraRepositoryPostgres } from "../infra/database/postgres/implementations/ExtraRepository";
 import { CreateExtraService } from "../services/Extras/CreateExtra";
 import { FindExtraService } from "../services/Extras/FindExtra";
 import { DeleteExtraService } from "../services/Extras/DeleteExtra";
 import { UpdateExtraService } from "../services/Extras/UpdateExtra";
 
 const createExtrasService = new CreateExtraService(
-  new ExtraRepositorySqlite()
+  new ExtraRepositoryPostgres()
 );
 
-const findExtrasService = new FindExtraService(new ExtraRepositorySqlite());
-const deleteExtrasService = new DeleteExtraService(new ExtraRepositorySqlite());
-const updateExtraService = new UpdateExtraService(new ExtraRepositorySqlite());
+const findExtrasService = new FindExtraService(new ExtraRepositoryPostgres());
+const deleteExtrasService = new DeleteExtraService(new ExtraRepositoryPostgres());
+const updateExtraService = new UpdateExtraService(new ExtraRepositoryPostgres());
 
 class ExtraController implements IExtrasController {
   async create(req: Request, res: Response) {

@@ -1,26 +1,26 @@
 import { Response, Request } from "express";
 import { IAppointmentController } from "../interfaces/controllers";
 import { FindAppointmentService } from "../services/Appointment/FindAppointment";
-import { AppointmentRepositorySqlite } from "../infra/database/sqlite/implementations/AppointmentRepository";
+import { AppointmentRepositoryPostgres } from "../infra/database/postgres/implementations/AppointmentRepository";
 import { CreateAppointmentService } from "../services/Appointment/CreateAppointment";
 import { PatchAppointmentService } from "../services/Appointment/PatchAppointment";
 import { FindAppointmentUserService } from "../services/Appointment/FindAppointmentUser";
 import { decriptCookie } from "../middleware/cookie";
 
 const createAppointmentService = new CreateAppointmentService(
-  new AppointmentRepositorySqlite()
+  new AppointmentRepositoryPostgres()
 );
 
 const findAppointmentService = new FindAppointmentService(
-  new AppointmentRepositorySqlite()
+  new AppointmentRepositoryPostgres()
 );
 
 const findAppointmentUserService = new FindAppointmentUserService(
-  new AppointmentRepositorySqlite()
+  new AppointmentRepositoryPostgres()
 );
 
 const patchAppointmentService = new PatchAppointmentService(
-  new AppointmentRepositorySqlite()
+  new AppointmentRepositoryPostgres()
 )
 
 class AppointmentController implements IAppointmentController {

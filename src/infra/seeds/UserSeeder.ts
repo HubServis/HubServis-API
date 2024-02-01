@@ -1,6 +1,6 @@
 import { DataSource } from "typeorm";
 import { Seeder, SeederFactoryManager } from "typeorm-extension";
-import { User } from "../database/sqlite/models/User";
+import { User } from "../database/postgres/models/User";
 import { hash } from "bcrypt";
 
 export default class UserSeeder implements Seeder {

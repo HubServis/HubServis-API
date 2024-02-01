@@ -1,4 +1,4 @@
-import Blocking from "../infra/database/sqlite/models/Blocking";
+import Blocking from "../infra/database/postgres/models/Blocking";
 
 export interface ICreateBlocking {
 	DateTimeStart: string;

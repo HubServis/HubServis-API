@@ -2,19 +2,19 @@ import { Request, Response } from "express";
 import { ILimitsController } from "../interfaces/controllers";
 import { Limit } from "../entities/Limit";
 import { CreateLimitService } from "../services/Limits/CreateLimit";
-import { LimitsRepositorySqlite } from "../infra/database/sqlite/implementations/LimitRepository";
+import { LimitsRepositoryPostgres } from "../infra/database/postgres/implementations/LimitRepository";
 import { FindLimitService } from "../services/Limits/FindLimit";
 import { DeleteLimitService } from "../services/Limits/DeleteLimit";
 import { PatchLimitService } from "../services/Limits/PatchLimit";
 
 const createLimitsService = new CreateLimitService(
-  new LimitsRepositorySqlite()
+  new LimitsRepositoryPostgres()
 );
-const findLimitsService = new FindLimitService(new LimitsRepositorySqlite());
+const findLimitsService = new FindLimitService(new LimitsRepositoryPostgres());
 const deleteLimitsService = new DeleteLimitService(
-  new LimitsRepositorySqlite()
+  new LimitsRepositoryPostgres()
 );
-const patchLimitsService = new PatchLimitService(new LimitsRepositorySqlite());
+const patchLimitsService = new PatchLimitService(new LimitsRepositoryPostgres());
 
 class LimitController implements ILimitsController {
   async create(req: Request, res: Response) {

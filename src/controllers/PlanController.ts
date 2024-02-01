@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PlansRepositorySqlite } from "../infra/database/sqlite/implementations/PlanRepository";
+import { PlansRepositoryPostgres } from "../infra/database/postgres/implementations/PlanRepository";
 
 import { IPlansController } from "../interfaces/controllers";
 
@@ -13,24 +13,24 @@ import { UpdatePlanService } from "../services/Plans/UpdatePlan";
 import { AppendPlanLimitService } from "../services/Plans/AppendPlanLimits";
 import { DeletePlanLimitService } from "../services/Plans/DeletePlanLimits";
 
-const createPlansService = new CreatePlanService(new PlansRepositorySqlite());
-const findPlansService = new FindPlanService(new PlansRepositorySqlite());
+const createPlansService = new CreatePlanService(new PlansRepositoryPostgres());
+const findPlansService = new FindPlanService(new PlansRepositoryPostgres());
 
-const deletePlansService = new DeletePlanService(new PlansRepositorySqlite());
-const updatePlansService = new UpdatePlanService(new PlansRepositorySqlite());
+const deletePlansService = new DeletePlanService(new PlansRepositoryPostgres());
+const updatePlansService = new UpdatePlanService(new PlansRepositoryPostgres());
 
 const appendPlansBenefitService = new AppendPlanBenefitService(
-  new PlansRepositorySqlite()
+  new PlansRepositoryPostgres()
 );
 const deletePlansBenefitService = new DeletePlanBenefitService(
-  new PlansRepositorySqlite()
+  new PlansRepositoryPostgres()
 );
 
 const appendPlansLimitService = new AppendPlanLimitService(
-  new PlansRepositorySqlite()
+  new PlansRepositoryPostgres()
 );
 const deletePlansLimitService = new DeletePlanLimitService(
-  new PlansRepositorySqlite()
+  new PlansRepositoryPostgres()
 );
 
 class PlansController implements IPlansController {

@@ -3,7 +3,7 @@ import express from "express";
 import { config } from "dotenv";
 import cookieParser from 'cookie-parser';
 import cors from "cors";
-import "./infra/database/sqlite/config";
+import "./infra/database/postgres/config";
 import { routes } from "./routes";
 
 import swaggerUI from "swagger-ui-express";
