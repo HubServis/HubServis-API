@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
-export class PlansMigrations1686665531987 implements MigrationInterface {
+export class ExpedientMigration1707670945735 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: "plans",
+        name: "expediencys",
         columns: [
           {
             name: "id",
@@ -19,24 +19,19 @@ export class PlansMigrations1686665531987 implements MigrationInterface {
             type: "varchar",
           },
           {
-            name: "isPrivated",
-            type: "boolean",
-          },
-          {
             name: "description",
             type: "varchar",
           },
           {
-            name: "price",
-            type: "int",
+            name: "expediencysInfos",
+            type: "varchar",
           },
           {
-            name: "benefits",
+            name: "business",
             type: "uuid",
-            isArray: true,
           },
           {
-            name: "limits",
+            name: "professionals",
             type: "uuid",
             isArray: true,
           },
@@ -53,20 +48,16 @@ export class PlansMigrations1686665531987 implements MigrationInterface {
         ],
         foreignKeys: [
           {
-            name: "BenefitsKey",
-            referencedTableName: "benefits",
+            name: "BusinessKey",
+            referencedTableName: "business",
             referencedColumnNames: ["id"],
-            columnNames: ["benefits"],
-            onDelete: "CASCADE",
-            onUpdate: "CASCADE",
+            columnNames: ["business"],
           },
           {
-            name: "LimitsKey",
-            referencedTableName: "limits",
+            name: "ProfessionalsKey",
+            referencedTableName: "professionals",
             referencedColumnNames: ["id"],
-            columnNames: ["limits"],
-            onDelete: "CASCADE",
-            onUpdate: "CASCADE",
+            columnNames: ["professionals"],
           },
         ],
       }),
@@ -74,6 +65,6 @@ export class PlansMigrations1686665531987 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable("plans");
+    await queryRunner.dropTable("expediencys");
   }
 }

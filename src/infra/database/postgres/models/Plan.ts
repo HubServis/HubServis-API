@@ -4,7 +4,7 @@ import { BaseEntity } from "./BaseEntity";
 import { Benefit } from "./Benefit";
 import { Limit } from "./Limit";
 
-@Entity("Plans")
+@Entity("plans")
 export class Plan extends BaseEntity {
   @Column()
   name: string;

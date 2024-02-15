@@ -5,7 +5,7 @@ import {
   OneToMany
 } from "typeorm";
 import { BaseEntity } from "./BaseEntity";
-import { v4 as uuid } from "uuid";
+// import { v4 as uuid } from "uuid";
 import Business from "./Business";
 import { Professional } from "./Professional";
 

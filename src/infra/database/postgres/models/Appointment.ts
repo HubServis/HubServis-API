@@ -1,18 +1,14 @@
-import {
-  Column,
-  Entity,
-  ManyToOne
-} from "typeorm";
+import { Column, Entity, ManyToOne } from "typeorm";
 import { BaseEntity } from "./BaseEntity";
 import { User } from "./User";
 import Service from "./Service";
 import { Professional } from "./Professional";
 import Business from "./Business";
-import { StatusAppointment } from '../../../../enums/models';
+import { StatusAppointment } from "../../../../enums/models";
 
 @Entity("appointments")
 export class Appointment extends BaseEntity {
-  @Column({type: "varchar"})
+  @Column({ type: "varchar" })
   status: StatusAppointment;
   /* STATUS pode conter uma das opções abaixo:
    CONCLUIDO

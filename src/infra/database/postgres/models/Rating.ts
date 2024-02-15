@@ -3,7 +3,7 @@ import { BaseEntity } from "./BaseEntity";
 import { User } from "./User";
 import Service from "./Service";
 
-@Entity("rating")
+@Entity("ratings")
 export class Rating extends BaseEntity {
   @Column('decimal')
   rating: number;

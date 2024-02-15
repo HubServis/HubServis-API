@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
-export class ProfessionalMigrations1686665548224 implements MigrationInterface {
+export class ServiceMigration1707671116229 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: "professionals",
+        name: "services",
         columns: [
           {
             name: "id",
@@ -17,25 +17,37 @@ export class ProfessionalMigrations1686665548224 implements MigrationInterface {
           {
             name: "name",
             type: "varchar",
-            isNullable: true,
           },
           {
-            name: "cpfcnpj",
+            name: "price",
             type: "varchar",
-            isNullable: true,
           },
           {
-            name: "isRegistred",
-            type: "boolean",
+            name: "duration",
+            type: "varchar",
           },
           {
-            name: "user",
-            type: "uuid",
-            isNullable: true,
+            name: "description",
+            type: "varchar",
           },
           {
-            name: "business",
-            type: "uuid",
+            name: "isPrivated",
+            type: "varchar",
+          },
+          {
+            name: "averageRating",
+            type: "int",
+            default: 0,
+          },
+          {
+            name: "totalRatings",
+            type: "int",
+            default: 0,
+          },
+          {
+            name: "totalValueRating",
+            type: "int",
+            default: 0,
           },
           {
             name: "appointments",
@@ -43,12 +55,18 @@ export class ProfessionalMigrations1686665548224 implements MigrationInterface {
             isArray: true,
           },
           {
-            name: "blockings",
+            name: "business",
             type: "uuid",
           },
           {
-            name: "expediencys",
+            name: "categories",
             type: "uuid",
+            isArray: true,
+          },
+          {
+            name: "ratings",
+            type: "uuid",
+            isArray: true,
           },
           {
             name: "created_at",
@@ -63,12 +81,10 @@ export class ProfessionalMigrations1686665548224 implements MigrationInterface {
         ],
         foreignKeys: [
           {
-            name: "UserKey",
-            referencedTableName: "users",
+            name: "AppointmentsKey",
+            referencedTableName: "appointments",
             referencedColumnNames: ["id"],
-            columnNames: ["user"],
-            onDelete: "CASCADE",
-            onUpdate: "CASCADE",
+            columnNames: ["appointments"],
           },
           {
             name: "BusinessKey",
@@ -76,31 +92,18 @@ export class ProfessionalMigrations1686665548224 implements MigrationInterface {
             referencedColumnNames: ["id"],
             columnNames: ["business"],
             onDelete: "CASCADE",
-            onUpdate: "CASCADE",
           },
           {
-            name: "AppointmentsKey",
-            referencedTableName: "appointments",
+            name: "CategoriesKey",
+            referencedTableName: "categories",
             referencedColumnNames: ["id"],
-            columnNames: ["appointments"],
-            onDelete: "CASCADE",
-            onUpdate: "CASCADE",
+            columnNames: ["categories"],
           },
           {
-            name: "BlockingsKey",
-            referencedTableName: "blockings",
+            name: "RatingsKey",
+            referencedTableName: "ratings",
             referencedColumnNames: ["id"],
-            columnNames: ["blockings"],
-            onDelete: "CASCADE",
-            onUpdate: "CASCADE",
-          },
-          {
-            name: "ExpediencysKey",
-            referencedTableName: "expediencys",
-            referencedColumnNames: ["id"],
-            columnNames: ["expediencys"],
-            onDelete: "CASCADE",
-            onUpdate: "CASCADE",
+            columnNames: ["ratings"],
           },
         ],
       }),
@@ -108,6 +111,6 @@ export class ProfessionalMigrations1686665548224 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable("professionals");
+    await queryRunner.dropTable("services");
   }
 }

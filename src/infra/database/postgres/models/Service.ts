@@ -2,7 +2,6 @@ import {
 	Column,
 	Entity,
 	JoinColumn,
-	JoinTable,
 	ManyToMany,
 	ManyToOne,
 	OneToMany,
@@ -13,7 +12,7 @@ import Appointment from "./Appointment";
 import Category from "./Category";
 import Rating from "./Rating";
 
-@Entity("service")
+@Entity("services")
 export class Service extends BaseEntity {
 	@Column()
 	name: string;

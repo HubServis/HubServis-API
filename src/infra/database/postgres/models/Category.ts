@@ -4,38 +4,38 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
-  OneToOne
+  OneToOne,
 } from "typeorm";
 import { BaseEntity } from "./BaseEntity";
 import { User } from "./User";
 import Service from "./Service";
-import { Professional } from "./Professional";
+// import { Professional } from "./Professional";
 import Business from "./Business";
-import { StatusAppointment } from '../../../../enums/models';
+// import { StatusAppointment } from '../../../../enums/models';
 
-@Entity("category")
+@Entity("categories")
 export class Category extends BaseEntity {
-	@Column()
-	name: string;
+  @Column()
+  name: string;
 
-	@Column()
-	nameId: string;
+  @Column()
+  nameId: string;
 
-	@Column()
-	description: string;
+  @Column()
+  description: string;
 
-	@Column()
-	isPrivated: boolean;
+  @Column()
+  isPrivated: boolean;
 
-	@OneToOne(() => User, (user) => user.category)
-	owner: User;
+  @OneToOne(() => User, (user) => user.category)
+  owner: User;
 
-	@ManyToOne(() => Business, (business) => business.categories)
-	business: Business;
+  @ManyToOne(() => Business, (business) => business.categories)
+  business: Business;
 
-	@ManyToMany(() => Service, (service) => service.categories)
-	@JoinTable()
-	services: Service[];
+  @ManyToMany(() => Service, (service) => service.categories)
+  @JoinTable()
+  services: Service[];
 }
 
 export default Category;

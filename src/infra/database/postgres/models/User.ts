@@ -1,15 +1,11 @@
 import {
   Column,
-  // ManyToMany,
-  // JoinTable,
   Entity,
   OneToOne,
   JoinColumn,
   OneToMany,
 } from "typeorm";
 
-// import Role from "./Role";
-// import Permission from "./Permission";
 import { BaseEntity } from "./BaseEntity";
 import Business from "./Business";
 import { Professional } from "./Professional";

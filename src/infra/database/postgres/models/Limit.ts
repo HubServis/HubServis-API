@@ -2,7 +2,7 @@ import { Column, Entity } from "typeorm";
 
 import { BaseEntity } from "./BaseEntity";
 
-@Entity("Limits")
+@Entity("limits")
 export class Limit extends BaseEntity {
   @Column()
   name: string;

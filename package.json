@@ -9,7 +9,7 @@
     "typeorm": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli",
     "start": "tsc && node ./build/index.js",
     "lint": "eslint . --ext .ts",
-    "seed:run": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs seed:run -d src/infra/database/sqlite/config.ts"
+    "seed:run": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs seed:run -d src/infra/database/posgtres/config.ts"
   },
   "keywords": [],
   "author": "",
