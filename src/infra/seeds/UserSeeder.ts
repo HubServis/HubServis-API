@@ -6,11 +6,23 @@ import { hash } from "bcrypt";
 export default class UserSeeder implements Seeder {
   public async run(
     dataSource: DataSource,
-    factoryManager: SeederFactoryManager
+    _factoryManager: SeederFactoryManager,
   ): Promise<any> {
     const userRepository = dataSource.getRepository(User);
 
-    const userData = {
+    const userData: Omit<
+      User,
+      | "id"
+      | "ratings"
+      | "plan"
+      | "category"
+      | "created_at"
+      | "professional"
+      | "extras"
+      | "image"
+      | "appointments"
+      | "business"
+    > = {
       name: "Ramilthon BMW 2",
       username: "Ramilthonbmw2",
       password: await hash("ramilthon", 8),
@@ -19,6 +31,7 @@ export default class UserSeeder implements Seeder {
     };
 
     const newUser = userRepository.create(userData);
+
     await userRepository.save(newUser);
   }
 }

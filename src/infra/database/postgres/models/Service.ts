@@ -53,5 +53,3 @@ export class Service extends BaseEntity {
 	@JoinColumn()
 	ratings: Rating[];
 }
-
-export default Service;
