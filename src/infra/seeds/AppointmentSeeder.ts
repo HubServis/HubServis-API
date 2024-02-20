@@ -3,9 +3,9 @@ import { Seeder, SeederFactoryManager } from "typeorm-extension";
 import { StatusAppointment } from "../../enums/models";
 import { User } from "../database/postgres/models/User";
 import Appointment from "../database/postgres/models/Appointment";
-import Service from "../database/postgres/models/Service";
-import Business from "../database/postgres/models/Business";
-import { Professional } from "../database/postgres/models/Professional";
+// import Service from "../database/postgres/models/Service";
+// import Business from "../database/postgres/models/Business";
+// import { Professional } from "../database/postgres/models/Professional";
 
 export default class AppointmentSeeder implements Seeder {
   public async run(
