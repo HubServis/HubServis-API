@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
 
-export interface IUserCotroller {
+export interface IUserController {
   create(req: Request, res: Response): Promise<Response>;
   find(req: Request, res: Response): Promise<Response>;
   findOneUser(req: Request, res: Response): Promise<Response>;
@@ -9,16 +9,16 @@ export interface IUserCotroller {
   getUserPermissions(req: Request, res: Response): Promise<Response>
 }
 
-export interface IUserACLCotroller {
+export interface IUserACLController {
   create(req: Request, res: Response): Promise<Response>;
 }
 
-export interface IProductCotroller {
+export interface IProductController {
   create(req: Request, res: Response): Promise<Response>;
   find(req: Request, res: Response): Promise<Response>;
 }
 
-export interface IRoleCotroller {
+export interface IRoleController {
   create(req: Request, res: Response): Promise<Response>;
   createRolePermission(req: Request, res: Response): Promise<Response>;
 }
@@ -27,12 +27,12 @@ export interface IPermissionController {
   create(req: Request, res: Response): Promise<Response>;
 }
 
-export interface IBusinessCotroller {
+export interface IBusinessController {
   create(req: Request, res: Response): Promise<Response>;
   find(req: Request, res: Response): Promise<Response>;
 }
 
-export interface IServiceCotroller {
+export interface IServiceController {
 	create(req: Request, res: Response): Promise<Response>;
 	find(req: Request, res: Response): Promise<Response>;
 	findOne(req: Request, res: Response): Promise<Response>;
@@ -40,7 +40,7 @@ export interface IServiceCotroller {
 	findServicesHighlight(req: Request, res: Response): Promise<Response>;
 }
 
-export interface IProfessionalCotroller {
+export interface IProfessionalController {
   addToBusiness(req: Request, res: Response): Promise<Response>;
   findProfessionals(req: Request, res: Response): Promise<Response>;
 }

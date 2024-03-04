@@ -58,7 +58,7 @@ export const cookieGateway = (permissions?: string[]) => {
         else next();
       }
     } catch (err) {
-      throw new Error("Error to proceed gateway: ", err);
+      throw new Error(`Error to proceed gateway: ${err}`);
     }
   };
 };
@@ -128,7 +128,7 @@ const revalidateCookie = (req: Request, res: Response) => {
 
     return true;
   } catch (err) {
-    new Error("Error revalidate Cookie: ", err);
+    new Error(`Error revalidate Cookie: ${err}`);
   }
 };
 

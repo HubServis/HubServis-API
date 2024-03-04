@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
 
-import { IBusinessCotroller } from "../interfaces/controllers";
+import { IBusinessController } from "../interfaces/controllers";
 import { CreateBusinessService } from "../services/business/CreateBusiness";
 import { FindBusinessService } from "../services/business/FindBusiness";
 import { Business } from "../entities/Business";
@@ -28,7 +28,7 @@ const patchBusinessService = new PatchBusinessService(
   new BusinessRepositoryPostgres()
 );
 
-class BusinessController implements IBusinessCotroller {
+class BusinessController implements IBusinessController {
   async create(req: Request, res: Response) {
     const { name } = req.body;
 

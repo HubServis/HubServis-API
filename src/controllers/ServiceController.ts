@@ -1,7 +1,7 @@
 import { Response, Request } from "express";
 import { CreateServiceService } from "../services/service/CreateService";
 import { FindServiceService } from "../services/service/FindService";
-import { IServiceCotroller } from "../interfaces/controllers";
+import { IServiceController } from "../interfaces/controllers";
 import { Service } from "../entities/Service";
 import { ServiceRepositoryPostgres } from "../infra/database/postgres/implementations/ServiceRepository";
 import { FindOneServiceService } from "../services/service/FindOneService";
@@ -33,7 +33,7 @@ const findManyServicesService = new FindManyServicesService(
   new ServiceRepositoryPostgres()
 )
 
-class ServiceController implements IServiceCotroller {
+class ServiceController implements IServiceController {
 	async create(req: Request, res: Response) {
 		const { name, price, duration, description } = req.body;
 

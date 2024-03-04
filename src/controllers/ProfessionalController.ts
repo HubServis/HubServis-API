@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { IProfessionalCotroller } from "../interfaces/controllers";
+import { IProfessionalController } from "../interfaces/controllers";
 import { CreateProfessionalService } from "../services/professional/CreateProfessional";
 import { ProfessionalRepositoryPostgres } from "../infra/database/postgres/implementations/ProfessionalRepository";
 import { Professional } from "../entities/Professional";
@@ -12,13 +12,13 @@ const findProfessionalsService = new FindProfessionalsService(
   new ProfessionalRepositoryPostgres()
 );
 
-class ProfessionalController implements IProfessionalCotroller {
+class ProfessionalController implements IProfessionalController {
   async addToBusiness(req: Request, res: Response) {
-    const { name, cpfcnpj, isRegistred } = req.body;
+    const { name, cpfcnpj, isRegistered } = req.body;
     const userId = req.userReq.id;
 
     try {
-      const role = new Professional({ name, cpfcnpj, isRegistred });
+      const role = new Professional({ name, cpfcnpj, isRegistered });
       const result = await createProfessionalService.execute(role, userId);
 
       if (result instanceof Error) {

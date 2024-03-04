@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { IUserCotroller } from "../interfaces/controllers";
+import { IUserController } from "../interfaces/controllers";
 import { User } from "../entities/User";
 import { FindUserService } from "../services/user/findUsers";
 import { CreateUserService } from "../services/user/CreateUser";
@@ -24,7 +24,7 @@ const deletePlanUserService = new DeletePlanUserService(
 );
 const getUserPermissions = new GetUserPermissions(new UserRepositoryPostgres());
 
-class UserController implements IUserCotroller {
+class UserController implements IUserController {
   async create(req: Request, res: Response) {
     const { username, email, password, name, cpfcnpj, image } = req.body;
 
@@ -135,8 +135,6 @@ class UserController implements IUserCotroller {
       const result = await getUserPermissions.execute({ userId });
 
       if (result instanceof Error) return res.status(400).json(result.message);
-
-      return res.status(201).json(result);
 
       return res.status(201).json(result);
     } catch (err) {

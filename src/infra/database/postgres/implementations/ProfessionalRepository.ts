@@ -9,7 +9,7 @@ export class ProfessionalRepositoryPostgres implements IProfessionalsRepository 
     props: Professional,
     userId: string
   ): Promise<Error | Professional> {
-    const { id, name, cpfcnpj, isRegistred } = props;
+    const { id, name, cpfcnpj, isRegistered } = props;
 
     const ownerBusinessRepository = (await Database).getRepository(UserSchema);
     const owner = await ownerBusinessRepository.findOne({
@@ -25,7 +25,7 @@ export class ProfessionalRepositoryPostgres implements IProfessionalsRepository 
       return new Error("Business not found!");
     }
 
-    if (isRegistred) {
+    if (isRegistered) {
       const userRepository = (await Database).getRepository(UserSchema);
       const user = await userRepository.findOne({
         where: {
@@ -44,7 +44,7 @@ export class ProfessionalRepositoryPostgres implements IProfessionalsRepository 
         id,
         name: user.name,
         cpfcnpj: user.cpfcnpj,
-        isRegistred,
+        isRegistered,
         business: owner.business,
         user,
       });
@@ -59,7 +59,7 @@ export class ProfessionalRepositoryPostgres implements IProfessionalsRepository 
       id,
       name,
       cpfcnpj,
-      isRegistred,
+      isRegistered,
       business: owner.business,
     });
 

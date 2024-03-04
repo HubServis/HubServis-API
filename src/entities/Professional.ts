@@ -4,7 +4,7 @@ export class Professional {
   public id: string;
   public name?: string;
   public cpfcnpj?: string;
-  public isRegistred: boolean;
+  public isRegistered: boolean;
 
   constructor(props: Omit<Professional, "id">, id: string = null) {
     Object.assign(this, props);

@@ -11,9 +11,9 @@ export class UpdateUserService {
     try {
       const result = await this.usersRepository.updateUser(props);
 
-	  return result
+      return result;
     } catch (err) {
-      return new Error("We had an error when updating. Reason: ", err);
+      return new Error(`We had an error when updating. Reason: ${err}`);
     }
   }
 }

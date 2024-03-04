@@ -19,7 +19,7 @@ export class Professional extends BaseEntity {
   cpfcnpj: string;
 
   @Column()
-  isRegistred: boolean;
+  isRegistered: boolean;
 
   @OneToOne(() => User, (user) => user.professional, { nullable: true })
   user: User;

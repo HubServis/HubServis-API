@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { IProductCotroller } from "../interfaces/controllers";
+import { IProductController } from "../interfaces/controllers";
 import { Product } from "../entities/Product";
 import { CreateProductService } from "../services/product/CreateProduct";
 import { FindProductService } from "../services/product/findProducts";
@@ -12,7 +12,7 @@ const findProductService = new FindProductService(
   new ProductRepositoryPostgres()
 );
 
-class ProductController implements IProductCotroller {
+class ProductController implements IProductController {
   async create(req: Request, res: Response) {
     const { name, description, price } = req.body;
 
@@ -26,6 +26,7 @@ class ProductController implements IProductCotroller {
       return res.status(500).json("Unexpected error");
     }
   }
+
   async find(req: Request, res: Response) {
     try {
       const products = await findProductService.execute();
