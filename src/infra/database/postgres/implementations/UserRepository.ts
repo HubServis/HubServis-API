@@ -29,19 +29,19 @@ export class UserRepositoryPostgres implements IUsersRepository {
 
     if (userExists) return new Error("User already exists");
 
-    const userCpfCnfpExists = await userRepository.findOne({
+    const userCpfCnpjExists = await userRepository.findOne({
       where: {
         cpfcnpj: cpfcnpj,
       },
     });
 
-    if (userCpfCnfpExists) return new Error("Cpf or cnpj already exists");
+    if (userCpfCnpjExists) return new Error("Cpf or cnpj already exists");
 
-    const defaultPlan = await planRepository.findOne({
-      where: {
-        name: "Default Plan",
-      },
-    });
+    // const defaultPlan = await planRepository.findOne({
+    //   where: {
+    //     name: "Default Plan",
+    //   },
+    // });
 
     const passwordHash = await hash(password, 8);
 
@@ -247,11 +247,11 @@ export class UserRepositoryPostgres implements IUsersRepository {
 
 	console.log('this user have access?', userAccess);
 
-    const planPermission = props.requestedPermissions.some(
-      (permission) => permission === userAccess.plan.name,
-    );
+  const planPermission = props.requestedPermissions.some(
+    (permission) => permission === userAccess.plan.name,
+  );
 
-	console.log('this user have plan? and is permit access? (254)', planPermission);
+	// console.log('this user have plan? and is permit access? (254)', planPermission);
 
     if (planPermission) return true;
 
@@ -265,7 +265,7 @@ export class UserRepositoryPostgres implements IUsersRepository {
       return valid > 0 ? true : false;
     });
 
-	console.log('this user have permission with the permissions requested? (268)', hasPermission)
+	// console.log('this user have permission with the permissions requested? (268)', hasPermission)
 
     if (!hasPermission) return false;
 
