@@ -40,6 +40,7 @@ export class ProfessionalRepositoryPostgres implements IProfessionalsRepository 
       const professionalRepository = (await Database).getRepository(
         ProfessionalSchema
       );
+      
       const professional = await professionalRepository.save({
         id,
         name: user.name,

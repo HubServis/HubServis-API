@@ -2,7 +2,6 @@ import { Router } from "express";
 
 import UserController from "./controllers/UserController";
 import SessionController from "./controllers/SessionController";
-import ProductController from "./controllers/ProductController";
 import BusinessController from "./controllers/BusinessController";
 import ServiceController from "./controllers/ServiceController";
 import ProfessionalController from "./controllers/ProfessionalController";
@@ -44,7 +43,6 @@ routes.patch("/business", cookieGateway(["owner"]), BusinessController.patch);
 
 // PROFESSIONAL
 routes.post("/professional/add", cookieGateway(['test']), ProfessionalController.addToBusiness);
-
 routes.get("/professionals", ProfessionalController.findProfessionals);
 
 // SERVICE
@@ -58,10 +56,6 @@ routes.get("/service/:serviceId", ServiceController.findOne);
 routes.post("/services/many", ServiceController.findMany);
 routes.delete("/service/:serviceId", ServiceController.delete);
 routes.get("/services/highlight", ServiceController.findServicesHighlight);
-
-// remover essas rotas depois talvez
-routes.post("/product", ProductController.create);
-routes.get("/products", ProductController.find);
 
 // BENEFITS
 routes.get("/benefit", BenefitController.find);

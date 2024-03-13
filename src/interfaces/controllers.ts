@@ -13,11 +13,6 @@ export interface IUserACLController {
   create(req: Request, res: Response): Promise<Response>;
 }
 
-export interface IProductController {
-  create(req: Request, res: Response): Promise<Response>;
-  find(req: Request, res: Response): Promise<Response>;
-}
-
 export interface IRoleController {
   create(req: Request, res: Response): Promise<Response>;
   createRolePermission(req: Request, res: Response): Promise<Response>;
