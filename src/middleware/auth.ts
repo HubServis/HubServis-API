@@ -21,7 +21,7 @@ export async function auth(req: Request, res: Response, next: NextFunction) {
     req.userReq = {
       id: token.id,
     };
-    
+
     next();
   });
 }

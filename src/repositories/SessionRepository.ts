@@ -1,10 +1,10 @@
-import { User } from "../entities/User";
-
 export type UserRequest = {
   email: string;
-  password: string;
+  user: string;
+  expiration: number;
 };
 
 export interface ISessionRepository {
   handle(props: UserRequest): Promise<Error | any>;
+  isExpired(expiration: number): Promise<Error | boolean>;
 }

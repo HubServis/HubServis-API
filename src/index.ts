@@ -8,6 +8,7 @@ import { routes } from "./routes";
 
 import swaggerUI from "swagger-ui-express";
 import swaggerDocument from "../swagger.json";
+import helmet from "helmet";
 
 config();
 
@@ -22,6 +23,7 @@ app.use(cors({ credentials: true, origin: "http://hubservis.io" }));
 app.use(cookieParser());
 app.use(express.urlencoded({ limit: '15mb', extended: true }))
 app.use(express.json({ limit: '15mb' }));
+app.use(helmet())
 app.use(routes);
 
 app.use(
@@ -34,7 +36,7 @@ app.listen(3000, () =>
   console.log("server is running in http://localhost:3000")
 );
 
-// captura os erros não tratados
+// captura os errors não tratados
 // se não tiver ele o sistema quebra e para de receber requisições
 process.on('uncaughtException', (error, origin) => {
   console.log(`\n${origin} signal received. \n${error}`)

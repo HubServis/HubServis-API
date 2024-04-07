@@ -7,12 +7,8 @@ import {
   IUsersRepository,
   ResRegisterUser,
 } from "../../../../repositories/UsersRepository";
-import { sign } from "jsonwebtoken";
-import fs from "fs";
-import { File } from "buffer";
 import { upload } from "../../../aws";
 import { config } from "dotenv";
-import { log } from "console";
 
 export class UserRepositoryPostgres implements IUsersRepository {
   public async create(props: User): Promise<Error | ResRegisterUser> {

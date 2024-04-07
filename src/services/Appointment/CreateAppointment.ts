@@ -1,4 +1,4 @@
-import { Appointment } from "../../entities/Appointment";
+// import { Appointment } from "../../entities/Appointment";
 import { IAppointmentsRepository, ICreateAppointment } from "../../repositories/AppointmentRepository";
 
 export class CreateAppointmentService {

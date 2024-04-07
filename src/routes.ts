@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 import UserController from "./controllers/UserController";
-import SessionController from "./controllers/SessionController";
+// import SessionController from "./controllers/SessionController";
 import BusinessController from "./controllers/BusinessController";
 import ServiceController from "./controllers/ServiceController";
 import ProfessionalController from "./controllers/ProfessionalController";
@@ -9,6 +9,7 @@ import BenefitController from "./controllers/BenefitController";
 import PlanController from "./controllers/PlanController";
 
 import { cookieGateway } from "./middleware/cookie";
+import { signinHandler } from "./middleware/signinHandler";
 
 import AppointmentController from "./controllers/AppointmentController";
 import CategoryController from "./controllers/CategoryController";
@@ -22,7 +23,7 @@ const routes = Router();
 
 // LOGIN
 routes.get("/logout", cookieGateway([]));
-routes.post("/login", SessionController.handle, cookieGateway([]));
+routes.post("/login", signinHandler);
 
 // USER
 routes.get("/users", UserController.find);

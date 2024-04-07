@@ -2,8 +2,6 @@ import { NextFunction, Request, Response } from "express";
 
 import { UserRepositoryPostgres } from "../infra/database/postgres/implementations/UserRepository";
 
-import { ICookie } from "../interfaces/cookie";
-
 import { GetUserPermissions } from "../services/user/getUserPermissions";
 
 import { config } from "dotenv";
@@ -63,7 +61,7 @@ export const cookieGateway = (permissions?: string[]) => {
   };
 };
 
-const createCookie = (req: Request, res: Response) => {
+const createCookie = (_req: Request, res: Response) => {
   try {
     config();
 
@@ -80,17 +78,8 @@ const createCookie = (req: Request, res: Response) => {
     const threeHours = 3 * 60 * 60 * 1000;
     const expiration = Number(new Date(Date.now() + threeHours));
 
-    res.cookie("resigned", "resign", {
-      maxAge: 60 * 60 * 5 * 1000,
-      httpOnly: true,
-      domain: process.env.COOKIE_DOMAIN,
-      path: "/",
-      sameSite: "strict",
-      // secure: true, use it when https is enabled = on server
-    });
-
     res.cookie("hubservis", cookie, {
-      maxAge: expiration,
+      expires: new Date(expiration),
       httpOnly: true,
       domain: process.env.COOKIE_DOMAIN,
       path: "/",
@@ -135,7 +124,7 @@ const revalidateCookie = (req: Request, res: Response) => {
 const verifyAccess = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  _next: NextFunction,
   permissions: string[],
 ): Promise<Boolean | Error | Response> => {
   try {
@@ -145,7 +134,7 @@ const verifyAccess = async (
 
     if (!cookieData) return res.status(401).json("User not have cookie");
 
-    if (cookieData.access.some((access) => access === req.path)) return true;
+    if (cookieData.access.some((access: any) => access === req.path)) return true;
 
     console.log("cookieData on (145)", cookieData);
 
@@ -190,15 +179,15 @@ const logout = async (req: Request, res: Response) => {
 
     res.json(true).status(200);
   } catch (err) {
-    throw new Error(err);
-
     res.json(false).status(500);
+
+    throw new Error(err);
   }
 };
 
 export const decriptCookie = (
   req: Request,
-  res: Response,
+  _res: Response,
 ): { token: string; userId: string; access: any } | false => {
   config();
 
