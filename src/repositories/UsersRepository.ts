@@ -1,5 +1,3 @@
-import { Plan } from "../entities/Plan";
-
 import { User } from "../entities/User";
 
 export interface ResRegisterUser {

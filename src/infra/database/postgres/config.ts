@@ -7,11 +7,12 @@ config();
 
 export const options: DataSourceOptions & SeederOptions = {
   type: 'postgres',
-  host: process.env.POSTGRES_HOST,
-  port: Number(process.env.POSTGRES_PORT),
-  username: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASS,
+  url: process.env.DATABASE_URL,
   database: process.env.POSTGRES_DB,
+  // host: process.env.POSTGRES_HOST,
+  // port: Number(process.env.POSTGRES_PORT),
+  // username: process.env.POSTGRES_USER,
+  // password: process.env.POSTGRES_PASS,
   seeds: ["./src/infra/seeding/seeds/index.ts"],
   migrations: ["./src/infra/database/migrations"],
   entities: ["./src/infra/database/postgres/models/**.ts"],

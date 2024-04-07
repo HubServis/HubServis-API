@@ -1,38 +1,56 @@
-import { compare } from "bcrypt";
 import Database from "../config";
-import { User as UserSchema } from "../models/User";
+
+import { Session as SessionSchema } from "../models/Session";
+
 import {
   ISessionRepository,
   UserRequest,
 } from "../../../../repositories/SessionRepository";
-import { Token } from "../../../../utils/token";
 
 export class SessionRepositoryPostgres implements ISessionRepository {
-  public async handle(props: UserRequest): Promise<Error | any> {
-    const { email, password } = props;
+  public async handle(
+    props: UserRequest,
+  ): Promise<Error | Omit<SessionSchema | "id", "createdAt">> {
+    try {
+      const { email, user, expiration } = props;
 
-    const repo = (await Database).getRepository(UserSchema);
+      const sessionRepository = (await Database).getRepository(SessionSchema);
 
-    const user = await repo.findOne({
-      where: { email: email },
-      select: {
-        id: true,
-        password: true,
-      },
-    });
+      const session = await sessionRepository.findOne({
+        where: { email: email },
+      });
 
-    if (!user) {
-      return new Error("User does not exists!");
+      if (session) {
+        return session;
+      }
+
+      await sessionRepository.insert({
+        email,
+        userId: user,
+        expiresAt: expiration,
+      });
+
+      return { email, userId: user, expiresAt: expiration };
+    } catch (err) {
+      return new Error(err.message);
     }
+  }
 
-    const passwordMatch = await compare(password, user.password);
+  public async isExpired(expiration: number): Promise<Error |boolean> {
+    try {
+      const sessionRepository = (await Database).getRepository(SessionSchema);
 
-    if (!passwordMatch) {
-      return new Error("User or Password incorrect");
+      const session = await sessionRepository.findOne({
+        where: { expiresAt: expiration },
+      });
+
+      if (!session) {
+        return true;
+      }
+
+      return false;
+    } catch (err) {
+      return new Error(err.message);
     }
-
-    const token = new Token().sign(user);
-
-    return { token, userId: user.id };
   }
 }

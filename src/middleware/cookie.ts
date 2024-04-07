@@ -2,8 +2,6 @@ import { NextFunction, Request, Response } from "express";
 
 import { UserRepositoryPostgres } from "../infra/database/postgres/implementations/UserRepository";
 
-import { ICookie } from "../interfaces/cookie";
-
 import { GetUserPermissions } from "../services/user/getUserPermissions";
 
 import { config } from "dotenv";
@@ -62,9 +60,15 @@ export const cookieGateway = (permissions?: string[]) => {
 	};
 };
 
+<<<<<<< HEAD
 const createCookie = (req: Request, res: Response) => {
 	try {
 		config();
+=======
+const createCookie = (_req: Request, res: Response) => {
+  try {
+    config();
+>>>>>>> 4c6bac6 (feat: review signinHandler)
 
 		const { token, userId } = res.locals;
 
@@ -79,6 +83,7 @@ const createCookie = (req: Request, res: Response) => {
 		const threeHours = 3 * 60 * 60 * 1000;
 		const expiration = Number(new Date(Date.now() + threeHours));
 
+<<<<<<< HEAD
 		res.cookie("resigned", "resign", {
 			maxAge: 60 * 60 * 5 * 1000,
 			httpOnly: true,
@@ -103,6 +108,21 @@ const createCookie = (req: Request, res: Response) => {
 	} catch (err) {
 		return res.status(500).json(`There was an error creating cookie: ${err}`);
 	}
+=======
+    res.cookie("hubservis", cookie, {
+      expires: new Date(expiration),
+      httpOnly: true,
+      domain: process.env.COOKIE_DOMAIN,
+      path: "/",
+      sameSite: "strict",
+      // secure: true, use it when https is enabled = on server
+      // signed: true, on server
+    });
+    res.json(true).status(201);
+  } catch (err) {
+    return res.status(500).json(`There was an error creating cookie: ${err}`);
+  }
+>>>>>>> 4c6bac6 (feat: review signinHandler)
 };
 
 const revalidateCookie = (req: Request, res: Response) => {
@@ -134,10 +154,17 @@ const revalidateCookie = (req: Request, res: Response) => {
 };
 
 const verifyAccess = async (
+<<<<<<< HEAD
 	req: Request,
 	res: Response,
 	next: NextFunction,
 	permissions: string[]
+=======
+  req: Request,
+  res: Response,
+  _next: NextFunction,
+  permissions: string[],
+>>>>>>> 4c6bac6 (feat: review signinHandler)
 ): Promise<Boolean | Error | Response> => {
 	try {
 		config();
@@ -146,9 +173,13 @@ const verifyAccess = async (
 
 		if (!cookieData) return res.status(401).json({message: "User not have cookie"});
 
+<<<<<<< HEAD
 		if (cookieData.access.length > 0) {
 			if (cookieData.access?.some((access) => access === req.path)) return true;
 		}
+=======
+    if (cookieData.access.some((access: any) => access === req.path)) return true;
+>>>>>>> 4c6bac6 (feat: review signinHandler)
 
 		// console.log("cookieData on (145)", cookieData);
 
@@ -192,6 +223,7 @@ const logout = async (req: Request, res: Response) => {
 
 		log("here I log", " cookies: ", req.cookies);
 
+<<<<<<< HEAD
 		res.json(true).status(200);
 	} catch (err) {
 		throw new Error(err);
@@ -203,6 +235,19 @@ const logout = async (req: Request, res: Response) => {
 export const decriptCookie = (
 	req: Request,
 	res: Response
+=======
+    res.json(true).status(200);
+  } catch (err) {
+    res.json(false).status(500);
+
+    throw new Error(err);
+  }
+};
+
+export const decriptCookie = (
+  req: Request,
+  _res: Response,
+>>>>>>> 4c6bac6 (feat: review signinHandler)
 ): { token: string; userId: string; access: any } | false => {
 	config();
 

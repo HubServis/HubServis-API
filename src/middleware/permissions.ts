@@ -12,11 +12,11 @@ export function is(permissionsRoutes: string[]) {
     const userRepository = (await Database).getRepository(UserSchema);
 
     const user = await userRepository.findOne({
-			where: { id: userReq.id },
-			relations: {
-        plan: true
+      where: { id: userReq.id },
+      relations: {
+        plan: true,
       },
-		});
+    });
 
     if (!user) return res.status(400).json("User does not exists!");
 
@@ -50,15 +50,15 @@ export function can(rolesRoutes: string[]) {
 
     if (!user) return res.status(400).json("User does not exists!");
 
-    const benefitsRolesIsPermited = user.plan.benefits
+    const benefitsRolesIsPermitted = user.plan.benefits
       .map((benefit) => benefit.role)
       .some((role) => rolesRoutes.includes(role));
 
-    if (!benefitsRolesIsPermited)
+    if (!benefitsRolesIsPermitted)
       return res
         .status(401)
         .json(
-          `Unauthorized, This Plan ${user.plan.name} does not offer this permission!`
+          `Unauthorized, This Plan ${user.plan.name} does not offer this permission!`,
         )
         .end();
 

@@ -9,8 +9,7 @@ import { DeletePlanUserService } from "../services/user/DeletePlanUser";
 import { FindOneUserService } from "../services/user/findOneUser";
 import { UpdateUserService } from "../services/user/updateUserService";
 import { GetUserPermissions } from "../services/user/getUserPermissions";
-import { on } from "events";
-import { cookieGateway, decriptCookie } from "../middleware/cookie";
+import { decriptCookie } from "../middleware/cookie";
 
 const createUserService = new CreateUserService(new UserRepositoryPostgres());
 const findUserService = new FindUserService(new UserRepositoryPostgres());
@@ -38,7 +37,14 @@ class UserController implements IUserController {
         image,
       });
       const createdUser = await createUserService.execute(user);
+<<<<<<< HEAD
+=======
+
+	  console.log('createdUser', createdUser);
+
+>>>>>>> 4c6bac6 (feat: review signinHandler)
       if (createdUser instanceof Error) {
+
         return res.status(400).json(createdUser.message);
       }
 

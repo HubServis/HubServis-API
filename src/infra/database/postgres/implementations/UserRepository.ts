@@ -7,12 +7,15 @@ import {
   IUsersRepository,
   ResRegisterUser,
 } from "../../../../repositories/UsersRepository";
+<<<<<<< HEAD
 import { sign } from "jsonwebtoken";
 import fs from "fs";
 import { File } from "buffer";
 // import { upload } from "../../../aws";
+=======
+import { upload } from "../../../aws";
+>>>>>>> 4c6bac6 (feat: review signinHandler)
 import { config } from "dotenv";
-import { log } from "console";
 
 export class UserRepositoryPostgres implements IUsersRepository {
   public async create(props: User): Promise<Error | ResRegisterUser> {
