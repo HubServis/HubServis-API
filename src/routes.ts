@@ -76,7 +76,6 @@ routes.patch("/limit", cookieGateway(['appAdmin']), LimitController.patch);
 routes.delete("/limit/:id", cookieGateway(['appAdmin']), LimitController.delete);
 
 // Plan - Benefit
-
 routes.patch("/plans/addBenefit", cookieGateway(['appAdmin']), PlanController.appendBenefit);
 routes.delete("/plans/:planId/:benefitId", cookieGateway(['appAdmin']), PlanController.deleteBenefit);
 
