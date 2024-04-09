@@ -1,8 +1,10 @@
 import { Column, Entity } from "typeorm";
+
 import { BaseEntity } from "./BaseEntity";
 
 @Entity("sessions")
 export class Session extends BaseEntity {
+
   @Column()
   email: string;
 
@@ -10,7 +12,7 @@ export class Session extends BaseEntity {
   userId: string;
 
   @Column()
-  expiresAt: number;
+  expiresAt: string;
 }
 
 export default Session;

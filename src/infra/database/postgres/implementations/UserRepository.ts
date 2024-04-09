@@ -1,4 +1,4 @@
-import { hash } from "bcrypt";
+import { hashSync } from "bcryptjs";
 import Database from "../config";
 import { User } from "../../../../entities/User";
 import { User as UserSchema } from "../models/User";
@@ -12,10 +12,10 @@ import { config } from "dotenv";
 
 export class UserRepositoryPostgres implements IUsersRepository {
   public async create(props: User): Promise<Error | ResRegisterUser> {
-    const { id, username, email, password, name, cpfcnpj, plan, image } = props;
+    const { id, username, email, password, name, cpfcnpj, plan } = props;
 
     const userRepository = (await Database).getRepository(UserSchema);
-    const planRepository = (await Database).getRepository(PlanSchema);
+    // const planRepository = (await Database).getRepository(PlanSchema);
 
     const userExists = await userRepository.findOne({
       where: {
@@ -39,7 +39,11 @@ export class UserRepositoryPostgres implements IUsersRepository {
     //   },
     // });
 
-    const passwordHash = await hash(password, 8);
+    console.log("here");
+
+    const passwordHash = hashSync(password, 8);
+
+    console.log("passwordHash", passwordHash);
 
     const user = await userRepository.save({
       id,
@@ -135,9 +139,7 @@ export class UserRepositoryPostgres implements IUsersRepository {
 
     if (newImageName) {
       try {
-        const imageBuffer = Buffer.from(props.formData.image.content, "base64");
-
-        const response = await upload(
+        await upload(
           newImageName,
           props.formData?.image?.content,
           props.formData.image?.format,
@@ -233,21 +235,21 @@ export class UserRepositoryPostgres implements IUsersRepository {
       },
     });
 
-	console.log('userAccess on UserRepositoryPostgres (240)', userAccess)
+    console.log("userAccess on UserRepositoryPostgres (240)", userAccess);
 
-	if(props.requestedPermissions?.length === 0) return true;
+    if (props.requestedPermissions?.length === 0) return true;
 
-	console.log('not have permissions (244)');
+    console.log("not have permissions (244)");
 
     if (!userAccess || userAccess === null || !userAccess.plan) return false;
 
-	console.log('this user have access?', userAccess);
+    console.log("this user have access?", userAccess);
 
-  const planPermission = props.requestedPermissions.some(
-    (permission) => permission === userAccess.plan.name,
-  );
+    const planPermission = props.requestedPermissions.some(
+      (permission) => permission === userAccess.plan.name,
+    );
 
-	// console.log('this user have plan? and is permit access? (254)', planPermission);
+    // console.log('this user have plan? and is permit access? (254)', planPermission);
 
     if (planPermission) return true;
 
@@ -261,7 +263,7 @@ export class UserRepositoryPostgres implements IUsersRepository {
       return valid > 0 ? true : false;
     });
 
-	// console.log('this user have permission with the permissions requested? (268)', hasPermission)
+    // console.log('this user have permission with the permissions requested? (268)', hasPermission)
 
     if (!hasPermission) return false;
 

@@ -8,7 +8,7 @@ import { SessionRepositoryPostgres } from "../infra/database/postgres/implementa
 
 import { User as UserSchema } from "../infra/database/postgres/models/User";
 
-import bcrypt from "bcrypt";
+import { compare } from "bcryptjs";
 
 const sessionService = new SessionService(new SessionRepositoryPostgres());
 
@@ -27,14 +27,10 @@ export const signinHandler = async (req: Request, res: Response) => {
     const user = await userRepository.findOne({ where: { email } });
 
     if (!user) {
-      return res
-        .status(404)
-        .json({ message: "User not found!" });
+      return res.status(404).json({ message: "User not found!" });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
-    console.log("isPasswordValid", isPasswordValid);
+    const isPasswordValid = await compare(password, user.password);
 
     if (!isPasswordValid) {
       return res
@@ -42,21 +38,23 @@ export const signinHandler = async (req: Request, res: Response) => {
         .json({ message: "Email or password are incorrect!" });
     }
 
-    console.log("user", user);
+    const maxAgeForThreeHours = 60 * 60 * 3 * 1000;
 
-    const threeHours = 60 * 60 * 3;
-
-    const expiresIn = new Date().getTime() + threeHours;
-
-    const session = await sessionService.execute({
-      expiration: expiresIn,
+    const userId = await sessionService.create({
+      expiration: String(maxAgeForThreeHours),
       user: user.id,
       email: user.email,
     });
 
     return res
-      .cookie("session", JSON.stringify(session), {
-        expires: new Date(expiresIn),
+      .cookie("session", JSON.stringify(userId), {
+        maxAge: maxAgeForThreeHours,
+        httpOnly: true,
+        domain: process.env.COOKIE_DOMAIN,
+        path: "/",
+        sameSite: "strict",
+        secure: process.env.NODE_ENV === "production",
+        signed: process.env.NODE_ENV === "production",
       })
       .status(200)
       .end();

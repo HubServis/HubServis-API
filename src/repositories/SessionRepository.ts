@@ -1,10 +1,11 @@
 export type UserRequest = {
   email: string;
   user: string;
-  expiration: number;
+  expiration: string;
 };
 
 export interface ISessionRepository {
-  handle(props: UserRequest): Promise<Error | any>;
-  isExpired(expiration: number): Promise<Error | boolean>;
+  createSession(props: UserRequest): Promise<Error | any>;
+  hasToken(user: string): Promise<any>;
+  removeSession(user: string): Promise<Error | boolean>;
 }

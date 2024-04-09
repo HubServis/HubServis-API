@@ -1,28 +1,31 @@
 import { Router } from "express";
 
+import PlanController from "./controllers/PlanController";
 import UserController from "./controllers/UserController";
 // import SessionController from "./controllers/SessionController";
 import BusinessController from "./controllers/BusinessController";
 import ServiceController from "./controllers/ServiceController";
-import ProfessionalController from "./controllers/ProfessionalController";
 import BenefitController from "./controllers/BenefitController";
-import PlanController from "./controllers/PlanController";
+import ProfessionalController from "./controllers/ProfessionalController";
 
 import { cookieGateway } from "./middleware/cookie";
 import { signinHandler } from "./middleware/signinHandler";
+import { logoutHandler } from "./middleware/logoutHandler";
+import { refreshHandler } from "./middleware/refreshHandler";
 
-import AppointmentController from "./controllers/AppointmentController";
-import CategoryController from "./controllers/CategoryController";
-import RatingController from "./controllers/RatingController";
 import LimitController from "./controllers/LimitController";
 import ExtraController from "./controllers/ExtraController";
-import EspedientController from "./controllers/EspedientController";
+import RatingController from "./controllers/RatingController";
+import CategoryController from "./controllers/CategoryController";
 import BlockingController from "./controllers/BlockingController";
+import EspedientController from "./controllers/EspedientController";
+import AppointmentController from "./controllers/AppointmentController";
 
 const routes = Router();
 
-// LOGIN
-routes.get("/logout", cookieGateway([]));
+// SESSION CONTROL
+routes.get("/logout", logoutHandler);
+routes.get("/refresh", refreshHandler);
 routes.post("/login", signinHandler);
 
 // USER
