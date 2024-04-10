@@ -17,12 +17,14 @@ import LimitController from "./controllers/LimitController";
 import ExtraController from "./controllers/ExtraController";
 import EspedientController from "./controllers/EspedientController";
 import BlockingController from "./controllers/BlockingController";
+import EmailController from "./controllers/EmailController";
 
 const routes = Router();
 
 // LOGIN
 routes.get("/logout", cookieGateway([]));
 routes.post("/login", SessionController.handle, cookieGateway([]));
+routes.get("/resetpassword", EmailController.resetPassword);
 
 // USER
 routes.get("/users", UserController.find);
