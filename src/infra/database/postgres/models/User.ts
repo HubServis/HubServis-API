@@ -32,6 +32,12 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
+  @Column()
+  tokenResetPassword: string;
+
+  @Column()
+  resetPasswordExpires: string;
+
   @OneToMany(() => Rating, (rating) => rating.user)
   ratings: Rating[];
 
@@ -41,7 +47,9 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   image: string;
 
-  @OneToMany(() => Appointment, (appointment) => appointment.user, { nullable: true })
+  @OneToMany(() => Appointment, (appointment) => appointment.user, {
+    nullable: true,
+  })
   appointments: Appointment[];
 
   @OneToOne(() => Business, { nullable: true })

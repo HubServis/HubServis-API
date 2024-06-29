@@ -25,6 +25,7 @@ const routes = Router();
 routes.get("/logout", cookieGateway([]));
 routes.post("/login", SessionController.handle, cookieGateway([]));
 routes.get("/resetpassword", EmailController.resetPassword);
+routes.post("/forgot_password", SessionController.forgotPassword);
 
 // USER
 routes.get("/users", UserController.find);

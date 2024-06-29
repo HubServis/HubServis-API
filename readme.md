@@ -5,6 +5,10 @@ _"Háh precisava do back rodando também para tesatr o front"_
 
 **OBS:** _No front-end do projeto HubServis contém todo o guia de como rodar tanto o ambiente front-end quanto o back-end juntos_
 
+### Token de reset password
+- expira em 1hr após ser criado.
+
+
 ---
 #### *Urgente*
 

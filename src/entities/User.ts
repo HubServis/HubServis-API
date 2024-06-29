@@ -10,6 +10,8 @@ export class User {
   public password: string;
   public plan?: Plan;
   public image?: string;
+  public tokenResetPassword?: string;
+  public resetPasswordExpires?: string;
 
   constructor(props: Omit<User, "id">, id: string = null) {
     Object.assign(this, props);
