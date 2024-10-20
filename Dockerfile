@@ -1,4 +1,4 @@
-FROM node:21-alpine as build
+FROM node:21-alpine AS build
 
 RUN apk add --no-cache curl \
     && curl -fsSL 'https://github.com/pnpm/pnpm/releases/download/v8.6.12/pnpm-linuxstatic-x64' -o /bin/pnpm \
