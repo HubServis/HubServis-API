@@ -30,7 +30,7 @@ app.use(
   swaggerUI.setup(swaggerDocument, { explorer: true })
 );
 
-app.listen(3000, () =>
+app.listen(process.env.PORT || 4000, () =>
   console.log("server is running in http://localhost:3000")
 );
 
