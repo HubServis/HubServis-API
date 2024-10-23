@@ -16,6 +16,7 @@ import { log } from "console";
 
 export class UserRepositoryPostgres implements IUsersRepository {
   public async create(props: User): Promise<Error | ResRegisterUser> {
+
     const { id, username, email, password, name, cpfcnpj, plan, image } = props;
 
     const userRepository = (await Database).getRepository(UserSchema);
@@ -247,7 +248,7 @@ export class UserRepositoryPostgres implements IUsersRepository {
 
 	console.log('this user have access?', userAccess);
 
-  const planPermission = props.requestedPermissions.some(
+  const planPermission = props.requestedPermissions?.some(
     (permission) => permission === userAccess.plan.name,
   );
 
@@ -255,10 +256,10 @@ export class UserRepositoryPostgres implements IUsersRepository {
 
     if (planPermission) return true;
 
-    const hasPermission = props.requestedPermissions.some((permission) => {
+    const hasPermission = props.requestedPermissions?.some((permission) => {
       let valid = 0;
 
-      userAccess.plan.benefits.forEach(
+      userAccess.plan.benefits?.forEach(
         (benefit) => benefit.role === permission && valid++,
       );
 

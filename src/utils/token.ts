@@ -8,13 +8,13 @@ import { config } from "dotenv";
 config();
 
 export class Token {
-  sign(user: User) {
-    return sign(
-      {
-        id: user.id,
-      },
-      process.env.SECRET_JWT,
-      { expiresIn: "4h" }
-    );
-  }
+	sign(user: User | { id: string }) {
+		return sign(
+			{
+				id: user.id,
+			},
+			process.env.SECRET_JWT,
+			{ expiresIn: "4h" }
+		);
+	}
 }

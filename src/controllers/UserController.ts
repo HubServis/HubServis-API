@@ -38,7 +38,6 @@ class UserController implements IUserController {
         image,
       });
       const createdUser = await createUserService.execute(user);
-
       if (createdUser instanceof Error) {
         return res.status(400).json(createdUser.message);
       }

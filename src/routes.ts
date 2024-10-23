@@ -28,28 +28,40 @@ routes.post("/login", SessionController.handle, cookieGateway([]));
 routes.get("/users", UserController.find);
 routes.get("/user", UserController.findOneUser);
 routes.get("/user/:userId", UserController.findOneUser);
-routes.post("/user", UserController.create, cookieGateway([]));
+routes.post("/user", UserController.create);
 routes.post("/user/permissions", cookieGateway([]));
 routes.patch("/user/update/:userId", UserController.updateUser);
 routes.patch("/user/:userId/:planName", UserController.appendPlan);
 routes.delete("/user/:userId", UserController.deletePlan);
 
 // BUSINESS
-routes.post("/business/create", cookieGateway(["basic"]), BusinessController.create);
+routes.post(
+	"/business/create",
+	cookieGateway(["basic"]),
+	BusinessController.create
+);
 routes.get("/business", BusinessController.find);
 routes.get("/business/:id", BusinessController.findOne);
-routes.delete("/business/delete/:businessId", cookieGateway(["owner"]), BusinessController.delete);
+routes.delete(
+	"/business/delete/:businessId",
+	cookieGateway(["owner"]),
+	BusinessController.delete
+);
 routes.patch("/business", cookieGateway(["owner"]), BusinessController.patch);
 
 // PROFESSIONAL
-routes.post("/professional/add", cookieGateway(['test']), ProfessionalController.addToBusiness);
+routes.post(
+	"/professional/add",
+	cookieGateway(["test"]),
+	ProfessionalController.addToBusiness
+);
 routes.get("/professionals", ProfessionalController.findProfessionals);
 
 // SERVICE
 routes.post(
-  "/service/create",
-  cookieGateway(["createService, owner"]),
-  ServiceController.create,
+	"/service/create",
+	cookieGateway(["createService, owner"]),
+	ServiceController.create
 );
 routes.get("/services", ServiceController.find);
 routes.get("/service/:serviceId", ServiceController.findOne);
@@ -59,29 +71,61 @@ routes.get("/services/highlight", ServiceController.findServicesHighlight);
 
 // BENEFITS
 routes.get("/benefit", BenefitController.find);
-routes.post("/benefit", cookieGateway(['appAdmin']), BenefitController.create);
-routes.patch("/benefit/:benefitName", cookieGateway(['appAdmin']), BenefitController.patch);
-routes.delete("/benefit/:benefitName", cookieGateway(['appAdmin']), BenefitController.delete);
+routes.post("/benefit", cookieGateway(["appAdmin"]), BenefitController.create);
+routes.patch(
+	"/benefit/:benefitName",
+	cookieGateway(["appAdmin"]),
+	BenefitController.patch
+);
+routes.delete(
+	"/benefit/:benefitName",
+	cookieGateway(["appAdmin"]),
+	BenefitController.delete
+);
 
 // PLANS
-routes.get("/plans", cookieGateway(['admin', 'appAdmin']), PlanController.find);
-routes.post("/plans", cookieGateway(['appAdmin']), PlanController.create);
-routes.patch("/plans", cookieGateway(['appAdmin']), PlanController.patch);
-routes.delete("/plans/:idPlan", cookieGateway(['appAdmin']), PlanController.delete);
+routes.get("/plans", cookieGateway(["admin", "appAdmin"]), PlanController.find);
+routes.post("/plans", cookieGateway(["appAdmin"]), PlanController.create);
+routes.patch("/plans", cookieGateway(["appAdmin"]), PlanController.patch);
+routes.delete(
+	"/plans/:idPlan",
+	cookieGateway(["appAdmin"]),
+	PlanController.delete
+);
 
 // LIMITS
-routes.post("/limit", cookieGateway(['appAdmin']), LimitController.create);
+routes.post("/limit", cookieGateway(["appAdmin"]), LimitController.create);
 routes.get("/limits", LimitController.find);
-routes.patch("/limit", cookieGateway(['appAdmin']), LimitController.patch);
-routes.delete("/limit/:id", cookieGateway(['appAdmin']), LimitController.delete);
+routes.patch("/limit", cookieGateway(["appAdmin"]), LimitController.patch);
+routes.delete(
+	"/limit/:id",
+	cookieGateway(["appAdmin"]),
+	LimitController.delete
+);
 
 // Plan - Benefit
-routes.patch("/plans/addBenefit", cookieGateway(['appAdmin']), PlanController.appendBenefit);
-routes.delete("/plans/:planId/:benefitId", cookieGateway(['appAdmin']), PlanController.deleteBenefit);
+routes.patch(
+	"/plans/addBenefit",
+	cookieGateway(["appAdmin"]),
+	PlanController.appendBenefit
+);
+routes.delete(
+	"/plans/:planId/:benefitId",
+	cookieGateway(["appAdmin"]),
+	PlanController.deleteBenefit
+);
 
 // Plan - Limits
-routes.patch("/plans/addLimit", cookieGateway(['appAdmin']), PlanController.appendLimit);
-routes.delete("/plans/:planId/:limitId", cookieGateway(['appAdmin']), PlanController.deleteLimit);
+routes.patch(
+	"/plans/addLimit",
+	cookieGateway(["appAdmin"]),
+	PlanController.appendLimit
+);
+routes.delete(
+	"/plans/:planId/:limitId",
+	cookieGateway(["appAdmin"]),
+	PlanController.deleteLimit
+);
 
 // EXTRAS
 routes.post("/extra", cookieGateway([]), ExtraController.create);
@@ -91,22 +135,54 @@ routes.patch("/extra", ExtraController.patch);
 
 // APPINTMENTS
 routes.get("/appointments", AppointmentController.find);
-routes.get("/appointments/user", cookieGateway([]), AppointmentController.findAppointmentsUser);
-routes.post("/appointment/create", cookieGateway([]), AppointmentController.create);
-routes.patch("/appointment/:id/:status", cookieGateway([]), AppointmentController.patch);
+routes.get(
+	"/appointments/user",
+	cookieGateway([]),
+	AppointmentController.findAppointmentsUser
+);
+routes.post(
+	"/appointment/create",
+	cookieGateway([]),
+	AppointmentController.create
+);
+routes.patch(
+	"/appointment/:id/:status",
+	cookieGateway([]),
+	AppointmentController.patch
+);
 
 // CATEGORY
-routes.post("/category", cookieGateway(['owner', 'manager', 'categoryManager', 'admin']), CategoryController.create);
+routes.post(
+	"/category",
+	cookieGateway(["owner", "manager", "categoryManager", "admin"]),
+	CategoryController.create
+);
 routes.get("/categories", CategoryController.find);
-routes.patch("/categories/services", cookieGateway(['owner', 'manager', 'categoryManager', 'admin']), CategoryController.appendService);
-routes.delete("/category/:categoryId",  cookieGateway(['owner', 'manager', 'categoryManager', 'admin']), CategoryController.delete);
+routes.patch(
+	"/categories/services",
+	cookieGateway(["owner", "manager", "categoryManager", "admin"]),
+	CategoryController.appendService
+);
+routes.delete(
+	"/category/:categoryId",
+	cookieGateway(["owner", "manager", "categoryManager", "admin"]),
+	CategoryController.delete
+);
 routes.get("/services/category", CategoryController.listServicesCategory);
 
 // RATING
-routes.post("/rating", cookieGateway(['basic']), RatingController.create);
-routes.delete("/rating/:ratingId", cookieGateway(['basic']), RatingController.delete);
+routes.post("/rating", cookieGateway(["basic"]), RatingController.create);
+routes.delete(
+	"/rating/:ratingId",
+	cookieGateway(["basic"]),
+	RatingController.delete
+);
 routes.get("/ratings", RatingController.findAll);
-routes.patch("/rating/:ratingId", cookieGateway(['basic']), RatingController.patch);
+routes.patch(
+	"/rating/:ratingId",
+	cookieGateway(["basic"]),
+	RatingController.patch
+);
 
 // ESPEDIENT
 routes.post("/espedient", cookieGateway([]), EspedientController.create);
@@ -117,7 +193,7 @@ routes.patch(
 	EspedientController.patch
 );
 
-routes.post('/blocking', BlockingController.create);
+routes.post("/blocking", BlockingController.create);
 routes.get("/blockings", BlockingController.find);
 
 export { routes };

@@ -8,208 +8,212 @@ import { GetUserPermissions } from "../services/user/getUserPermissions";
 
 import { config } from "dotenv";
 import { log } from "console";
+import { Token } from "../utils/token";
 
 const getUserPermissions = new GetUserPermissions(new UserRepositoryPostgres());
 
 export const cookieGateway = (permissions?: string[]) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
-    console.log("entered on gateway");
+	return async (req: Request, res: Response, next: NextFunction) => {
+		console.log("entered on gateway");
 
-    try {
-      if (req.path === "/login" || req.path === "/user") {
-        const result = createCookie(req, res);
+		try {
+			if (req.path === "/login" || req.path === "/user") {
+				const result = createCookie(req, res);
 
-        console.log("createCookie cookie result", result);
+				console.log("createCookie cookie result", result);
 
-        return res.json(result).status(200);
-      }
+				return res.json(result).status(200);
+			}
 
-      if (req.path === "/user/permissions") {
-        const result: Boolean | Response | Error = await verifyAccess(
-          req,
-          res,
-          next,
-          req.body.permissions,
-        );
+			if (req.path === "/user/permissions") {
+				const result: Boolean | Response | Error = await verifyAccess(
+					req,
+					res,
+					next,
+					req.body.permissions
+				);
 
-        // console.log("verifyAccess result (30)", result);
+				// console.log("verifyAccess result (30)", result);
 
-        if (result !== true) return res.json(false).status(401);
-        else return res.json(true).status(200);
-      }
+				if (result !== true) return res.json(false).status(401);
+				else return res.json(true).status(200);
+			}
 
-      if (req.path === "/logout") {
-        console.log(`user ${req.cookies}, logged out (37)`);
-        logout(req, res);
+			if (req.path === "/logout") {
+				console.log(`user ${req.cookies}, logged out (37)`);
+				logout(req, res);
 
-        return;
-      }
+				return;
+			}
 
-      {
-        /* if(!req.cookies["hubservis"])
+			{
+				/* if(!req.cookies["hubservis"])
         	revalidateCookie(req, res); */
 
-        const result = await verifyAccess(req, res, next, permissions);
+				const result = await verifyAccess(req, res, next, permissions);
 
-        console.log("verifyAccess result (49)", result);
+				console.log("verifyAccess result (49)", result);
 
-        if (result !== true)
-          return res.status(401).json("User not passed on verifyAccess!");
-        else next();
-      }
-    } catch (err) {
-      throw new Error(`Error to proceed gateway: ${err}`);
-    }
-  };
+				if (result !== true)
+					return res.status(401).json("User not passed on verifyAccess!");
+				else next();
+			}
+		} catch (err) {
+			throw new Error(`Error to proceed gateway: ${err}`);
+		}
+	};
 };
 
 const createCookie = (req: Request, res: Response) => {
-  try {
-    config();
+	try {
+		config();
 
-    const { token, userId } = res.locals;
+		const { token, userId } = res.locals;
 
-    const cookie = btoa(
-      JSON.stringify({
-        token: token,
-        userId: userId,
-        access: [],
-      }),
-    );
+		const cookie = btoa(
+			JSON.stringify({
+				token: token,
+				userId: userId,
+				access: [],
+			})
+		);
 
-    const threeHours = 3 * 60 * 60 * 1000;
-    const expiration = Number(new Date(Date.now() + threeHours));
+		const threeHours = 3 * 60 * 60 * 1000;
+		const expiration = Number(new Date(Date.now() + threeHours));
 
-    res.cookie("resigned", "resign", {
-      maxAge: 60 * 60 * 5 * 1000,
-      httpOnly: true,
-      domain: process.env.COOKIE_DOMAIN,
-      path: "/",
-      sameSite: "strict",
-      // secure: true, use it when https is enabled = on server
-    });
+		res.cookie("resigned", "resign", {
+			maxAge: 60 * 60 * 5 * 1000,
+			httpOnly: true,
+			domain: process.env.COOKIE_DOMAIN,
+			path: "/",
+			sameSite: "strict",
+			// secure: true, use it when https is enabled = on server
+		});
 
-    res.cookie("hubservis", cookie, {
-      maxAge: expiration,
-      httpOnly: true,
-      domain: process.env.COOKIE_DOMAIN,
-      path: "/",
-      sameSite: "strict",
-      // secure: true, use it when https is enabled = on server
-      // signed: true, on server
-    });
-    res.json(true).status(201);
-  } catch (err) {
-    return res.status(500).json(`There was an error creating cookie: ${err}`);
-  }
+		res.cookie("hubservis", cookie, {
+			maxAge: expiration,
+			httpOnly: true,
+			domain: process.env.COOKIE_DOMAIN,
+			path: "/",
+			sameSite: "strict",
+			// secure: true, use it when https is enabled = on server
+			// signed: true, on server
+		});
+
+		res.json(true).status(201);
+	} catch (err) {
+		return res.status(500).json(`There was an error creating cookie: ${err}`);
+	}
 };
 
 const revalidateCookie = (req: Request, res: Response) => {
-  try {
-    config();
+	try {
+		config();
 
-    const cookie = req.cookies["hubservis"];
+		const cookie = req.cookies["hubservis"];
 
-    if (cookie) return true;
+		if (cookie) return true;
 
-    const revalidate = req.cookies["resigned"];
+		const revalidate = req.cookies["resigned"];
 
-    if (!revalidate) return res.status(401).json("User does not have cookie!");
+		if (!revalidate) return res.status(401).json("User does not have cookie!");
 
-    res.cookie("hubservis", cookie, {
-      maxAge: 60 * 60 * 4 * 1000,
-      httpOnly: true,
-      domain: process.env.COOKIE_DOMAIN,
-      sameSite: "strict",
-      // secure: true, use it when https is enabled = on server
-      // signed: true, on server
-      path: "/",
-    });
+		res.cookie("hubservis", cookie, {
+			maxAge: 60 * 60 * 4 * 1000,
+			httpOnly: true,
+			domain: process.env.COOKIE_DOMAIN,
+			sameSite: "strict",
+			// secure: true, use it when https is enabled = on server
+			// signed: true, on server
+			path: "/",
+		});
 
-    return true;
-  } catch (err) {
-    new Error(`Error revalidate Cookie: ${err}`);
-  }
+		return true;
+	} catch (err) {
+		new Error(`Error revalidate Cookie: ${err}`);
+	}
 };
 
 const verifyAccess = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-  permissions: string[],
+	req: Request,
+	res: Response,
+	next: NextFunction,
+	permissions: string[]
 ): Promise<Boolean | Error | Response> => {
-  try {
-    config();
+	try {
+		config();
 
-    const cookieData = decriptCookie(req, res);
+		const cookieData = decriptCookie(req, res);
 
-    if (!cookieData) return res.status(401).json("User not have cookie");
+		if (!cookieData) return res.status(401).json("User not have cookie");
 
-    if (cookieData.access.some((access) => access === req.path)) return true;
+		if (cookieData.access.length > 0) {
+			if (cookieData.access?.some((access) => access === req.path)) return true;
+		}
 
-    console.log("cookieData on (145)", cookieData);
+		console.log("cookieData on (145)", cookieData);
 
-    const result = await getUserPermissions.execute({
-      userId: cookieData.userId,
-      requestedPermissions: permissions,
-    });
+		const result = await getUserPermissions.execute({
+			userId: cookieData.userId,
+			requestedPermissions: permissions,
+		});
 
-    console.log("this is the result for getUserPermissions (152)", result);
+		console.log("this is the result for getUserPermissions (152)", result);
 
-    if (result !== true) return res.status(401).json("User not have access!");
+		if (result !== true) return res.status(401).json("User not have access!");
 
-    cookieData.access.push(req.path);
+		cookieData.access.push(req.path);
 
-    const reasignedCookie = btoa(JSON.stringify(cookieData));
+		const reasignedCookie = btoa(JSON.stringify(cookieData));
 
-    res.cookie("hubservis", reasignedCookie, {
-      maxAge: 60 * 60 * 3 * 1000,
-      httpOnly: true,
-      domain: process.env.COOKIE_DOMAIN,
-      sameSite: "strict",
-      // secure: true, use it when https is enabled = on server
-      // signed: true, on server
-      path: "/",
-    });
+		res.cookie("hubservis", reasignedCookie, {
+			maxAge: 60 * 60 * 3 * 1000,
+			httpOnly: true,
+			domain: process.env.COOKIE_DOMAIN,
+			sameSite: "strict",
+			// secure: true, use it when https is enabled = on server
+			// signed: true, on server
+			path: "/",
+		});
 
-    return result;
-  } catch (err) {
-    return res.status(500).json(`There was an error on verifyAccess: ${err}`);
-  }
+		return result;
+	} catch (err) {
+		return res.status(500).json(`There was an error on verifyAccess: ${err}`);
+	}
 };
 
 const logout = async (req: Request, res: Response) => {
-  try {
-    res.setHeader(
-      "set-cookie",
-      `hubservis=; path=/; sameSite=strict; max-age=0; httpOnly=true; domain=${process.env.COOKIE_DOMAIN};`,
-    );
-    res.clearCookie("resigned");
+	try {
+		res.setHeader(
+			"set-cookie",
+			`hubservis=; path=/; sameSite=strict; max-age=0; httpOnly=true; domain=${process.env.COOKIE_DOMAIN};`
+		);
+		res.clearCookie("resigned");
 
-    log("here I log", " cookies: ", req.cookies);
+		log("here I log", " cookies: ", req.cookies);
 
-    res.json(true).status(200);
-  } catch (err) {
-    throw new Error(err);
+		res.json(true).status(200);
+	} catch (err) {
+		throw new Error(err);
 
-    res.json(false).status(500);
-  }
+		res.json(false).status(500);
+	}
 };
 
 export const decriptCookie = (
-  req: Request,
-  res: Response,
+	req: Request,
+	res: Response
 ): { token: string; userId: string; access: any } | false => {
-  config();
+	config();
 
-  const cookie = req.cookies["hubservis"];
+	const cookie = req.cookies["hubservis"];
 
-  if (!cookie || cookie === undefined) return false;
+	if (!cookie || cookie === undefined) return false;
 
-  const buffCookie = Buffer.from(cookie, "base64");
-  const cookieData: { token: string; userId: string; access: any } = JSON.parse(
-    buffCookie.toString("ascii"),
-  );
+	const buffCookie = Buffer.from(cookie, "base64");
+	const cookieData: { token: string; userId: string; access: any } = JSON.parse(
+		buffCookie.toString("ascii")
+	);
 
-  return cookieData;
+	return cookieData;
 };
