@@ -5,29 +5,29 @@ import { SessionRepositoryPostgres } from "../infra/database/postgres/implementa
 const sessionService = new SessionService(new SessionRepositoryPostgres());
 
 class SessionController {
-  async handle(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<Response> {
-    const { email, password } = req.body;
+	async handle(
+		req: Request,
+		res: Response,
+		next: NextFunction
+	): Promise<Response> {
+		const { email, password } = req.body;
 
-    try {
-      const result = await sessionService.execute({ email, password });
+		try {
+			const result = await sessionService.execute({ email, password });
 
-      if (result instanceof Error) {
-        return res.status(400).json(result.message);
-      }
+			if (result instanceof Error) {
+				return res.status(400).json(result.message);
+			}
 
-      res.locals = result;
+			res.locals = result;
 
-      next();
-	  // res.json('logged').status(201);
-    } catch (err) {
-      console.log(err.message);
-      return res.status(500).json("Unexpected error");
-    }
-  }
+			next();
+			// res.json('logged').status(201);
+		} catch (err) {
+			console.log(err.message);
+			return res.status(500).json("Unexpected error");
+		}
+	}
 }
 
 export default new SessionController();

@@ -37,7 +37,7 @@ routes.delete("/user/:userId", UserController.deletePlan);
 // BUSINESS
 routes.post(
 	"/business/create",
-	cookieGateway(["basic"]),
+	cookieGateway(["basic", "appAdmin"]),
 	BusinessController.create
 );
 routes.get("/business", BusinessController.find);

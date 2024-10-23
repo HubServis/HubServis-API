@@ -46,18 +46,16 @@ export const cookieGateway = (permissions?: string[]) => {
 				return;
 			}
 
-			{
-				/* if(!req.cookies["hubservis"])
+			/* if(!req.cookies["hubservis"])
         	revalidateCookie(req, res); */
 
-				const result = await verifyAccess(req, res, next, permissions);
+			const result = await verifyAccess(req, res, next, permissions);
 
-				console.log("verifyAccess result (49)", result);
+			console.log("verifyAccess result (49)", result);
 
-				if (result !== true)
-					return res.status(401).json("User not passed on verifyAccess!");
-				else next();
-			}
+			if (result !== true)
+				return res.status(401).json("User not passed on verifyAccess!");
+			else next();
 		} catch (err) {
 			throw new Error(`Error to proceed gateway: ${err}`);
 		}
@@ -189,6 +187,7 @@ const logout = async (req: Request, res: Response) => {
 			`hubservis=; path=/; sameSite=strict; max-age=0; httpOnly=true; domain=${process.env.COOKIE_DOMAIN};`
 		);
 		res.clearCookie("resigned");
+		res.clearCookie("hubservis");
 
 		log("here I log", " cookies: ", req.cookies);
 
