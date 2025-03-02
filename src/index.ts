@@ -15,7 +15,9 @@ const app = express();
 
 //Reduce sniff chances to succecede
 app.disable('x-powered-by')
-app.use(cors({ credentials: true, origin: "http://hubservis.io" }));
+// app.use(cors({ credentials: true, origin: "http://hubservis.io" })); // in production
+app.use(cors({ credentials: true, origin: "http://localhost:5173" })); // in development
+
 /* use it when on server
 	app.use(cookieParser('somekeycodetosecurecookiewithsomecaracters'));
 */
@@ -36,11 +38,11 @@ app.listen(process.env.PORT || 4000, () =>
 
 // captura os erros não tratados
 // se não tiver ele o sistema quebra e para de receber requisições
-process.on('uncaughtException', (error, origin) => {
-  console.log(`\n${origin} signal received. \n${error}`)
-})
+// process.on('uncaughtException', (error, origin) => {
+//   console.log(`\n${origin} signal received. \n${error}`)
+// })
 
 // se nao tiver ele, o sistema joga um warn
-process.on('unhandledRejection', (error) => {
-  console.log(`\nunhandledRejection signal received. \n${error}`)
-})
+// process.on('unhandledRejection', (error) => {
+//   console.log(`\nunhandledRejection signal received. \n${error}`)
+// })

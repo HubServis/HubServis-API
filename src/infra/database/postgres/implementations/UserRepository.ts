@@ -10,7 +10,7 @@ import {
 import { sign } from "jsonwebtoken";
 import fs from "fs";
 import { File } from "buffer";
-import { upload } from "../../../aws";
+// import { upload } from "../../../aws";
 import { config } from "dotenv";
 import { log } from "console";
 
@@ -142,11 +142,12 @@ export class UserRepositoryPostgres implements IUsersRepository {
       try {
         const imageBuffer = Buffer.from(props.formData.image.content, "base64");
 
-        const response = await upload(
-          newImageName,
-          props.formData?.image?.content,
-          props.formData.image?.format,
-        );
+        // const response = await upload(
+        //   newImageName,
+        //   props.formData?.image?.content,
+        //   props.formData.image?.format,
+        // );
+        const response = true
       } catch (err) {
         return new Error(`There had an error saving this image: ${err}`);
       }
