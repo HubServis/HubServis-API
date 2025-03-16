@@ -62,6 +62,7 @@ export const signinHandler = async (
         path: "/",
         sameSite: "strict",
       })
+      .json("OK")
       .end();
   } catch (error) {
     console.log("There was an error", error);
