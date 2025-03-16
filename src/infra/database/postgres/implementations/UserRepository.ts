@@ -7,19 +7,15 @@ import {
   IUsersRepository,
   ResRegisterUser,
 } from "../../../../repositories/UsersRepository";
-<<<<<<< HEAD
 import { sign } from "jsonwebtoken";
 import fs from "fs";
 import { File } from "buffer";
 // import { upload } from "../../../aws";
-=======
 import { upload } from "../../../aws";
->>>>>>> 4c6bac6 (feat: review signinHandler)
 import { config } from "dotenv";
 
 export class UserRepositoryPostgres implements IUsersRepository {
   public async create(props: User): Promise<Error | ResRegisterUser> {
-
     const { id, username, email, password, name, cpfcnpj, plan, image } = props;
 
     const userRepository = (await Database).getRepository(UserSchema);
@@ -150,7 +146,7 @@ export class UserRepositoryPostgres implements IUsersRepository {
         //   props.formData?.image?.content,
         //   props.formData.image?.format,
         // );
-        const response = true
+        const response = true;
       } catch (err) {
         return new Error(`There had an error saving this image: ${err}`);
       }
@@ -242,21 +238,21 @@ export class UserRepositoryPostgres implements IUsersRepository {
       },
     });
 
-	// console.log('userAccess on UserRepositoryPostgres (240)', userAccess)
+    // console.log('userAccess on UserRepositoryPostgres (240)', userAccess)
 
-	if(props.requestedPermissions?.length === 0) return true;
+    if (props.requestedPermissions?.length === 0) return true;
 
-	// console.log('not have permissions (244)');
+    // console.log('not have permissions (244)');
 
     if (!userAccess || userAccess === null || !userAccess.plan) return false;
 
-	// console.log('this user have access?', userAccess);
+    // console.log('this user have access?', userAccess);
 
-  const planPermission = props.requestedPermissions?.some(
-    (permission) => permission === userAccess.plan.name,
-  );
+    const planPermission = props.requestedPermissions?.some(
+      (permission) => permission === userAccess.plan.name,
+    );
 
-	// console.log('this user have plan? and is permit access? (254)', planPermission);
+    // console.log('this user have plan? and is permit access? (254)', planPermission);
 
     if (planPermission) return true;
 
@@ -270,7 +266,7 @@ export class UserRepositoryPostgres implements IUsersRepository {
       return valid > 0 ? true : false;
     });
 
-	// console.log('this user have permission with the permissions requested? (268)', hasPermission)
+    // console.log('this user have permission with the permissions requested? (268)', hasPermission)
 
     if (!hasPermission) return false;
 

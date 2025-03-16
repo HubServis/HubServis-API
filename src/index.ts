@@ -1,7 +1,7 @@
 import express from "express";
 
 import { config } from "dotenv";
-import cookieParser from 'cookie-parser';
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import "./infra/database/postgres/config";
 import { routes } from "./routes";
@@ -15,36 +15,38 @@ config();
 const app = express();
 
 //Reduce sniff chances to succecede
-app.disable('x-powered-by')
+app.disable("x-powered-by");
 // app.use(cors({ credentials: true, origin: "http://hubservis.io" })); // in production
-app.use(cors({ credentials: true, origin: "http://localhost:5173" })); // in development
+app.use(cors({ credentials: true, origin: true })); // in development
 
 /* use it when on server
 	app.use(cookieParser('somekeycodetosecurecookiewithsomecaracters'));
 */
 app.use(cookieParser());
-app.use(express.urlencoded({ limit: '15mb', extended: true }))
-app.use(express.json({ limit: '15mb' }));
-app.use(helmet())
+app.use(express.urlencoded({ limit: "15mb", extended: true }));
+app.use(express.json({ limit: "15mb" }));
+app.use(helmet());
 app.use(routes);
 
 app.use(
   "/api-docs",
   swaggerUI.serve,
-  swaggerUI.setup(swaggerDocument, { explorer: true })
+  swaggerUI.setup(swaggerDocument, { explorer: true }),
 );
 
 app.listen(process.env.PORT || 4000, () =>
-  console.log(`server is running in http://localhost:${process.env.PORT || 4000}`)
+  console.log(
+    `server is running in http://localhost:${process.env.PORT || 4000}`,
+  ),
 );
 
 // captura os errors não tratados
 // se não tiver ele o sistema quebra e para de receber requisições
-// process.on('uncaughtException', (error, origin) => {
-//   console.log(`\n${origin} signal received. \n${error}`)
-// })
+process.on("uncaughtException", (error, origin) => {
+  console.log(`\n${origin} signal received. \n${error}`);
+});
 
 // se nao tiver ele, o sistema joga um warn
-// process.on('unhandledRejection', (error) => {
-//   console.log(`\nunhandledRejection signal received. \n${error}`)
-// })
+process.on("unhandledRejection", (error) => {
+  console.log(`\nunhandledRejection signal received. \n${error}`);
+});

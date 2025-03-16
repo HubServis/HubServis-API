@@ -37,14 +37,10 @@ class UserController implements IUserController {
         image,
       });
       const createdUser = await createUserService.execute(user);
-<<<<<<< HEAD
-=======
 
-	  console.log('createdUser', createdUser);
+      console.log("createdUser", createdUser);
 
->>>>>>> 4c6bac6 (feat: review signinHandler)
       if (createdUser instanceof Error) {
-
         return res.status(400).json(createdUser.message);
       }
 

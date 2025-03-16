@@ -1,15 +1,17 @@
-import { Column, Entity } from "typeorm";
-import { BaseEntity } from "./BaseEntity";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("sessions")
-export class Session extends BaseEntity {
+export class Session {
+  @PrimaryGeneratedColumn()
+  id: string;
+
   @Column()
   email: string;
 
   @Column()
   userId: string;
 
-  @Column()
+  @Column({ type: "bigint" })
   expiresAt: number;
 }
 

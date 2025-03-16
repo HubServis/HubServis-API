@@ -1,6 +1,6 @@
 import Database from "../infra/database/postgres/config";
 
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
 import { SessionService } from "../services/session/SessionServices";
 
@@ -12,7 +12,11 @@ import bcrypt from "bcrypt";
 
 const sessionService = new SessionService(new SessionRepositoryPostgres());
 
-export const signinHandler = async (req: Request, res: Response) => {
+export const signinHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const { email, password } = req.body;
 
@@ -27,9 +31,7 @@ export const signinHandler = async (req: Request, res: Response) => {
     const user = await userRepository.findOne({ where: { email } });
 
     if (!user) {
-      return res
-        .status(404)
-        .json({ message: "User not found!" });
+      return res.status(404).json({ message: "User not found!" });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -55,10 +57,11 @@ export const signinHandler = async (req: Request, res: Response) => {
     });
 
     return res
-      .cookie("session", JSON.stringify(session), {
-        expires: new Date(expiresIn),
+      .cookie("hubs", JSON.stringify(session), {
+        httpOnly: true,
+        path: "/",
+        sameSite: "strict",
       })
-      .status(200)
       .end();
   } catch (error) {
     console.log("There was an error", error);

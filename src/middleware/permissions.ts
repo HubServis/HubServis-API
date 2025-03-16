@@ -27,8 +27,6 @@ export function is(permissionsRoutes: string[]) {
         .status(401)
         .json(`Unauthorized, This Plan is Not Allowed`)
         .end();
-
-    return next();
   };
 }
 
@@ -61,7 +59,5 @@ export function can(rolesRoutes: string[]) {
           `Unauthorized, This Plan ${user.plan.name} does not offer this permission!`,
         )
         .end();
-
-    return next();
   };
 }
