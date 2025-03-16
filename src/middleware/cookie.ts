@@ -14,13 +14,12 @@ const getUserPermissions = new GetUserPermissions(new UserRepositoryPostgres());
 
 export const cookieGateway = (permissions?: string[]) => {
 	return async (req: Request, res: Response, next: NextFunction) => {
-		console.log("entered on gateway");
+		console.log("entered on middleware cookie", req.path);
 
 		try {
 			if (req.path === "/login" || req.path === "/user") {
-				const result = createCookie(req, res);
-
-				console.log("createCookie cookie result", result);
+				// console.log("[cookie middleware]", res.locals);
+				const result: any = createCookie(req, res);
 
 				return res.json(result).status(200);
 			}
@@ -57,7 +56,8 @@ export const cookieGateway = (permissions?: string[]) => {
 				return res.status(401).json("User not passed on verifyAccess!");
 			else next();
 		} catch (err) {
-			throw new Error(`Error to proceed gateway: ${err}`);
+			// throw new Error(`Error to proceed gateway: ${err}`);
+			return res.status(500).json({message: "Server internal error!"});
 		}
 	};
 };
@@ -86,7 +86,7 @@ const createCookie = (req: Request, res: Response) => {
 			path: "/",
 			sameSite: "strict",
 			// secure: true, use it when https is enabled = on server
-		});
+		});   
 
 		res.cookie("hubservis", cookie, {
 			maxAge: expiration,
@@ -98,7 +98,8 @@ const createCookie = (req: Request, res: Response) => {
 			// signed: true, on server
 		});
 
-		res.json(true).status(201);
+		
+		res.json({message: "authenticated", data: { auth: true }}).status(201);
 	} catch (err) {
 		return res.status(500).json(`There was an error creating cookie: ${err}`);
 	}
@@ -143,13 +144,13 @@ const verifyAccess = async (
 
 		const cookieData = decriptCookie(req, res);
 
-		if (!cookieData) return res.status(401).json("User not have cookie");
+		if (!cookieData) return res.status(401).json({message: "User not have cookie"});
 
 		if (cookieData.access.length > 0) {
 			if (cookieData.access?.some((access) => access === req.path)) return true;
 		}
 
-		console.log("cookieData on (145)", cookieData);
+		// console.log("cookieData on (145)", cookieData);
 
 		const result = await getUserPermissions.execute({
 			userId: cookieData.userId,
@@ -158,7 +159,7 @@ const verifyAccess = async (
 
 		console.log("this is the result for getUserPermissions (152)", result);
 
-		if (result !== true) return res.status(401).json("User not have access!");
+		if (result !== true) return res.status(401).json({message: "User not have access!"});
 
 		cookieData.access.push(req.path);
 
@@ -176,7 +177,7 @@ const verifyAccess = async (
 
 		return result;
 	} catch (err) {
-		return res.status(500).json(`There was an error on verifyAccess: ${err}`);
+		return res.status(500).json({message: `There was an error on verifyAccess: ${err}`});
 	}
 };
 

@@ -239,15 +239,15 @@ export class UserRepositoryPostgres implements IUsersRepository {
       },
     });
 
-	console.log('userAccess on UserRepositoryPostgres (240)', userAccess)
+	// console.log('userAccess on UserRepositoryPostgres (240)', userAccess)
 
 	if(props.requestedPermissions?.length === 0) return true;
 
-	console.log('not have permissions (244)');
+	// console.log('not have permissions (244)');
 
     if (!userAccess || userAccess === null || !userAccess.plan) return false;
 
-	console.log('this user have access?', userAccess);
+	// console.log('this user have access?', userAccess);
 
   const planPermission = props.requestedPermissions?.some(
     (permission) => permission === userAccess.plan.name,

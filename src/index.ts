@@ -33,7 +33,7 @@ app.use(
 );
 
 app.listen(process.env.PORT || 4000, () =>
-  console.log("server is running in http://localhost:3000")
+  console.log(`server is running in http://localhost:${process.env.PORT || 4000}`)
 );
 
 // captura os erros não tratados

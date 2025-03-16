@@ -25,7 +25,7 @@ routes.get("/logout", cookieGateway([]));
 routes.post("/login", SessionController.handle, cookieGateway([]));
 
 // USER
-routes.get("/users", UserController.find);
+routes.get("/users", cookieGateway([]), UserController.find,);
 routes.get("/user", UserController.findOneUser);
 routes.get("/user/:userId", UserController.findOneUser);
 routes.post("/user", UserController.create);
