@@ -1,0 +1,120 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator tsed {
+  provider = "tsed-prisma"
+}
+
+model User {
+  id       String     @id @unique @default(uuid()) @db.Uuid
+  name     String
+  email    String     @unique
+  cpfcnpj  String
+  username String
+  password String
+  image    String?
+  planId   String     @db.Uuid()
+  plan     Plan       @relation(fields: [planId], references: [id])
+  bussines Business[]
+}
+
+model Professional {
+  id           String   @id @unique @default(uuid()) @db.Uuid
+  name         String
+  cpfcnpj      String   @unique
+  businessId   String   @unique @db.Uuid
+  isRegistered Boolean  @default(true)
+  business     Business @relation(fields: [businessId], references: [id])
+  roles        Role[]
+}
+
+model Schedule {
+  id       String @id @unique @default(uuid()) @db.Uuid
+  status   String
+  dateTime String
+}
+
+model Expedient {
+  id             String @id @unique @default(uuid()) @db.Uuid
+  name           String
+  description    String
+  expedientInfos String
+}
+
+model Blocking {
+  id               String   @id @unique @default(uuid()) @db.Uuid
+  dateTimeStart    String
+  dateTimeEnd      String
+  description      String
+  allDay           Boolean?
+  allProfessionals Boolean?
+}
+
+model Business {
+  id            String         @id @unique @default(uuid()) @db.Uuid
+  name          String
+  ownerId       String         @db.Uuid
+  owner         User           @relation(fields: [ownerId], references: [id])
+  professionals Professional[]
+}
+
+model Category {
+  id          String  @id @unique @default(uuid()) @db.Uuid
+  name        String
+  nameId      String  @db.Uuid
+  description String
+  isPrivated  Boolean
+}
+
+model Service {
+  id          String   @id @unique @default(uuid()) @db.Uuid
+  name        String
+  price       String
+  duration    String
+  description String
+  isPrivated  Boolean?
+}
+
+model Rating {
+  id      String @id @unique @default(uuid()) @db.Uuid
+  comment String
+  rating  Int
+}
+
+model Plan {
+  id          String    @id @unique @default(uuid()) @db.Uuid()
+  name        String
+  description String
+  price       Int
+  isPrivated  Boolean
+  users       User[]
+  benefits    Benefit[]
+}
+
+model Benefit {
+  id          String @id @unique @default(uuid()) @db.Uuid
+  name        String
+  description String
+  value       Int
+  bonusPoint  Int
+  plan        Plan[]
+}
+
+model Role {
+  id            String         @id @unique @default(uuid()) @db.Uuid
+  name          String         @unique
+  professionals Professional[]
+}

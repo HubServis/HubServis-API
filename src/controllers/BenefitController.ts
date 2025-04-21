@@ -1,103 +1,70 @@
-import { Request, Response } from "express";
+import { Controller, Inject } from "@tsed/di";
 
-import { Benefit } from "../entities/Benefit";
-import { BenefitRepositoryPostgres } from "../infra/database/postgres/implementations/BenefitRepository";
+import { BodyParams, QueryParams } from "@tsed/platform-params";
 
-import { IBenefitsController } from "../interfaces/controllers";
+import { Delete, Description, Get, Post, Put, Returns, Summary } from "@tsed/schema";
 
-import { CreateBenefitService } from "../services/Benefits/CreateBenefit";
-import { DeleteBenefitService } from "../services/Benefits/DeleteBenefit";
-import { FindBenefitService } from "../services/Benefits/FindBenefits";
-import { UpdateBenefitService } from "../services/Benefits/UpdateBenefit";
+import { Benefit } from "../../generated/prisma";
 
-const createBenefitService = new CreateBenefitService(
-  new BenefitRepositoryPostgres()
-);
-const findBenefitService = new FindBenefitService(
-  new BenefitRepositoryPostgres()
-);
-const deleteBenefitService = new DeleteBenefitService(
-  new BenefitRepositoryPostgres()
-);
-const updateBenefitService = new UpdateBenefitService(
-  new BenefitRepositoryPostgres()
-);
+import { BenefitModelDefinition } from "../@types/modelDefinition";
 
-class BenefitsController implements IBenefitsController {
-  async create(req: Request, res: Response) {
-    const { name, description, max_value, isControllable, role } = req.body;
+import { BenefitService } from "../services/BenefitService";
 
-    try {
-      const benefit = new Benefit({
-        name,
-        description,
-        max_value: Number(max_value),
-        isControllable,
-        role,
-      });
+@Controller("/benefits")
+export class BenefitController {
+    @Inject()
+    private readonly service: BenefitService;
 
-      const result = await createBenefitService.execute(benefit);
+    @Get("/:id")
+    @Summary("Busca um benefício")
+    @Description("Busca um benefício com um plano ativo, deve ser usado um ID pra isso.")
+    @Returns(200, BenefitModelDefinition)
+    @Returns(404).Description("Agendamento não registrado.")
+    async find(@QueryParams() id: string): Promise<Benefit | string | Error> {
+        const user = await this.service.find(id);
 
-      if (result instanceof Error) return res.status(400).json(result.message);
-
-      return res.status(201).json(result);
-    } catch (err) {
-      return res.status(500).json(`Unexpected Error ${err.message}`);
+        return user;
     }
-  }
 
-  async find(req: Request, res: Response) {
-    const { name } = req.body;
+    @Get("/")
+    @Summary("Busca todos os benefícios")
+    @Returns(200, Array).Of(BenefitModelDefinition)
+    @Returns(404).Description("Não há benefícios na base!")
+    async findAll(): Promise<Benefit[] | string | Error> {
+        const users = await this.service.findAll();
 
-    try {
-      const result = await findBenefitService.execute(name);
-
-      if (result instanceof Error) return res.status(400).json(result.message);
-
-      return res.status(200).json(result);
-    } catch (err) {
-      return res.status(500).json(`Unexpected Error: ${err.message}`);
+        return users;
     }
-  }
 
-  async delete(req: Request, res: Response) {
-    const { benefitName } = req.params;
+    @Post("/")
+    @Summary("Cria um novo benefício")
+    @Returns(201, String).Description("OK").Examples("OK")
+    @Returns(500).Description("Erro interno")
+    async create(@BodyParams(BenefitModelDefinition) newBenefitData: Benefit): Promise<string | Error> {
+        const newBenefit = await this.service.create(newBenefitData);
 
-    try {
-      const result = await deleteBenefitService.execute(benefitName);
-
-      if (result instanceof Error) return res.status(400).json(result.message);
-
-      return res.status(201).json(result);
-    } catch (err) {
-      return res.status(500).json(`Unexpected Error: ${err.message}`);
+        return newBenefit;
     }
-  }
 
-  async patch(req: Request, res: Response) {
-    const { benefitName } = req.params;
-    const { id, name, description, max_value, isControllable, role } = req.body;
+    @Put("/:id")
+    @Summary("Atualiza um benefício")
+    @Returns(201, String).Description("OK").Examples("OK")
+    @Returns(404).Description("Agendamento não encontrado")
+    @Returns(500).Description("Erro interno")
+    async update(@QueryParams() id: string, @BodyParams(BenefitModelDefinition) newBenefitData: Benefit): Promise<string | Error> {
+        const newBenefit = await this.service.update(newBenefitData, id);
 
-    try {
-      const result = await updateBenefitService.execute({
-        benefitName,
-        newBenefit: {
-          id,
-          name,
-          description,
-          max_value,
-          isControllable,
-          role,
-        },
-      });
-
-      if (result instanceof Error) return res.status(400).json(result.message);
-
-      return res.status(201).json(result);
-    } catch (err) {
-      return res.status(500).json(`Unexpected Error: ${err.message}`);
+        return newBenefit;
     }
-  }
+
+    @Delete("/:id")
+    @Summary("Remove um benefício")
+    @Returns(201, String).Description("OK").Examples("OK")
+    @Returns(404).Description("Agendamento não encontrado")
+    @Returns(500).Description("Erro interno")
+    async delete(@QueryParams() id: string): Promise<string | Error> {
+        const result = await this.service.delete(id);
+
+        return result;
+    }
 }
-
-export default new BenefitsController();

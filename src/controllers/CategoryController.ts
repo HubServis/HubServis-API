@@ -1,141 +1,70 @@
-import { Response, Request } from "express";
-import { ICategoryController } from "../interfaces/controllers";
-import { CategoryRepositoryPostgres } from "../infra/database/postgres/implementations/CategoryRepository";
-import { CreateCategoryService } from "../services/Category/CreateCategory";
-import { FindCategoryService } from "../services/Category/FindCategory";
-import { AppendCategoryServiceService } from "../services/Category/AppendCategoryService";
-import { DeleteCategoryService } from "../services/Category/DeleteCategory";
-import { ListServicesCategoryService } from "../services/Category/ListServicesCategory";
-import { CustomError } from "../interfaces/errors";
+import { Controller, Inject } from "@tsed/di";
 
-const createAppointmentService = new CreateCategoryService(
-  new CategoryRepositoryPostgres()
-);
+import { BodyParams, QueryParams } from "@tsed/platform-params";
 
-const findCategoryService = new FindCategoryService(
-  new CategoryRepositoryPostgres()
-);
+import { Delete, Description, Get, Post, Put, Returns, Summary } from "@tsed/schema";
 
-const appendCategoryServiceService = new AppendCategoryServiceService(
-  new CategoryRepositoryPostgres()
-);
+import { Category } from "../../generated/prisma";
 
-const deleteCategoryService = new DeleteCategoryService(
-  new CategoryRepositoryPostgres()
-);
+import { CategoryModelDefinition } from "../@types/modelDefinition";
 
-const listServicesCategoryService = new ListServicesCategoryService(
-  new CategoryRepositoryPostgres()
-);
+import { CategoryService } from "../services/CategoryService";
 
-class CategoryController implements ICategoryController {
-	async create(req: Request, res: Response) {
-		const { name, description } = req.body;
-		const userId = req.userReq.id;
+@Controller("/category")
+export class CategoryController {
+    @Inject()
+    private readonly service: CategoryService;
 
-		try {
-			const result = await createAppointmentService.execute({
-				name,
-				description,
-				userId,
-			});
+    @Get("/:id")
+    @Summary("Busca um categoria")
+    @Description("Busca um categoria com um plano ativo, deve ser usado um ID pra isso.")
+    @Returns(200, CategoryModelDefinition)
+    @Returns(404).Description("Categoria não registrada.")
+    async find(@QueryParams() id: string): Promise<Category | string | Error> {
+        const user = await this.service.find(id);
 
-			if (result instanceof Error) {
-				return res.status(400).json(result.message);
-			}
-
-			return res.status(201).json(result);
-		} catch (err) {
-			console.log(err.message);
-			return res.status(500).json("Unexpected error");
-		}
-	}
-
-	async find(req: Request, res: Response) {
-		const { showPrivateOnly, showAll } = req.query;
-
-		try {
-			const result = await findCategoryService.execute({
-				showPrivateOnly,
-				showAll,
-			});
-
-			if (result instanceof Error) {
-				return res.status(400).json(result.message);
-			}
-
-			return res.status(201).json(result);
-		} catch (err) {
-			console.log(err.message);
-			return res.status(500).json("Unexpected error");
-		}
-	}
-
-	async appendService(req: Request, res: Response) {
-		const { service, categories } = req.body;
-
-		try {
-			const result = await appendCategoryServiceService.execute({
-				service,
-				categories,
-			});
-
-			if (result instanceof Error) {
-				return res.status(400).json(result.message);
-			}
-
-			return res.status(201).json(result);
-		} catch (err) {
-			console.log(err.message);
-			return res.status(500).json("Unexpected error");
-		}
-	}
-
-	async delete(req: Request, res: Response) {
-		const { categoryId } = req.params;
-		const { id } = req.userReq;
-
-		try {
-			const result = await deleteCategoryService.execute({
-				category: categoryId,
-				userId: id,
-			});
-
-			if (result instanceof Error) {
-				return res.status(400).json(result.message);
-			}
-
-			return res.status(201).json(result);
-		} catch (err) {
-			console.log(err.message);
-			return res.status(500).json("Unexpected error");
-		}
-	}
-
-	async listServicesCategory(req: Request, res: Response) {
-    const { categoryNameId } = req.query;
-
-    if(!categoryNameId) return res.status(400).json("categoryNameId not informed!");
-
-		try {
-      const result = await listServicesCategoryService.execute({
-        categoryNameId,
-      });
-
-      if (result instanceof Error) {
-        return res.status(400).json(result.message);
-      }
-
-      if (result instanceof CustomError && result.type == "error") {
-        return res.status(result.statusCode).json(result.message);
-			}
-
-      return res.status(201).json(result);
-		} catch (err) {
-      console.log(err.message);
-			return res.status(500).json("Unexpected error");
+        return user;
     }
-	}
-}
 
-export default new CategoryController();
+    @Get("/")
+    @Summary("Busca todos os categorias")
+    @Returns(200, Array).Of(CategoryModelDefinition)
+    @Returns(404).Description("Não há categorias na base!")
+    async findAll(): Promise<Category[] | string | Error> {
+        const users = await this.service.findAll();
+
+        return users;
+    }
+
+    @Post("/")
+    @Summary("Cria um novo categoria")
+    @Returns(201, String).Description("OK").Examples("OK")
+    @Returns(500).Description("Erro interno")
+    async create(@BodyParams(CategoryModelDefinition) newCategoryData: Category): Promise<string | Error> {
+        const newCategory = await this.service.create(newCategoryData);
+
+        return newCategory;
+    }
+
+    @Put("/:id")
+    @Summary("Atualiza um categoria")
+    @Returns(201, String).Description("OK").Examples("OK")
+    @Returns(404).Description("Categoria não encontrado")
+    @Returns(500).Description("Erro interno")
+    async update(@QueryParams() id: string, @BodyParams(CategoryModelDefinition) newCategoryData: Category): Promise<string | Error> {
+        const newCategory = await this.service.update(newCategoryData, id);
+
+        return newCategory;
+    }
+
+    @Delete("/:id")
+    @Summary("Remove um categoria")
+    @Returns(201, String).Description("OK").Examples("OK")
+    @Returns(404).Description("Categoria não encontrado")
+    @Returns(500).Description("Erro interno")
+    async delete(@QueryParams() id: string): Promise<string | Error> {
+        const result = await this.service.delete(id);
+
+        return result;
+    }
+}

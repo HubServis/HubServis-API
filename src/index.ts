@@ -1,52 +1,57 @@
-import express from "express";
+import { $log } from "@tsed/logger";
 
-import { config } from "dotenv";
-import cookieParser from "cookie-parser";
-import cors from "cors";
-import "./infra/database/postgres/config";
-import { routes } from "./routes";
+import { PlatformExpress } from "@tsed/platform-express";
 
-import swaggerUI from "swagger-ui-express";
-import swaggerDocument from "../swagger.json";
-import helmet from "helmet";
+import { Server } from "./Server";
 
-config();
+const SIG_EVENTS = [
+    "beforeExit",
+    "SIGHUP",
+    "SIGINT",
+    "SIGQUIT",
+    "SIGILL",
+    "SIGTRAP",
+    "SIGABRT",
+    "SIGBUS",
+    "SIGFPE",
+    "SIGUSR1",
+    "SIGSEGV",
+    "SIGUSR2",
+    "SIGTERM",
+];
 
-const app = express();
+const server = async () => {
+    try {
+        const platform = await PlatformExpress.bootstrap(Server);
 
-//Reduce sniff chances to succecede
-app.disable("x-powered-by");
-// app.use(cors({ credentials: true, origin: "http://hubservis.io" })); // in production
-app.use(cors({ credentials: true, origin: true })); // in development
+        await platform.listen();
 
-/* use it when on server
-	app.use(cookieParser('somekeycodetosecurecookiewithsomecaracters'));
-*/
-app.use(cookieParser());
-app.use(express.urlencoded({ limit: "15mb", extended: true }));
-app.use(express.json({ limit: "15mb" }));
-app.use(helmet());
-app.use(routes);
+        SIG_EVENTS.forEach((evt) =>
+            process.on(evt, async () => {
+                await platform.stop();
 
-app.use(
-  "/api-docs",
-  swaggerUI.serve,
-  swaggerUI.setup(swaggerDocument, { explorer: true }),
-);
+                process.exit(0);
+            }),
+        );
 
-app.listen(process.env.PORT || 4000, () =>
-  console.log(
-    `server is running in http://localhost:${process.env.PORT || 4000}`,
-  ),
-);
+        ["uncaughtException", "unhandledRejection"].forEach((evt) =>
+            process.on(evt, async (error) => {
+                $log.error({
+                    event: "SERVER_" + evt.toUpperCase(),
+                    message: error.message,
+                    stack: error.stack,
+                });
 
-// captura os errors não tratados
-// se não tiver ele o sistema quebra e para de receber requisições
-process.on("uncaughtException", (error, origin) => {
-  console.log(`\n${origin} signal received. \n${error}`);
-});
+                await platform.stop();
+            }),
+        );
+    } catch (error) {
+        $log.error({
+            event: "!::: SERVER_BOOTSTRAP_ERROR :::!",
+            message: error.message,
+            stack: error.stack,
+        });
+    }
+};
 
-// se nao tiver ele, o sistema joga um warn
-process.on("unhandledRejection", (error) => {
-  console.log(`\nunhandledRejection signal received. \n${error}`);
-});
+server();

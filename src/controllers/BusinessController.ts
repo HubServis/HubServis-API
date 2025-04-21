@@ -1,130 +1,70 @@
-import { Response, Request } from "express";
+import { Controller, Inject } from "@tsed/di";
 
-import { IBusinessController } from "../interfaces/controllers";
-import { CreateBusinessService } from "../services/business/CreateBusiness";
-import { FindBusinessService } from "../services/business/FindBusiness";
-import { Business } from "../entities/Business";
-import { BusinessRepositoryPostgres } from "../infra/database/postgres/implementations/BusinessRepository";
-import { FindOneBusinessService } from "../services/business/FindOneBusiness";
-import { DeleteBusinessService } from "../services/business/DeleteBusiness";
-import { PatchBusinessService } from "../services/business/PatchBusiness";
-import { decriptCookie } from "../middleware/cookie";
+import { BodyParams, QueryParams } from "@tsed/platform-params";
 
-const createBusinessService = new CreateBusinessService(
-	new BusinessRepositoryPostgres()
-);
-const findBusinessService = new FindBusinessService(
-	new BusinessRepositoryPostgres()
-);
+import { Delete, Description, Get, Post, Put, Returns, Summary } from "@tsed/schema";
 
-const findOneBusinessService = new FindOneBusinessService(
-	new BusinessRepositoryPostgres()
-);
+import { Business } from "../../generated/prisma";
 
-const deleteBusinessService = new DeleteBusinessService(
-	new BusinessRepositoryPostgres()
-);
+import { BusinessModelDefinition } from "../@types/modelDefinition";
 
-const patchBusinessService = new PatchBusinessService(
-	new BusinessRepositoryPostgres()
-);
+import { BusinessService } from "../services/BusinessService";
 
-class BusinessController implements IBusinessController {
-	async create(req: Request, res: Response) {
-		const { name } = req.body;
-		const cookieDescripted: any = decriptCookie(req, res);
-    
-		try {
-			const business = new Business({ name });
-			const result = await createBusinessService.execute(
-				business,
-				cookieDescripted.userId
-			);
+@Controller("/business")
+export class BusinessController {
+    @Inject()
+    private readonly service: BusinessService;
 
-			if (result instanceof Error) {
-				return res.status(400).json(result.message);
-			}
+    @Get("/:id")
+    @Summary("Busca um negócio")
+    @Description("Busca um negócio com um plano ativo, deve ser usado um ID pra isso.")
+    @Returns(200, BusinessModelDefinition)
+    @Returns(404).Description("Categoria não registrada.")
+    async find(@QueryParams() id: string): Promise<Business | string | Error> {
+        const user = await this.service.find(id);
 
-			return res.status(201).json({ res: result });
-		} catch (err) {
-			console.log(err.message);
-			return res.status(500).json("Unexpected error");
-		}
-	}
+        return user;
+    }
 
-	async find(req: Request, res: Response) {
-		try {
-			const products = await findBusinessService.execute();
-			return res.status(201).json(products);
-		} catch (err) {
-			console.log(err.message);
-			return res.status(500).json("Unexpected error");
-		}
-	}
+    @Get("/")
+    @Summary("Busca todos os negócios")
+    @Returns(200, Array).Of(BusinessModelDefinition)
+    @Returns(404).Description("Não há negócios na base!")
+    async findAll(): Promise<Business[] | string | Error> {
+        const users = await this.service.findAll();
 
-	async findOne(req: Request, res: Response) {
-		const { id: businessId } = req.params;
+        return users;
+    }
 
-		try {
-			const result = await findOneBusinessService.execute({
-				businessId,
-			});
+    @Post("/")
+    @Summary("Cria um novo negócio")
+    @Returns(201, String).Description("OK").Examples("OK")
+    @Returns(500).Description("Erro interno")
+    async create(@BodyParams(BusinessModelDefinition) newBusinessData: Business): Promise<string | Error> {
+        const newBusiness = await this.service.create(newBusinessData);
 
-			if (result instanceof Error) {
-				return res.status(400).json(result.message);
-			}
+        return newBusiness;
+    }
 
-			return res.status(201).json(result);
-		} catch (err) {
-			console.log(err.message);
-			return res.status(500).json("Unexpected error");
-		}
-	}
+    @Put("/:id")
+    @Summary("Atualiza um negócio")
+    @Returns(201, String).Description("OK").Examples("OK")
+    @Returns(404).Description("Categoria não encontrado")
+    @Returns(500).Description("Erro interno")
+    async update(@QueryParams() id: string, @BodyParams(BusinessModelDefinition) newBusinessData: Business): Promise<string | Error> {
+        const newBusiness = await this.service.update(newBusinessData, id);
 
-	async delete(req: Request, res: Response) {
-		const { businessId } = req.params;
-		const { id } = req.userReq;
+        return newBusiness;
+    }
 
-		try {
-			const result = await deleteBusinessService.execute({
-				businessId,
-				userId: id,
-			});
+    @Delete("/:id")
+    @Summary("Remove um negócio")
+    @Returns(201, String).Description("OK").Examples("OK")
+    @Returns(404).Description("Categoria não encontrado")
+    @Returns(500).Description("Erro interno")
+    async delete(@QueryParams() id: string): Promise<string | Error> {
+        const result = await this.service.delete(id);
 
-			if (result instanceof Error) {
-				return res.status(400).json(result.message);
-			}
-
-			return res.status(201).json(result);
-		} catch (err) {
-			console.log(err.message);
-			return res.status(500).json("Unexpected error");
-		}
-	}
-
-	async patch(req: Request, res: Response) {
-		const { id } = req.userReq;
-		const { name, id: businessId } = req.body;
-
-		try {
-			const result = await patchBusinessService.execute({
-				userId: id,
-				newBusiness: {
-					id: businessId,
-					name,
-				},
-			});
-
-			if (result instanceof Error) {
-				return res.status(400).json(result.message);
-			}
-
-			return res.status(201).json(result);
-		} catch (err) {
-			console.log(err.message);
-			return res.status(500).json("Unexpected error");
-		}
-	}
+        return result;
+    }
 }
-
-export default new BusinessController();

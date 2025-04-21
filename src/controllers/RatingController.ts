@@ -1,104 +1,70 @@
-import { Response, Request } from "express";
-import { IRatingController } from "../interfaces/controllers";
-import { CreateRatingService } from "../services/rating/CreateRating";
-import { RatingRepositoryPostgres } from "../infra/database/postgres/implementations/RatingRepository";
-import { DeleteRatingService } from "../services/rating/DeleteRating";
-import { FindRatingService } from "../services/rating/FindAllRating";
-import { PatchRatingService } from "../services/rating/PatchRating";
+import { Controller, Inject } from "@tsed/di";
 
-const createRatingService = new CreateRatingService(
-  new RatingRepositoryPostgres()
-);
+import { BodyParams, QueryParams } from "@tsed/platform-params";
 
-const deleteRatingService = new DeleteRatingService(
-  new RatingRepositoryPostgres()
-);
+import { Delete, Description, Get, Post, Put, Returns, Summary } from "@tsed/schema";
 
-const findAllRatingService = new FindRatingService(
-  new RatingRepositoryPostgres()
-);
+import { Rating } from "../../generated/prisma";
 
-const patchRatingService = new PatchRatingService(
-  new RatingRepositoryPostgres()
-);
+import { RatingModelDefinition } from "../@types/modelDefinition";
 
-class RatingController implements IRatingController {
-  async create(req: Request, res: Response) {
-    const { serviceId, comment, rating } = req.body;
-    const { id: userId } = req.userReq;
+import { RatingService } from "../services/RatingService";
 
-    try {
-      if(rating == "" || rating > 5.0) return res.status(400).json("Avaliação inválida!");
+@Controller("/rating")
+export class RatingController {
+    @Inject()
+    private readonly service: RatingService;
 
-      const result = await createRatingService.execute({
-        userId,
-        serviceId,
-        comment,
-        rating,
-      });
+    @Get("/:id")
+    @Summary("Busca um rating")
+    @Description("Busca um rating com um plano ativo, deve ser usado um ID pra isso.")
+    @Returns(200, RatingModelDefinition)
+    @Returns(404).Description("Rating não registrada.")
+    async find(@QueryParams() id: string): Promise<Rating | string | Error> {
+        const user = await this.service.find(id);
 
-      if (result instanceof Error) return res.status(400).json(result.message);
-
-      return res.status(201).json(result);
-    } catch (err) {
-      console.log(err.message);
-      return res.status(500).json("Unexpected error");
+        return user;
     }
-  }
 
-  async delete(req: Request, res: Response) {
-    const { ratingId } = req.params;
+    @Get("/")
+    @Summary("Busca todos os ratings")
+    @Returns(200, Array).Of(RatingModelDefinition)
+    @Returns(404).Description("Não há ratings na base!")
+    async findAll(): Promise<Rating[] | string | Error> {
+        const users = await this.service.findAll();
 
-    if(ratingId == "" || ratingId == null) return res.status(400).json("Assessment ID not provided!")
-
-    try {
-      const result = await deleteRatingService.execute({
-        ratingId,
-      });
-
-      if(result instanceof Error) return res.status(400).json(result.message);
-
-      return res.status(200).json(result);
-    } catch (err) {
-      console.log(err.message);
-      return res.status(500).json("Unexpected error");
+        return users;
     }
-  }
 
-  async patch(req: Request, res: Response) {
-    const { ratingId } = req.params;
-    const { comment, rating } = req.body;
+    @Post("/")
+    @Summary("Cria um novo rating")
+    @Returns(201, String).Description("OK").Examples("OK")
+    @Returns(500).Description("Erro interno")
+    async create(@BodyParams(RatingModelDefinition) newRatingData: Rating): Promise<string | Error> {
+        const newRating = await this.service.create(newRatingData);
 
-    if(rating == "" || rating > 5.0) return res.status(400).json("Avaliação inválida!");
-
-    try {
-      const result = await patchRatingService.execute({
-        ratingId,
-        comment,
-        rating
-      });
-
-      if(result instanceof Error) return res.status(400).json(result.message);
-
-      return res.status(200).json(result);
-    } catch (err) {
-      console.log(err.message);
-      return res.status(500).json("Unexpected error");
+        return newRating;
     }
-  }
 
-  async findAll(req: Request, res: Response) {
-    // if(ratingId == "" || ratingId == null) return res.status(400).json("Assessment ID not provided!")
+    @Put("/:id")
+    @Summary("Atualiza um rating")
+    @Returns(201, String).Description("OK").Examples("OK")
+    @Returns(404).Description("Rating não encontrado")
+    @Returns(500).Description("Erro interno")
+    async update(@QueryParams() id: string, @BodyParams(RatingModelDefinition) newRatingData: Rating): Promise<string | Error> {
+        const newRating = await this.service.update(newRatingData, id);
 
-    try {
-      const result = await findAllRatingService.execute();
-
-      return res.status(200).json(result);
-    } catch (err) {
-      console.log(err.message);
-      return res.status(500).json("Unexpected error");
+        return newRating;
     }
-  }
+
+    @Delete("/:id")
+    @Summary("Remove um rating")
+    @Returns(201, String).Description("OK").Examples("OK")
+    @Returns(404).Description("Rating não encontrado")
+    @Returns(500).Description("Erro interno")
+    async delete(@QueryParams() id: string): Promise<string | Error> {
+        const result = await this.service.delete(id);
+
+        return result;
+    }
 }
-
-export default new RatingController();

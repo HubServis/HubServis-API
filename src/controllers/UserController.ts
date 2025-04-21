@@ -1,147 +1,70 @@
-import { Response, Request } from "express";
-import { IUserController } from "../interfaces/controllers";
-import { User } from "../entities/User";
-import { FindUserService } from "../services/user/findUsers";
-import { CreateUserService } from "../services/user/CreateUser";
-import { UserRepositoryPostgres } from "../infra/database/postgres/implementations/UserRepository";
-import { AppendPlanUserService } from "../services/user/AppendPlanUser";
-import { DeletePlanUserService } from "../services/user/DeletePlanUser";
-import { FindOneUserService } from "../services/user/findOneUser";
-import { UpdateUserService } from "../services/user/updateUserService";
-import { GetUserPermissions } from "../services/user/getUserPermissions";
-import { decriptCookie } from "../middleware/cookie";
+import { Controller, Inject } from "@tsed/di";
 
-const createUserService = new CreateUserService(new UserRepositoryPostgres());
-const findUserService = new FindUserService(new UserRepositoryPostgres());
-const findOneUserService = new FindOneUserService(new UserRepositoryPostgres());
-const updateUserService = new UpdateUserService(new UserRepositoryPostgres());
-const appendPlanUserService = new AppendPlanUserService(
-  new UserRepositoryPostgres(),
-);
-const deletePlanUserService = new DeletePlanUserService(
-  new UserRepositoryPostgres(),
-);
-const getUserPermissions = new GetUserPermissions(new UserRepositoryPostgres());
+import { BodyParams, QueryParams } from "@tsed/platform-params";
 
-class UserController implements IUserController {
-  async create(req: Request, res: Response) {
-    const { username, email, password, name, cpfcnpj, image } = req.body;
+import { Delete, Description, Get, Post, Put, Returns, Summary } from "@tsed/schema";
 
-    try {
-      const user = new User({
-        username,
-        email,
-        password,
-        cpfcnpj,
-        name,
-        image,
-      });
-      const createdUser = await createUserService.execute(user);
+import { User } from "../../generated/prisma";
 
-      console.log("createdUser", createdUser);
+import { UserModelDefinition } from "../@types/modelDefinition";
 
-      if (createdUser instanceof Error) {
-        return res.status(400).json(createdUser.message);
-      }
+import { UserService } from "../services/UserService";
 
-      return res.status(201).json(createdUser);
-    } catch (err) {
-      console.log(err.message);
-      return res.status(500).json("Unexpected error");
+@Controller("/users")
+export class UserController {
+    @Inject()
+    private readonly service: UserService;
+
+    @Get("/:id")
+    @Summary("Busca um usuário")
+    @Description("Busca um usuário com um plano ativo, deve ser usado um ID pra isso.")
+    @Returns(200, UserModelDefinition)
+    @Returns(404).Description("Usuário não registrado.")
+    async find(@QueryParams() id: string): Promise<User | string | Error> {
+        const user = await this.service.find(id);
+
+        return user;
     }
-  }
 
-  async find(_: Request, res: Response) {
-    try {
-      const users = await findUserService.execute();
-      return res.status(201).json(users);
-    } catch (err) {
-      console.log(err.message);
-      return res.status(500).json("Unexpected error");
+    @Get("/")
+    @Summary("Busca todos os usuários")
+    @Returns(200, Array).Of(UserModelDefinition)
+    @Returns(404).Description("Não há usuários na base!")
+    async findAll(): Promise<User[] | string | Error> {
+        const users = await this.service.findAll();
+
+        return users;
     }
-  }
 
-  async findOneUser(req: Request, res: Response) {
-    let userId;
+    @Post("/")
+    @Summary("Cria um novo usuário")
+    @Returns(201, String).Description("OK").Examples("OK")
+    @Returns(500).Description("Erro interno")
+    async create(@BodyParams(UserModelDefinition) newUserData: User): Promise<string | Error> {
+        const newUser = await this.service.create(newUserData);
 
-    //@ts-ignore
-    const hasCookieId = decriptCookie(req, res).userId;
-
-    hasCookieId ? (userId = hasCookieId) : (userId = req.params);
-
-    if (!userId) return res.status(400).json("request not have userId!");
-
-    try {
-      const result = await findOneUserService.execute({ userId });
-
-      if (result instanceof Error) return res.status(404).json(result.message);
-
-      return res.status(201).json(result);
-    } catch (err) {
-      console.log(err.message);
-      return res.status(500).json("Unexpected error");
+        return newUser;
     }
-  }
 
-  async updateUser(req: Request, res: Response) {
-    const { userId } = req.params;
-    const formData = req.body;
+    @Put("/:id")
+    @Summary("Atualiza um usuário")
+    @Returns(201, String).Description("OK").Examples("OK")
+    @Returns(404).Description("Usuário não encontrado")
+    @Returns(500).Description("Erro interno")
+    async update(@QueryParams() id: string, @BodyParams(UserModelDefinition) newUserData: User): Promise<string | Error> {
+        const newUser = await this.service.update(newUserData, id);
 
-    try {
-      const result = await updateUserService.execute({
-        userId,
-        formData,
-      });
-
-      if (result instanceof Error) return res.status(404).json(result.message);
-
-      return res.status(201).json(result);
-    } catch (err) {
-      return res.status(500).json("Unexpected Error!");
+        return newUser;
     }
-  }
 
-  async appendPlan(req: Request, res: Response): Promise<Response> {
-    try {
-      const { userId, planName } = req.params;
+    @Delete("/:id")
+    @Summary("Remove um usuário")
+    @Returns(201, String).Description("OK").Examples("OK")
+    @Returns(404).Description("Usuário não encontrado")
+    @Returns(500).Description("Erro interno")
+    async delete(@QueryParams() id: string): Promise<string | Error> {
+        const result = await this.service.delete(id);
 
-      const result = await appendPlanUserService.execute({ userId, planName });
-
-      if (result instanceof Error) return res.status(400).json(result.message);
-
-      return res.status(201).json(result);
-    } catch (err) {
-      return res.status(500).json(err.message);
+        return result;
     }
-  }
-
-  async deletePlan(req: Request, res: Response): Promise<Response> {
-    try {
-      const { userId } = req.params;
-
-      const result = await deletePlanUserService.execute({ userId });
-
-      if (result instanceof Error) return res.status(400).json(result.message);
-
-      return res.status(201).json(result);
-    } catch (err) {
-      return res.status(500).json(err.message);
-    }
-  }
-
-  async getUserPermissions(req: Request, res: Response): Promise<Response> {
-    try {
-      const { userId } = req.params;
-
-      const result = await getUserPermissions.execute({ userId });
-
-      if (result instanceof Error) return res.status(400).json(result.message);
-
-      return res.status(201).json(result);
-    } catch (err) {
-      return res.status(500).json(err.message);
-    }
-  }
 }
-
-export default new UserController();
