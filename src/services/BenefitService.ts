@@ -3,11 +3,12 @@ import { Service } from "@tsed/di";
 import { InternalServerError } from "@tsed/exceptions";
 import { $log } from "@tsed/logger";
 
-import { PrismaClient, Benefit } from "../../generated/prisma";
+import { Benefit } from "../../generated/prisma";
+import { prisma } from "./Prisma";
 
 @Service()
 export class BenefitService {
-    private readonly prisma = new PrismaClient();
+    private readonly prisma = prisma
 
     async find(id: string): Promise<Benefit | string | Error> {
         try {

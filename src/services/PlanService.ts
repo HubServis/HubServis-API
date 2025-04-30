@@ -5,11 +5,12 @@ import { InternalServerError } from "@tsed/exceptions";
 import { UserService } from "./UserService";
 import { BenefitService } from "./BenefitService";
 
-import { Plan, PrismaClient } from "../../generated/prisma";
+import { Plan } from "../../generated/prisma";
+import { prisma } from "./Prisma";
 
 @Service()
 export class PlanService {
-    private readonly prisma = new PrismaClient();
+    private readonly prisma = prisma
     private readonly userService = new UserService();
     private readonly benefitService = new BenefitService();
 

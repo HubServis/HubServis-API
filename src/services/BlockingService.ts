@@ -2,11 +2,12 @@ import { Service } from "@tsed/di";
 
 import { InternalServerError } from "@tsed/exceptions";
 
-import { PrismaClient, Blocking } from "../../generated/prisma";
+import { Blocking } from "../../generated/prisma";
+import { prisma } from "./Prisma";
 
 @Service()
 export class BlockingService {
-    private readonly prisma = new PrismaClient();
+    private readonly prisma = prisma
 
     async find(id: string): Promise<Blocking | string | Error> {
         try {
