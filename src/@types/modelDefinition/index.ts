@@ -1,8 +1,8 @@
-import { CollectionOf, Example, Property, Title } from "@tsed/schema";
+import { CollectionOf, Example, Groups, Nullable, Property, Required, Title, UniqueItems } from "@tsed/schema";
 
 import { randomUUID, UUID } from "crypto";
 
-import { Business, Plan, Professional, Role, User } from "../../../generated/prisma";
+import { Benefit, Business, Plan, Professional, Role, User } from "../../../generated/prisma";
 
 export class UserModelDefinition {
     @Title("ID")
@@ -43,14 +43,19 @@ export class UserModelDefinition {
     @Title("PlanId")
     @Example("131231241231241231")
     @Property()
+    @Groups("appendPlan", "group.plan")
     public planId: string;
 
     @Title("Plan")
     @Property(() => PlanModelDefinition)
+    @Required()
+    @Groups("appendPlan", "group.plan")
     public plan: Plan;
 
     @Title("Business")
+    @CollectionOf(() => BusinessModelDefinition)
     @Property(() => BusinessModelDefinition)
+    @Groups("appendBussiness", "group.business")
     public business: Business[];
 }
 
@@ -73,6 +78,7 @@ export class ProfessionalModelDefinition {
     @Title("BusinessID")
     @Example("123jl12j3l141411241241k2j")
     @Property()
+    @Groups("appendBussiness", "group.business")
     public businessId: UUID;
 
     @Title("IsRegistered")
@@ -82,11 +88,13 @@ export class ProfessionalModelDefinition {
 
     @Title("Business")
     @Property(() => BusinessModelDefinition)
+    @Groups("appendBussiness", "group.business")
     public business: Business;
 
     @Title("Role")
     @CollectionOf(() => RoleModelDefinition)
     @Property(() => RoleModelDefinition)
+    @Groups("appendRole", "group.role")
     public role: Role[];
 }
 
@@ -158,6 +166,7 @@ export class BlockingModelDefinition {
     @Title("All Professionals")
     @Example(true)
     @Property()
+    @Groups("appendProfessional", "group.professional")
     public allProfessionals: boolean;
 }
 
@@ -175,16 +184,19 @@ export class BusinessModelDefinition {
     @Title("Owner ID")
     @Example(randomUUID())
     @Property()
+    @Groups("appendUser", "group.user")
     public ownerId: UUID;
 
     @Title("Owner")
     @Example(randomUUID())
-    @Property()
-    public owner: string;
+    @Property(() => UserModelDefinition)
+    @Groups("appendUser", "group.user")
+    public owner: User;
 
     @Title("Professionals")
     @CollectionOf(ProfessionalModelDefinition)
     @Property(() => ProfessionalModelDefinition)
+    @Groups("appendProfessional", "group.professional")
     public professionals: Professional[];
 }
 
@@ -266,33 +278,48 @@ export class RatingModelDefinition {
 
 export class PlanModelDefinition {
     @Title("ID")
+    @Required()
+    @UniqueItems()
     @Example(randomUUID())
     @Property()
     public id: UUID;
 
     @Title("Name")
+    @Required()
     @Example("Abaco")
     @Property()
     public name: string;
 
     @Title("Description")
+    @Required()
     @Example("Descrição")
     @Property()
     public description: string;
 
     @Title("Price")
     @Example(200)
+    @Required()
     @Property()
     public price: number;
 
-    @Title("IsPrivate")
+    @Title("isPrivated")
     @Example(true)
     @Property()
-    public IsPrivate?: boolean;
+    public isPrivated?: boolean;
 
     @Title("Users")
-    @Property(() => UserModelDefinition)
+    @Required(false)
+    @Nullable([])
+    // @Property(() => UserModelDefinition)
+    @CollectionOf(() => UserModelDefinition)
+    @Groups("appendUser", "group.user")
     public users: User[];
+
+    @Title("Benefits")
+    @Required().Error("É preciso um Benefício criado antes")
+    @CollectionOf(() => BenefitModelDefinition)
+    @Groups("appendBenefit", "group.benefit")
+    public benefits: Benefit[];
 }
 
 export class BenefitModelDefinition {
@@ -317,12 +344,14 @@ export class BenefitModelDefinition {
     public value: number;
 
     @Title("Bonus Point")
-    @Example(0.2)
+    @Example("0.2")
     @Property()
     public bonusPoint?: number;
 
     @Title("Plan")
-    @Property(PlanModelDefinition)
+    @CollectionOf(() => PlanModelDefinition)
+    @Property(() => PlanModelDefinition)
+    @Groups("appendPlan", "group.plan")
     public plan: Plan[];
 }
 
@@ -340,5 +369,18 @@ export class RoleModelDefinition {
     @Title("Professionals")
     @Example(ProfessionalModelDefinition)
     @Property()
+    @Groups("appendProfessional", "group.professional")
     public professionals: Professional[];
+}
+
+export class AuthModelDefinition {
+    @Title("Email")
+    @Example("teste@teste.com")
+    @Property()
+    public email: string;
+
+    @Title("Password")
+    @Example("12345")
+    @Property()
+    public password: string;
 }

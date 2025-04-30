@@ -8,10 +8,14 @@ import { PrismaClient, User } from "../../generated/prisma";
 export class UserService {
     private readonly prisma = new PrismaClient();
 
-    async find(id: string): Promise<User | string | Error> {
+    async find(email: string): Promise<User | string | Error> {
         try {
             const user = await this.prisma.user.findUnique({
-                where: { id },
+                where: { email },
+                include: {
+                    bussines: true,
+                    plan: true,
+                },
             });
 
             if (!user) return "Usuário não registrado.";
@@ -44,11 +48,15 @@ export class UserService {
 
             if (alreadyRegistered) return "Usuário já registrado!";
 
-            await this.prisma.user.create({
+            const newUser = await this.prisma.user.create({
                 data: newUserData,
+                include: {
+                    bussines: true,
+                    plan: true,
+                },
             });
 
-            return "OK";
+            return `OK: ${newUser}`;
         } catch (err) {
             throw new InternalServerError(err);
         }

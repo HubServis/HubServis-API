@@ -1,6 +1,7 @@
 namespace NodeJS {
     interface ProcessEnv {
         PORT: string;
+        SERVER_URL: string;
         NODE_ENV: "production" | "development";
         JWT_SECRET: string;
         COOKIE_DOMAIN: string;

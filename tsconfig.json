@@ -27,7 +27,6 @@
     "noResolve": false,
     "preserveConstEnums": true,
     "sourceMap": true
-
   },
   "ts-node": {
       "swc": true

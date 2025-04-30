@@ -1,6 +1,6 @@
 import { Controller, Inject } from "@tsed/di";
 
-import { BodyParams, QueryParams } from "@tsed/platform-params";
+import { BodyParams, PathParams, QueryParams } from "@tsed/platform-params";
 
 import { Delete, Description, Get, Post, Put, Returns, Summary } from "@tsed/schema";
 
@@ -51,7 +51,10 @@ export class BenefitController {
     @Returns(201, String).Description("OK").Examples("OK")
     @Returns(404).Description("Agendamento não encontrado")
     @Returns(500).Description("Erro interno")
-    async update(@QueryParams() id: string, @BodyParams(BenefitModelDefinition) newBenefitData: Benefit): Promise<string | Error> {
+    async update(
+        @PathParams("id") id: string,
+        @BodyParams(BenefitModelDefinition) newBenefitData: Partial<Benefit>,
+    ): Promise<string | Error> {
         const newBenefit = await this.service.update(newBenefitData, id);
 
         return newBenefit;

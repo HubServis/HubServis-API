@@ -1,8 +1,8 @@
 import { Controller, Inject } from "@tsed/di";
 
-import { BodyParams, QueryParams } from "@tsed/platform-params";
+import { BodyParams, PathParams, QueryParams } from "@tsed/platform-params";
 
-import { Delete, Description, Get, Post, Put, Returns, Summary } from "@tsed/schema";
+import { Delete, Description, Get, In, Post, Put, Returns, Security, Summary } from "@tsed/schema";
 
 import { User } from "../../generated/prisma";
 
@@ -48,10 +48,12 @@ export class UserController {
 
     @Put("/:id")
     @Summary("Atualiza um usuário")
+    @In("header").Name("authorization").Type(String).Description("Bearer Auth Required!").Required()
+    @Security("bearerHttpAuthentication")
     @Returns(201, String).Description("OK").Examples("OK")
     @Returns(404).Description("Usuário não encontrado")
     @Returns(500).Description("Erro interno")
-    async update(@QueryParams() id: string, @BodyParams(UserModelDefinition) newUserData: User): Promise<string | Error> {
+    async update(@PathParams("id") id: string, @BodyParams(UserModelDefinition) newUserData: User): Promise<string | Error> {
         const newUser = await this.service.update(newUserData, id);
 
         return newUser;

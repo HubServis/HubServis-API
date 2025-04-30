@@ -1,6 +1,7 @@
 import { Service } from "@tsed/di";
 
 import { InternalServerError } from "@tsed/exceptions";
+import { $log } from "@tsed/logger";
 
 import { PrismaClient, Benefit } from "../../generated/prisma";
 
@@ -55,6 +56,7 @@ export class BenefitService {
     }
 
     async update(newBenefitData: Partial<Benefit>, id: string): Promise<string | Error> {
+        $log.info(id);
         try {
             const benefit = await this.prisma.benefit.findUnique({
                 where: { id },
@@ -63,6 +65,8 @@ export class BenefitService {
             if (!benefit) return "Usuário não cadastrado!";
 
             const newBenefit = { ...benefit, ...newBenefitData };
+
+            $log.info("new Benefit", newBenefit);
 
             await this.prisma.benefit.update({
                 where: { id },

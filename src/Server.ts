@@ -5,25 +5,16 @@ import "@tsed/platform-log-request"; // remove this import if you don&#x27;t wan
 
 import { join } from "node:path";
 
-import { Configuration } from "@tsed/di";
+import { Configuration, Inject } from "@tsed/di";
 
-import { RedisStore } from "connect-redis";
-
-import { application } from "@tsed/platform-http";
+import { PlatformApplication } from "@tsed/platform-http";
 
 import { config } from "./config";
-import { redisClient } from "./config/cache";
-import { AUTORIZED_ORIGINS, NODE_ENV, PORT, SESSION_SECRET } from "./config/variables";
+import { AUTORIZED_ORIGINS, NODE_ENV, PORT, SERVER_URL } from "./config/variables";
 
-import session from "express-session";
-
-import cors from "cors";
-import helmet from "helmet";
 import express from "express";
-import compression from "compression";
-import methodOverride from "method-override";
-import bodyParser from "body-parser";
 
+import { AuthController } from "./controllers/AuthController";
 import { UserController } from "./controllers/UserController";
 import { RoleController } from "./controllers/RoleController";
 import { PlanController } from "./controllers/PlanController";
@@ -32,16 +23,34 @@ import { BenefitController } from "./controllers/BenefitController";
 import { ScheduleController } from "./controllers/ScheduleController";
 import { CategoryController } from "./controllers/CategoryController";
 import { BusinessController } from "./controllers/BusinessController";
-import { ProfessionalController } from "./controllers/ProfessionalController";
-import { ExpedientController } from "./controllers/ExpedientController";
 import { BlockingController } from "./controllers/BlockingController";
+import { ExpedientController } from "./controllers/ExpedientController";
+import { ProfessionalController } from "./controllers/ProfessionalController";
+
+import cors from "cors";
+
+const rootDir = __dirname;
 
 @Configuration({
+    rootDir,
     ...config,
     swagger: [
         {
             path: "/v3/docs",
             specVersion: "3.0.1",
+            spec: {
+                servers: [{ url: `${SERVER_URL}:${PORT}`, description: "Main Server" }],
+                components: {
+                    securitySchemes: {
+                        bearerHttpAuthentication: {
+                            description: "Bearer Token Com JWT",
+                            type: "http",
+                            bearerFormat: "jwt",
+                            scheme: "Bearer",
+                        },
+                    },
+                },
+            },
         },
     ],
     multer: {
@@ -52,6 +61,8 @@ import { BlockingController } from "./controllers/BlockingController";
         },
     },
     middlewares: [
+        "compression",
+        "method-override",
         {
             use: "cors",
             options: {
@@ -63,9 +74,6 @@ import { BlockingController } from "./controllers/BlockingController";
         {
             use: "helmet",
             options: {
-                hidePoweredBy: true,
-                noSniff: true,
-                xssFilter: true,
                 contentSecurityPolicy: {
                     directives: {
                         defaultSrc: [`'self'`],
@@ -76,23 +84,6 @@ import { BlockingController } from "./controllers/BlockingController";
                 },
             },
         },
-        {
-            use: "express-session",
-            options: {
-                store: new RedisStore({ client: redisClient, ttl: 3200 }),
-                proxy: true,
-                secret: SESSION_SECRET,
-                cookie: {
-                    secure: NODE_ENV === "production" ? true : false,
-                    httpOnly: true, //# Apenas servidor reconhece autenticidade de cookie
-                    sameSite: NODE_ENV === "production" ? true : false,
-                },
-                resave: true,
-                saveUninitialized: false,
-            },
-        },
-        "compression",
-        "method-override",
         "json-parser",
         { use: "urlencoded-parser", options: { extended: true } },
     ],
@@ -101,11 +92,12 @@ import { BlockingController } from "./controllers/BlockingController";
     httpsPort: NODE_ENV, // CHANGE
     mount: {
         "/": [
+            AuthController,
             UserController,
             PlanController,
+            BenefitController,
             RoleController,
             RatingController,
-            BenefitController,
             CategoryController,
             ScheduleController,
             BusinessController,
@@ -117,9 +109,14 @@ import { BlockingController } from "./controllers/BlockingController";
     exclude: ["**/*.specs.ts"],
 })
 export class Server {
-    protected app = application();
+    @Inject()
+    protected app: PlatformApplication;
 
-    $beforeRouteInit(): void {
-        this.app.use("/uploads", express.static(join(process.cwd(), "uploads")));
+    /**
+     * This method let you configure the middlewares
+     * @returns {Server}
+     */
+    $beforeRouteInit(): void | Promise<any> {
+        this.app.use("/uploads", express.static(join(process.cwd(), "uploads"))).use(cors({}));
     }
 }

@@ -2,16 +2,25 @@ import { Service } from "@tsed/di";
 
 import { InternalServerError } from "@tsed/exceptions";
 
+import { UserService } from "./UserService";
+import { BenefitService } from "./BenefitService";
+
 import { Plan, PrismaClient } from "../../generated/prisma";
 
 @Service()
 export class PlanService {
     private readonly prisma = new PrismaClient();
+    private readonly userService = new UserService();
+    private readonly benefitService = new BenefitService();
 
     async find(id: string): Promise<Plan | string | Error> {
         try {
             const plan = await this.prisma.plan.findUnique({
                 where: { id },
+                include: {
+                    users: true,
+                    benefits: true,
+                },
             });
 
             if (!plan) return "Plano não registrado.";
@@ -24,9 +33,15 @@ export class PlanService {
 
     async findAll(): Promise<Plan[] | string | Error> {
         try {
-            const plans = await this.prisma.plan.findMany();
+            const plans = await this.prisma.plan.findMany({
+                include: {
+                    users: true,
+                    _count: true,
+                    benefits: true,
+                },
+            });
 
-            if (plans.length < 1) return "Não há usuários na base!";
+            if (plans.length < 1) return "Não há Planos na base!";
 
             return plans;
         } catch (err) {
@@ -54,7 +69,7 @@ export class PlanService {
         }
     }
 
-    async update(newUserData: Partial<Plan>, id: string): Promise<string | Error> {
+    async update(newPlanData: Partial<Plan>, id: string): Promise<string | Error> {
         try {
             const plan = await this.prisma.plan.findUnique({
                 where: { id },
@@ -62,11 +77,11 @@ export class PlanService {
 
             if (!plan) return "Plano não cadastrado!";
 
-            const newUser = { ...plan, ...newUserData };
+            const newPlan = { ...plan, ...newPlanData };
 
             await this.prisma.plan.update({
                 where: { id },
-                data: newUser,
+                data: newPlan,
             });
 
             return "OK";
@@ -88,6 +103,126 @@ export class PlanService {
             });
 
             return "OK";
+        } catch (err) {
+            throw new InternalServerError(err);
+        }
+    }
+
+    async patchBenefit(planID: string, benefitID: string): Promise<Plan | string | Error> {
+        try {
+            const plan = await this.prisma.plan.findUnique({
+                where: { id: planID },
+            });
+
+            if (!plan) return "Plano não cadastrado!";
+
+            const benefit = await this.benefitService.find(benefitID);
+
+            if (!benefit || benefit instanceof Error) return "Benefícios não cadastrado!";
+
+            const newPlan = await this.prisma.plan.update({
+                where: { id: planID },
+                data: {
+                    benefits: {
+                        connect: {
+                            id: benefitID,
+                        },
+                    },
+                },
+                include: {
+                    benefits: true,
+                },
+            });
+
+            return newPlan;
+        } catch (err) {
+            throw new InternalServerError(err);
+        }
+    }
+
+    async deletePatchedBenefit(planID: string, benefitID: string): Promise<Plan | string | Error> {
+        try {
+            const plan = await this.prisma.plan.findUnique({
+                where: { id: planID },
+            });
+
+            if (!plan) return "Plano não cadastrado!";
+
+            const newPlan = await this.prisma.plan.update({
+                where: { id: planID },
+                data: {
+                    benefits: {
+                        disconnect: {
+                            id: benefitID,
+                        },
+                    },
+                },
+                include: {
+                    benefits: true,
+                },
+            });
+
+            return newPlan;
+        } catch (err) {
+            throw new InternalServerError(err);
+        }
+    }
+
+    async patchUserToPlan(planID: string, userID: string): Promise<Plan | string | Error> {
+        try {
+            const plan = await this.prisma.plan.findUnique({
+                where: { id: planID },
+            });
+
+            if (!plan) return "Plano não cadastrado!";
+
+            const user = await this.userService.find(userID);
+
+            if (!user || user instanceof Error) return "Usuário não cadastrado!";
+
+            const newPlan = await this.prisma.plan.update({
+                where: { id: planID },
+                data: {
+                    users: {
+                        connect: {
+                            id: userID,
+                        },
+                    },
+                },
+                include: {
+                    users: true,
+                },
+            });
+
+            return newPlan;
+        } catch (err) {
+            throw new InternalServerError(err);
+        }
+    }
+
+    async deletePatchedUser(planID: string, userID: string): Promise<Plan | string | Error> {
+        try {
+            const plan = await this.prisma.plan.findUnique({
+                where: { id: planID },
+            });
+
+            if (!plan) return "Plano não cadastrado!";
+
+            const newPlan = await this.prisma.plan.update({
+                where: { id: planID },
+                data: {
+                    users: {
+                        disconnect: {
+                            id: userID,
+                        },
+                    },
+                },
+                include: {
+                    users: true,
+                },
+            });
+
+            return newPlan;
         } catch (err) {
             throw new InternalServerError(err);
         }

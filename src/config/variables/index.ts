@@ -3,6 +3,7 @@ import { config } from "dotenv";
 config();
 
 export const PORT = process.env.PORT;
+export const SERVER_URL = process.env.SERVER_URL;
 export const NODE_ENV = process.env.NODE_ENV;
 export const JWT_SECRET = process.env.JWT_SECRET;
 export const COOKIE_DOMAIN = process.env.COOKIE_DOMAIN;

@@ -22,7 +22,7 @@ const SIG_EVENTS = [
 
 const server = async () => {
     try {
-        const platform = await PlatformExpress.bootstrap(Server);
+        const platform = await PlatformExpress.bootstrap(Server, {});
 
         await platform.listen();
 
