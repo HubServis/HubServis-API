@@ -43,7 +43,7 @@ export class UserModelDefinition {
     @Title("PlanId")
     @Example("131231241231241231")
     @Property()
-    @Groups("appendPlan", "group.plan")
+    @Groups("createUser", "internal", "group.internal")
     public planId: string;
 
     @Title("Plan")
@@ -288,23 +288,27 @@ export class PlanModelDefinition {
     @Required()
     @Example("Abaco")
     @Property()
+    @Groups("creation", "group.plan")
     public name: string;
 
     @Title("Description")
     @Required()
     @Example("Descrição")
     @Property()
+    @Groups("creation", "group.plan")
     public description: string;
 
     @Title("Price")
     @Example(200)
     @Required()
     @Property()
+    @Groups("creation", "group.plan")
     public price: number;
 
     @Title("isPrivated")
     @Example(true)
     @Property()
+    @Groups("creation", "group.plan")
     public isPrivated?: boolean;
 
     @Title("Users")
@@ -313,12 +317,14 @@ export class PlanModelDefinition {
     // @Property(() => UserModelDefinition)
     @CollectionOf(() => UserModelDefinition)
     @Groups("appendUser", "group.user")
+    @Groups("creation", "group.plan")
     public users: User[];
 
     @Title("Benefits")
     @Required().Error("É preciso um Benefício criado antes")
     @CollectionOf(() => BenefitModelDefinition)
     @Groups("appendBenefit", "group.benefit")
+    @Groups("creation", "group.plan")
     public benefits: Benefit[];
 }
 

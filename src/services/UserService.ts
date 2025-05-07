@@ -3,11 +3,14 @@ import { Service } from "@tsed/di";
 import { InternalServerError } from "@tsed/exceptions";
 
 import { User } from "../../generated/prisma";
+
+import bcrypt from "bcrypt";
+
 import { prisma } from "./Prisma";
 
 @Service()
 export class UserService {
-    private readonly prisma = prisma
+    private readonly prisma = prisma;
 
     async find(email: string): Promise<User | string | Error> {
         try {
@@ -29,7 +32,12 @@ export class UserService {
 
     async findAll(): Promise<User[] | string | Error> {
         try {
-            const users = await this.prisma.user.findMany();
+            const users = await this.prisma.user.findMany({
+                include: {
+                    plan: true,
+                    bussines: true,
+                },
+            });
 
             if (users.length < 1) return "Não há usuários na base!";
 
@@ -39,7 +47,7 @@ export class UserService {
         }
     }
 
-    async create(newUserData: User): Promise<string | Error> {
+    async create(newUserData: User): Promise<User | string | Error> {
         try {
             const alreadyRegistered = await this.prisma.user.findUnique({
                 where: {
@@ -49,15 +57,30 @@ export class UserService {
 
             if (alreadyRegistered) return "Usuário já registrado!";
 
+            const salt = bcrypt.genSaltSync(10);
+
+            newUserData.password = bcrypt.hashSync(newUserData.password, salt);
+
             const newUser = await this.prisma.user.create({
-                data: newUserData,
+                data: {
+                    username: newUserData.username,
+                    password: newUserData.password,
+                    cpfcnpj: newUserData.cpfcnpj,
+                    email: newUserData.email,
+                    name: newUserData.name,
+                    plan: {
+                        connect: {
+                            id: newUserData.planId,
+                        },
+                    },
+                },
                 include: {
                     bussines: true,
                     plan: true,
                 },
             });
 
-            return `OK: ${newUser}`;
+            return newUser;
         } catch (err) {
             throw new InternalServerError(err);
         }

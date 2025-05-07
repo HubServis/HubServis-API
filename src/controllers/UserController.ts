@@ -1,8 +1,8 @@
 import { Controller, Inject } from "@tsed/di";
 
-import { BodyParams, PathParams, QueryParams } from "@tsed/platform-params";
+import { BodyParams, PathParams } from "@tsed/platform-params";
 
-import { Delete, Description, Get, In, Post, Put, Returns, Security, Summary } from "@tsed/schema";
+import { Delete, Description, Get, Groups, In, Post, Put, Returns, Security, Summary } from "@tsed/schema";
 
 import { User } from "../../generated/prisma";
 
@@ -20,7 +20,7 @@ export class UserController {
     @Description("Busca um usuário com um plano ativo, deve ser usado um ID pra isso.")
     @Returns(200, UserModelDefinition)
     @Returns(404).Description("Usuário não registrado.")
-    async find(@QueryParams() id: string): Promise<User | string | Error> {
+    async find(@PathParams("id") id: string): Promise<User | string | Error> {
         const user = await this.service.find(id);
 
         return user;
@@ -40,7 +40,7 @@ export class UserController {
     @Summary("Cria um novo usuário")
     @Returns(201, String).Description("OK").Examples("OK")
     @Returns(500).Description("Erro interno")
-    async create(@BodyParams(UserModelDefinition) newUserData: User): Promise<string | Error> {
+    async create(@BodyParams(UserModelDefinition) @Groups("createUser") newUserData: User): Promise<User | string | Error> {
         const newUser = await this.service.create(newUserData);
 
         return newUser;
@@ -61,10 +61,11 @@ export class UserController {
 
     @Delete("/:id")
     @Summary("Remove um usuário")
+    @In("header").Name("authorization").Type(String).Description("Bearer Auth Required")
     @Returns(201, String).Description("OK").Examples("OK")
     @Returns(404).Description("Usuário não encontrado")
     @Returns(500).Description("Erro interno")
-    async delete(@QueryParams() id: string): Promise<string | Error> {
+    async delete(@PathParams("id") id: string): Promise<string | Error> {
         const result = await this.service.delete(id);
 
         return result;

@@ -11,6 +11,9 @@ import { User } from "../../generated/prisma";
 import { JWT_SECRET } from "../config/variables";
 
 import { sign } from "jsonwebtoken";
+
+import bcrypt from "bcrypt";
+
 import { Unauthorized } from "@tsed/exceptions";
 
 @Middleware()
@@ -27,7 +30,7 @@ export class GenerateAccessJWT {
 
             if (userExists instanceof Error || typeof userExists === "string") throw new Unauthorized("User não encontrado!");
 
-            if (userExists.password !== userExists.password) throw new Unauthorized("Unauthorized");
+            if (bcrypt.compareSync(req?.body?.password, userExists.password)) throw new Unauthorized("Unauthorized");
 
             const newToken = sign(
                 {
