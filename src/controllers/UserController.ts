@@ -1,4 +1,5 @@
 import { Controller, Inject } from "@tsed/di";
+import { UseAuth } from "@tsed/platform-middlewares";
 
 import { BodyParams, PathParams } from "@tsed/platform-params";
 
@@ -7,6 +8,7 @@ import { Delete, Description, Get, Groups, In, Post, Put, Returns, Security, Sum
 import { User } from "../../generated/prisma";
 
 import { UserModelDefinition } from "../@types/modelDefinition";
+import { ValidateAccessJWT } from "../middleware/auth";
 
 import { UserService } from "../services/UserService";
 
@@ -20,8 +22,8 @@ export class UserController {
     @Description("Busca um usuário com um plano ativo, deve ser usado um ID pra isso.")
     @Returns(200, UserModelDefinition)
     @Returns(404).Description("Usuário não registrado.")
-    async find(@PathParams("id") id: string): Promise<User | string | Error> {
-        const user = await this.service.find(id);
+    async find(@PathParams("id") id: string): Promise<Partial<User> | string | Error> {
+        const user = await this.service.find(id, true);
 
         return user;
     }
@@ -30,7 +32,7 @@ export class UserController {
     @Summary("Busca todos os usuários")
     @Returns(200, Array).Of(UserModelDefinition)
     @Returns(404).Description("Não há usuários na base!")
-    async findAll(): Promise<User[] | string | Error> {
+    async findAll(): Promise<Omit<User, "password">[] | string | Error> {
         const users = await this.service.findAll();
 
         return users;
@@ -40,7 +42,7 @@ export class UserController {
     @Summary("Cria um novo usuário")
     @Returns(201, String).Description("OK").Examples("OK")
     @Returns(500).Description("Erro interno")
-    async create(@BodyParams(UserModelDefinition) @Groups("createUser") newUserData: User): Promise<User | string | Error> {
+    async create(@BodyParams(UserModelDefinition) @Groups("createUser") newUserData: User): Promise<Partial<User> | string | Error> {
         const newUser = await this.service.create(newUserData);
 
         return newUser;
@@ -48,7 +50,7 @@ export class UserController {
 
     @Put("/:id")
     @Summary("Atualiza um usuário")
-    @In("header").Name("authorization").Type(String).Description("Bearer Auth Required!").Required()
+    @UseAuth(ValidateAccessJWT, { plan: ["Free", "Pro", "Enterprise", "Abaco"], benefit: ["updateOwn", "teste"] })
     @Security("bearerHttpAuthentication")
     @Returns(201, String).Description("OK").Examples("OK")
     @Returns(404).Description("Usuário não encontrado")

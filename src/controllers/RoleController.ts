@@ -41,8 +41,6 @@ export class RoleController {
     @Returns(201, String).Description("OK").Examples("OK")
     @Returns(500).Description("Erro interno")
     async create(@BodyParams(RoleModelDefinition) newRoleData: Role): Promise<string | Error> {
-        console.log("Controller", newRoleData);
-
         const newRole = await this.service.create(newRoleData);
 
         return newRole;

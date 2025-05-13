@@ -12,13 +12,20 @@ import { prisma } from "./Prisma";
 export class UserService {
     private readonly prisma = prisma;
 
-    async find(email: string): Promise<User | string | Error> {
+    async find<TOmit extends boolean>(email: string, omit?: TOmit) {
         try {
             const user = await this.prisma.user.findUnique({
                 where: { email },
+                omit: {
+                    password: omit,
+                },
                 include: {
                     bussines: true,
-                    plan: true,
+                    plan: {
+                        include: {
+                            benefits: true,
+                        },
+                    },
                 },
             });
 
@@ -30,11 +37,18 @@ export class UserService {
         }
     }
 
-    async findAll(): Promise<User[] | string | Error> {
+    async findAll(): Promise<Omit<User, "password">[] | string | Error> {
         try {
             const users = await this.prisma.user.findMany({
+                omit: {
+                    password: true,
+                },
                 include: {
-                    plan: true,
+                    plan: {
+                        include: {
+                            benefits: true,
+                        },
+                    },
                     bussines: true,
                 },
             });
@@ -47,7 +61,7 @@ export class UserService {
         }
     }
 
-    async create(newUserData: User): Promise<User | string | Error> {
+    async create(newUserData: User): Promise<Partial<User> | string | Error> {
         try {
             const alreadyRegistered = await this.prisma.user.findUnique({
                 where: {
@@ -77,6 +91,9 @@ export class UserService {
                 include: {
                     bussines: true,
                     plan: true,
+                },
+                omit: {
+                    password: true,
                 },
             });
 
