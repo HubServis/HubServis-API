@@ -8,13 +8,14 @@ import { UserService } from "../services/UserService";
 
 import { JWT_SECRET } from "../config/variables";
 
-import { JwtPayload, sign, verify } from "jsonwebtoken";
+import { sign, verify } from "jsonwebtoken";
 
 import bcrypt from "bcrypt";
 
 import { Unauthorized } from "@tsed/exceptions";
 
-import { Benefit, Plan, User } from "../../generated/prisma";
+import { Benefit } from "../../generated/prisma";
+
 import { UserDataDecodedType } from "../@types/AuthMiddleware";
 
 @Middleware()
@@ -86,5 +87,29 @@ export class ValidateAccessJWT implements MiddlewareMethods {
         if (count >= 2) throw new Unauthorized("Não autorizado");
 
         return true;
+    }
+}
+
+@Middleware()
+export class RefreshAccessJWT implements MiddlewareMethods {
+    public async use(@Req() req: Req, @Context() ctx: Context) {
+        const authHeaders = req.headers["authorization"];
+
+        const token = authHeaders && authHeaders.split(" ")[1];
+
+        if (!token || token === null) throw new Unauthorized("Usuário não autorizado");
+
+        const userDataDecoded = verify(token, JWT_SECRET, (_, decoded) => decoded) as UserDataDecodedType;
+
+        if (!userDataDecoded) throw new Unauthorized("Não autorizado");
+
+        delete userDataDecoded?.iat;
+        delete userDataDecoded?.exp;
+
+        const newToken = sign(userDataDecoded, JWT_SECRET, { expiresIn: 2800 });
+
+        ctx.set("token", newToken);
+
+        return (req.headers["authorization"] = newToken);
     }
 }

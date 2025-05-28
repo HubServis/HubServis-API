@@ -19,7 +19,7 @@ export class AuthController {
     public async sign(
         @Required()
         @BodyParams(AuthModelDefinition)
-        body: { email: string; password: string },
+        _body: { email: string; password: string },
 
         @Context()
         ctx: Context,
