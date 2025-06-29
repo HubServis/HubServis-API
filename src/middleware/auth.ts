@@ -16,7 +16,7 @@ import { Unauthorized } from "@tsed/exceptions";
 
 import { Benefit } from "../../generated/prisma";
 
-import { UserDataDecodedType } from "../@types/AuthMiddleware";
+import { UserDataDecodedType } from "../@types/authMiddleware";
 
 @Middleware()
 export class GenerateAccessJWT {

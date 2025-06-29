@@ -14831,18 +14831,18 @@ export namespace Prisma {
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     email?: string
+    cpfcnpj?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     name?: StringFilter<"User"> | string
-    cpfcnpj?: StringFilter<"User"> | string
     username?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     image?: StringNullableFilter<"User"> | string | null
     planId?: UuidFilter<"User"> | string
     plan?: XOR<PlanScalarRelationFilter, PlanWhereInput>
     bussines?: BusinessListRelationFilter
-  }, "id" | "id" | "email">
+  }, "id" | "id" | "email" | "cpfcnpj">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder

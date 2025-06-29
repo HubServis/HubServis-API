@@ -24,6 +24,6 @@ export class AuthController {
         @Context()
         ctx: Context,
     ) {
-        return ctx.get("token");
+        return JSON.stringify({ token: ctx.get("token") });
     }
 }

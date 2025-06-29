@@ -22,7 +22,7 @@ model User {
   id       String     @id @unique @default(uuid()) @db.Uuid
   name     String
   email    String     @unique
-  cpfcnpj  String
+  cpfcnpj  String     @unique
   username String
   password String
   image    String?
