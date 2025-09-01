@@ -1,4 +1,4 @@
-import { Req } from "@tsed/platform-http";
+import { Req, Res } from "@tsed/platform-http";
 
 import { Context } from "@tsed/platform-params";
 
@@ -12,11 +12,13 @@ import { sign, verify } from "jsonwebtoken";
 
 import bcrypt from "bcrypt";
 
-import { Unauthorized } from "@tsed/exceptions";
+import { InternalServerError, Unauthorized } from "@tsed/exceptions";
 
 import { Benefit } from "../../generated/prisma";
 
 import { UserDataDecodedType } from "../@types/authMiddleware";
+
+import { oAuthRefreshToken, oAuthGetUrl } from "../services/OAuth";
 
 @Middleware()
 export class GenerateAccessJWT {
@@ -111,5 +113,22 @@ export class RefreshAccessJWT implements MiddlewareMethods {
         ctx.set("token", newToken);
 
         return (req.headers["authorization"] = newToken);
+    }
+}
+
+@Middleware()
+export class OAuthStrategyJWT implements MiddlewareMethods {
+    public async use(@Req() req: Req, @Res() res: Res) {
+        const authHeaders = req.headers["authorization"];
+
+        const token = authHeaders && authHeaders.split(" ")[1];
+
+        if (!token || token === null) {
+            const urlCall = await oAuthGetUrl();
+
+            if (urlCall instanceof Error) throw new InternalServerError(`Erro ao gerar URL ${urlCall}`);
+
+            res.redirect(urlCall);
+        }
     }
 }

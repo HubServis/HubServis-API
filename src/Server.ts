@@ -10,6 +10,7 @@ import { Configuration, Inject } from "@tsed/di";
 import { PlatformApplication } from "@tsed/platform-http";
 
 import { config } from "./config";
+
 import { AUTORIZED_ORIGINS, NODE_ENV, PORT, SERVER_URL } from "./config/variables";
 
 import express from "express";
@@ -47,6 +48,20 @@ const rootDir = __dirname;
                             type: "http",
                             bearerFormat: "jwt",
                             scheme: "Bearer",
+                        },
+                        oauth2: {
+                            description: "oauth2",
+                            type: "oauth2",
+                            flows: {
+                                implicit: {
+                                    authorizationUrl: `${SERVER_URL}:${PORT}/oauth/`,
+                                    scopes: {
+                                        openid: "OpenID access",
+                                        email: "User e-mail",
+                                        profile: "User profile info(img, name, etc...)",
+                                    },
+                                },
+                            },
                         },
                     },
                 },
