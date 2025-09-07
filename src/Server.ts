@@ -9,6 +9,8 @@ import { Configuration, Inject } from "@tsed/di";
 
 import { PlatformApplication } from "@tsed/platform-http";
 
+import redisCache from "cache-manager-ioredis";
+
 import { config } from "./config";
 
 import { AUTORIZED_ORIGINS, NODE_ENV, PORT, SERVER_URL } from "./config/variables";

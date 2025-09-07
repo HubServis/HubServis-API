@@ -10,7 +10,7 @@ import { prisma } from "./Prisma";
 
 @Service()
 export class PlanService {
-    private readonly prisma = prisma
+    private readonly prisma = prisma;
     private readonly userService = new UserService();
     private readonly benefitService = new BenefitService();
 
@@ -19,7 +19,12 @@ export class PlanService {
             const plan = await this.prisma.plan.findUnique({
                 where: { id },
                 include: {
-                    users: true,
+                    users: {
+                        select: {
+                            name: true,
+                            cpfcnpj: true,
+                        },
+                    },
                     benefits: true,
                 },
             });
@@ -36,7 +41,13 @@ export class PlanService {
         try {
             const plans = await this.prisma.plan.findMany({
                 include: {
-                    users: true,
+                    users: {
+                        select: {
+                            name: true,
+                            cpfcnpj: true,
+                            email: true,
+                        },
+                    },
                     _count: true,
                     benefits: true,
                 },
@@ -191,7 +202,12 @@ export class PlanService {
                     },
                 },
                 include: {
-                    users: true,
+                    users: {
+                        select: {
+                            name: true,
+                            cpfcnpj: true,
+                        },
+                    },
                 },
             });
 
@@ -219,7 +235,12 @@ export class PlanService {
                     },
                 },
                 include: {
-                    users: true,
+                    users: {
+                        select: {
+                            name: true,
+                            cpfcnpj: true,
+                        },
+                    },
                 },
             });
 

@@ -19,16 +19,16 @@ generator tsed {
 }
 
 model User {
-  id       String     @id @unique @default(uuid()) @db.Uuid
-  name     String
-  email    String     @unique
-  cpfcnpj  String     @unique
-  username String
-  password String
-  image    String?
-  planId   String     @db.Uuid()
-  plan     Plan       @relation(fields: [planId], references: [id])
-  bussines Business[]
+  id        String       @id @unique @default(uuid()) @db.Uuid
+  name      String
+  email     String       @unique
+  phone     String
+  password  String
+  cpfcnpj   String?      @unique
+  image     String?
+  planId    String?      @db.Uuid()
+  plan      Plan?        @relation(fields: [planId], references: [id])
+  business  Business[]
 }
 
 model Professional {
@@ -66,6 +66,7 @@ model Blocking {
 model Business {
   id            String         @id @unique @default(uuid()) @db.Uuid
   name          String
+  businessType  String
   ownerId       String         @db.Uuid
   owner         User           @relation(fields: [ownerId], references: [id])
   professionals Professional[]

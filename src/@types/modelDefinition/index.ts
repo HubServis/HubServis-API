@@ -5,35 +5,36 @@ import { randomUUID, UUID } from "crypto";
 import { Benefit, Business, Plan, Professional, Role, User } from "../../../generated/prisma";
 
 export class UserModelDefinition {
-    @Title("ID")
-    @Example(randomUUID())
-    @Property()
-    public id: UUID;
-
     @Title("Name")
     @Example("Abaco")
     @Property()
+    @Required()
     public name: string;
 
     @Title("Email")
     @Example("teste@teste.com")
     @Property()
+    @Required()
     public email: string;
 
-    @Title("CpfCnpj")
-    @Example("123456789x")
+    @Title("Telefone")
+    @Example("(12) 34567-8901")
     @Property()
-    public cpfcnpj: string;
-
-    @Title("Username")
-    @Example("abaco_xamp")
-    @Property()
-    public username: string;
+    @Required()
+    public phone: string;
 
     @Title("Password")
     @Example("senhaSegura")
     @Property()
+    @Required()
     public password: string;
+
+    @Title("CpfCnpj")
+    @Example("123456789x")
+    @Property()
+    @Groups("createOwner")
+    @Required()
+    public cpfcnpj?: string;
 
     @Title("Image")
     @Example("uma imagem")
@@ -43,20 +44,22 @@ export class UserModelDefinition {
     @Title("PlanId")
     @Example("131231241231241231")
     @Property()
-    @Groups("createUser", "internal", "group.internal")
-    public planId: string;
+    @Groups("createOwner", "internal", "group.internal")
+    @Required()
+    public planId?: string;
 
     @Title("Plan")
     @Property(() => PlanModelDefinition)
+    @Groups("createOwner", "internal", "group.internal")
     @Required()
-    @Groups("appendPlan", "group.plan")
-    public plan: Plan;
+    public plan?: Plan;
 
     @Title("Business")
     @CollectionOf(() => BusinessModelDefinition)
     @Property(() => BusinessModelDefinition)
-    @Groups("appendBussiness", "group.business")
-    public business: Business[];
+    @Groups("createOwner", "appendBussiness", "group.business")
+    @Required()
+    public business?: Business[];
 }
 
 export class ProfessionalModelDefinition {
@@ -177,9 +180,14 @@ export class BusinessModelDefinition {
     public id: UUID;
 
     @Title("Name")
-    @Example("Abaco")
+    @Example("Cortes 3 estrelas")
     @Property()
     public name: string;
+
+    @Title("Name")
+    @Example("Cabeleleiro")
+    @Property()
+    public businessType: string;
 
     @Title("Owner ID")
     @Example(randomUUID())

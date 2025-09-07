@@ -1,12 +1,12 @@
-import { Controller } from "@tsed/di";
+import { Controller, logger } from "@tsed/di";
 import { UseBefore } from "@tsed/platform-middlewares";
 
-import { BodyParams, Context } from "@tsed/platform-params";
+import { BodyParams, Context, QueryParams } from "@tsed/platform-params";
 
 import { Description, Get, Post, Required, Returns, Summary } from "@tsed/schema";
 import { AuthModelDefinition } from "../@types/modelDefinition";
 
-import { GenerateAccessJWT, OAuthStrategyJWT } from "../middleware/auth";
+import { GenerateAccessJWT, OAuthGenerateAccessJWT } from "../middleware/auth";
 
 @Controller("/auth")
 export class AuthController {
@@ -32,11 +32,19 @@ export class AuthController {
     @Description("Inicializa uma autenticação pra um usuário via Google Auth")
     @Returns(200)
     @Returns(401).Description("UNAUTHORIZED")
-    @UseBefore(OAuthStrategyJWT)
-    public async signOauth(
-        @Context()
-        ctx: Context,
-    ) {
-        return JSON.stringify({ token: ctx.get("token") });
+    @UseBefore(OAuthGenerateAccessJWT)
+    public async signOauth() {
+        return;
+    }
+
+    @Get("/oauth/callback")
+    @Description("Retorno da chamada OAuth")
+    @Returns(200)
+    @Returns(401).Description("UNAUTHORIZED")
+    @UseBefore(OAuthGenerateAccessJWT)
+    public async callbackOauth(@QueryParams("provider") provider: string) {
+        logger().info(`Callback recebido ${provider}`);
+
+        return;
     }
 }

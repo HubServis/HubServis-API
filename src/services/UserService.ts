@@ -7,6 +7,7 @@ import { User } from "../../generated/prisma";
 import bcrypt from "bcrypt";
 
 import { prisma } from "./Prisma";
+import { BusinessUser } from "../@types/dataTypes";
 
 @Service()
 export class UserService {
@@ -20,7 +21,7 @@ export class UserService {
                     password: omit,
                 },
                 include: {
-                    bussines: true,
+                    business: true,
                     plan: {
                         include: {
                             benefits: true,
@@ -49,7 +50,7 @@ export class UserService {
                             benefits: true,
                         },
                     },
-                    bussines: true,
+                    business: true,
                 },
             });
 
@@ -61,7 +62,7 @@ export class UserService {
         }
     }
 
-    async create(newUserData: User): Promise<Partial<User> | string | Error> {
+    async createClient(newUserData: User): Promise<Partial<User> | string | Error> {
         try {
             const alreadyRegistered = await this.prisma.user.findUnique({
                 where: {
@@ -77,19 +78,61 @@ export class UserService {
 
             const newUser = await this.prisma.user.create({
                 data: {
-                    username: newUserData.username,
-                    password: newUserData.password,
-                    cpfcnpj: newUserData.cpfcnpj,
                     email: newUserData.email,
                     name: newUserData.name,
+                    phone: newUserData.phone,
+                    password: newUserData.password,
+                },
+                include: {
+                    business: false,
+                    plan: false,
+                },
+                omit: {
+                    password: true,
+                },
+            });
+
+            return newUser;
+        } catch (err) {
+            throw new InternalServerError(err);
+        }
+    }
+
+    async createOwner(newUserData: BusinessUser): Promise<Partial<User> | string | Error> {
+        try {
+            const alreadyRegistered = await this.prisma.user.findUnique({
+                where: {
+                    email: newUserData.email,
+                },
+            });
+
+            if (alreadyRegistered) return "Usuário já registrado!";
+
+            const salt = bcrypt.genSaltSync(10);
+
+            newUserData.password = bcrypt.hashSync(newUserData.password, salt);
+
+            const newUser = await this.prisma.user.create({
+                data: {
+                    email: newUserData.email,
+                    name: newUserData.name,
+                    password: newUserData.password,
+                    cpfcnpj: newUserData.cpfcnpj,
+                    phone: newUserData.phone,
                     plan: {
                         connect: {
-                            id: newUserData.planId,
+                            id: newUserData.planId!,
+                        },
+                    },
+                    business: {
+                        create: {
+                            name: newUserData.business.name,
+                            businessType: newUserData.business.businessType,
                         },
                     },
                 },
                 include: {
-                    bussines: true,
+                    business: true,
                     plan: true,
                 },
                 omit: {

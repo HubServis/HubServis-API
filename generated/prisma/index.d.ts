@@ -1870,11 +1870,11 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
-    bussines: number
+    business: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    bussines?: boolean | UserCountOutputTypeCountBussinesArgs
+    business?: boolean | UserCountOutputTypeCountBusinessArgs
   }
 
   // Custom InputTypes
@@ -1891,7 +1891,7 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountBussinesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCountOutputTypeCountBusinessArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BusinessWhereInput
   }
 
@@ -2078,9 +2078,9 @@ export namespace Prisma {
     id: string | null
     name: string | null
     email: string | null
-    cpfcnpj: string | null
-    username: string | null
+    phone: string | null
     password: string | null
+    cpfcnpj: string | null
     image: string | null
     planId: string | null
   }
@@ -2089,9 +2089,9 @@ export namespace Prisma {
     id: string | null
     name: string | null
     email: string | null
-    cpfcnpj: string | null
-    username: string | null
+    phone: string | null
     password: string | null
+    cpfcnpj: string | null
     image: string | null
     planId: string | null
   }
@@ -2100,9 +2100,9 @@ export namespace Prisma {
     id: number
     name: number
     email: number
-    cpfcnpj: number
-    username: number
+    phone: number
     password: number
+    cpfcnpj: number
     image: number
     planId: number
     _all: number
@@ -2113,9 +2113,9 @@ export namespace Prisma {
     id?: true
     name?: true
     email?: true
-    cpfcnpj?: true
-    username?: true
+    phone?: true
     password?: true
+    cpfcnpj?: true
     image?: true
     planId?: true
   }
@@ -2124,9 +2124,9 @@ export namespace Prisma {
     id?: true
     name?: true
     email?: true
-    cpfcnpj?: true
-    username?: true
+    phone?: true
     password?: true
+    cpfcnpj?: true
     image?: true
     planId?: true
   }
@@ -2135,9 +2135,9 @@ export namespace Prisma {
     id?: true
     name?: true
     email?: true
-    cpfcnpj?: true
-    username?: true
+    phone?: true
     password?: true
+    cpfcnpj?: true
     image?: true
     planId?: true
     _all?: true
@@ -2219,11 +2219,11 @@ export namespace Prisma {
     id: string
     name: string
     email: string
-    cpfcnpj: string
-    username: string
+    phone: string
     password: string
+    cpfcnpj: string | null
     image: string | null
-    planId: string
+    planId: string | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -2247,13 +2247,13 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     email?: boolean
-    cpfcnpj?: boolean
-    username?: boolean
+    phone?: boolean
     password?: boolean
+    cpfcnpj?: boolean
     image?: boolean
     planId?: boolean
-    plan?: boolean | PlanDefaultArgs<ExtArgs>
-    bussines?: boolean | User$bussinesArgs<ExtArgs>
+    plan?: boolean | User$planArgs<ExtArgs>
+    business?: boolean | User$businessArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2261,65 +2261,65 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     email?: boolean
-    cpfcnpj?: boolean
-    username?: boolean
+    phone?: boolean
     password?: boolean
+    cpfcnpj?: boolean
     image?: boolean
     planId?: boolean
-    plan?: boolean | PlanDefaultArgs<ExtArgs>
+    plan?: boolean | User$planArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
     email?: boolean
-    cpfcnpj?: boolean
-    username?: boolean
+    phone?: boolean
     password?: boolean
+    cpfcnpj?: boolean
     image?: boolean
     planId?: boolean
-    plan?: boolean | PlanDefaultArgs<ExtArgs>
+    plan?: boolean | User$planArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
     id?: boolean
     name?: boolean
     email?: boolean
-    cpfcnpj?: boolean
-    username?: boolean
+    phone?: boolean
     password?: boolean
+    cpfcnpj?: boolean
     image?: boolean
     planId?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "cpfcnpj" | "username" | "password" | "image" | "planId", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "phone" | "password" | "cpfcnpj" | "image" | "planId", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    plan?: boolean | PlanDefaultArgs<ExtArgs>
-    bussines?: boolean | User$bussinesArgs<ExtArgs>
+    plan?: boolean | User$planArgs<ExtArgs>
+    business?: boolean | User$businessArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    plan?: boolean | PlanDefaultArgs<ExtArgs>
+    plan?: boolean | User$planArgs<ExtArgs>
   }
   export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    plan?: boolean | PlanDefaultArgs<ExtArgs>
+    plan?: boolean | User$planArgs<ExtArgs>
   }
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
-      plan: Prisma.$PlanPayload<ExtArgs>
-      bussines: Prisma.$BusinessPayload<ExtArgs>[]
+      plan: Prisma.$PlanPayload<ExtArgs> | null
+      business: Prisma.$BusinessPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
       email: string
-      cpfcnpj: string
-      username: string
+      phone: string
       password: string
+      cpfcnpj: string | null
       image: string | null
-      planId: string
+      planId: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2714,8 +2714,8 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    plan<T extends PlanDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PlanDefaultArgs<ExtArgs>>): Prisma__PlanClient<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    bussines<T extends User$bussinesArgs<ExtArgs> = {}>(args?: Subset<T, User$bussinesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    plan<T extends User$planArgs<ExtArgs> = {}>(args?: Subset<T, User$planArgs<ExtArgs>>): Prisma__PlanClient<$Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    business<T extends User$businessArgs<ExtArgs> = {}>(args?: Subset<T, User$businessArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BusinessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2748,9 +2748,9 @@ export namespace Prisma {
     readonly id: FieldRef<"User", 'String'>
     readonly name: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
-    readonly cpfcnpj: FieldRef<"User", 'String'>
-    readonly username: FieldRef<"User", 'String'>
+    readonly phone: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
+    readonly cpfcnpj: FieldRef<"User", 'String'>
     readonly image: FieldRef<"User", 'String'>
     readonly planId: FieldRef<"User", 'String'>
   }
@@ -3149,9 +3149,28 @@ export namespace Prisma {
   }
 
   /**
-   * User.bussines
+   * User.plan
    */
-  export type User$bussinesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$planArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Plan
+     */
+    select?: PlanSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Plan
+     */
+    omit?: PlanOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlanInclude<ExtArgs> | null
+    where?: PlanWhereInput
+  }
+
+  /**
+   * User.business
+   */
+  export type User$businessArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Business
      */
@@ -7251,18 +7270,21 @@ export namespace Prisma {
   export type BusinessMinAggregateOutputType = {
     id: string | null
     name: string | null
+    businessType: string | null
     ownerId: string | null
   }
 
   export type BusinessMaxAggregateOutputType = {
     id: string | null
     name: string | null
+    businessType: string | null
     ownerId: string | null
   }
 
   export type BusinessCountAggregateOutputType = {
     id: number
     name: number
+    businessType: number
     ownerId: number
     _all: number
   }
@@ -7271,18 +7293,21 @@ export namespace Prisma {
   export type BusinessMinAggregateInputType = {
     id?: true
     name?: true
+    businessType?: true
     ownerId?: true
   }
 
   export type BusinessMaxAggregateInputType = {
     id?: true
     name?: true
+    businessType?: true
     ownerId?: true
   }
 
   export type BusinessCountAggregateInputType = {
     id?: true
     name?: true
+    businessType?: true
     ownerId?: true
     _all?: true
   }
@@ -7362,6 +7387,7 @@ export namespace Prisma {
   export type BusinessGroupByOutputType = {
     id: string
     name: string
+    businessType: string
     ownerId: string
     _count: BusinessCountAggregateOutputType | null
     _min: BusinessMinAggregateOutputType | null
@@ -7385,6 +7411,7 @@ export namespace Prisma {
   export type BusinessSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    businessType?: boolean
     ownerId?: boolean
     owner?: boolean | UserDefaultArgs<ExtArgs>
     professionals?: boolean | Business$professionalsArgs<ExtArgs>
@@ -7394,6 +7421,7 @@ export namespace Prisma {
   export type BusinessSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    businessType?: boolean
     ownerId?: boolean
     owner?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["business"]>
@@ -7401,6 +7429,7 @@ export namespace Prisma {
   export type BusinessSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    businessType?: boolean
     ownerId?: boolean
     owner?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["business"]>
@@ -7408,10 +7437,11 @@ export namespace Prisma {
   export type BusinessSelectScalar = {
     id?: boolean
     name?: boolean
+    businessType?: boolean
     ownerId?: boolean
   }
 
-  export type BusinessOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "ownerId", ExtArgs["result"]["business"]>
+  export type BusinessOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "businessType" | "ownerId", ExtArgs["result"]["business"]>
   export type BusinessInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     owner?: boolean | UserDefaultArgs<ExtArgs>
     professionals?: boolean | Business$professionalsArgs<ExtArgs>
@@ -7433,6 +7463,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
+      businessType: string
       ownerId: string
     }, ExtArgs["result"]["business"]>
     composites: {}
@@ -7861,6 +7892,7 @@ export namespace Prisma {
   interface BusinessFieldRefs {
     readonly id: FieldRef<"Business", 'String'>
     readonly name: FieldRef<"Business", 'String'>
+    readonly businessType: FieldRef<"Business", 'String'>
     readonly ownerId: FieldRef<"Business", 'String'>
   }
     
@@ -14595,9 +14627,9 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     email: 'email',
-    cpfcnpj: 'cpfcnpj',
-    username: 'username',
+    phone: 'phone',
     password: 'password',
+    cpfcnpj: 'cpfcnpj',
     image: 'image',
     planId: 'planId'
   };
@@ -14650,6 +14682,7 @@ export namespace Prisma {
   export const BusinessScalarFieldEnum: {
     id: 'id',
     name: 'name',
+    businessType: 'businessType',
     ownerId: 'ownerId'
   };
 
@@ -14806,26 +14839,26 @@ export namespace Prisma {
     id?: UuidFilter<"User"> | string
     name?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
-    cpfcnpj?: StringFilter<"User"> | string
-    username?: StringFilter<"User"> | string
+    phone?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
+    cpfcnpj?: StringNullableFilter<"User"> | string | null
     image?: StringNullableFilter<"User"> | string | null
-    planId?: UuidFilter<"User"> | string
-    plan?: XOR<PlanScalarRelationFilter, PlanWhereInput>
-    bussines?: BusinessListRelationFilter
+    planId?: UuidNullableFilter<"User"> | string | null
+    plan?: XOR<PlanNullableScalarRelationFilter, PlanWhereInput> | null
+    business?: BusinessListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
     email?: SortOrder
-    cpfcnpj?: SortOrder
-    username?: SortOrder
+    phone?: SortOrder
     password?: SortOrder
+    cpfcnpj?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
-    planId?: SortOrder
+    planId?: SortOrderInput | SortOrder
     plan?: PlanOrderByWithRelationInput
-    bussines?: BusinessOrderByRelationAggregateInput
+    business?: BusinessOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -14836,23 +14869,23 @@ export namespace Prisma {
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     name?: StringFilter<"User"> | string
-    username?: StringFilter<"User"> | string
+    phone?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
     image?: StringNullableFilter<"User"> | string | null
-    planId?: UuidFilter<"User"> | string
-    plan?: XOR<PlanScalarRelationFilter, PlanWhereInput>
-    bussines?: BusinessListRelationFilter
+    planId?: UuidNullableFilter<"User"> | string | null
+    plan?: XOR<PlanNullableScalarRelationFilter, PlanWhereInput> | null
+    business?: BusinessListRelationFilter
   }, "id" | "id" | "email" | "cpfcnpj">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
     email?: SortOrder
-    cpfcnpj?: SortOrder
-    username?: SortOrder
+    phone?: SortOrder
     password?: SortOrder
+    cpfcnpj?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
-    planId?: SortOrder
+    planId?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -14865,11 +14898,11 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"User"> | string
     name?: StringWithAggregatesFilter<"User"> | string
     email?: StringWithAggregatesFilter<"User"> | string
-    cpfcnpj?: StringWithAggregatesFilter<"User"> | string
-    username?: StringWithAggregatesFilter<"User"> | string
+    phone?: StringWithAggregatesFilter<"User"> | string
     password?: StringWithAggregatesFilter<"User"> | string
+    cpfcnpj?: StringNullableWithAggregatesFilter<"User"> | string | null
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
-    planId?: UuidWithAggregatesFilter<"User"> | string
+    planId?: UuidNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type ProfessionalWhereInput = {
@@ -15082,6 +15115,7 @@ export namespace Prisma {
     NOT?: BusinessWhereInput | BusinessWhereInput[]
     id?: UuidFilter<"Business"> | string
     name?: StringFilter<"Business"> | string
+    businessType?: StringFilter<"Business"> | string
     ownerId?: UuidFilter<"Business"> | string
     owner?: XOR<UserScalarRelationFilter, UserWhereInput>
     professionals?: ProfessionalListRelationFilter
@@ -15090,6 +15124,7 @@ export namespace Prisma {
   export type BusinessOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    businessType?: SortOrder
     ownerId?: SortOrder
     owner?: UserOrderByWithRelationInput
     professionals?: ProfessionalOrderByRelationAggregateInput
@@ -15101,6 +15136,7 @@ export namespace Prisma {
     OR?: BusinessWhereInput[]
     NOT?: BusinessWhereInput | BusinessWhereInput[]
     name?: StringFilter<"Business"> | string
+    businessType?: StringFilter<"Business"> | string
     ownerId?: UuidFilter<"Business"> | string
     owner?: XOR<UserScalarRelationFilter, UserWhereInput>
     professionals?: ProfessionalListRelationFilter
@@ -15109,6 +15145,7 @@ export namespace Prisma {
   export type BusinessOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    businessType?: SortOrder
     ownerId?: SortOrder
     _count?: BusinessCountOrderByAggregateInput
     _max?: BusinessMaxOrderByAggregateInput
@@ -15121,6 +15158,7 @@ export namespace Prisma {
     NOT?: BusinessScalarWhereWithAggregatesInput | BusinessScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"Business"> | string
     name?: StringWithAggregatesFilter<"Business"> | string
+    businessType?: StringWithAggregatesFilter<"Business"> | string
     ownerId?: UuidWithAggregatesFilter<"Business"> | string
   }
 
@@ -15438,68 +15476,68 @@ export namespace Prisma {
     id?: string
     name: string
     email: string
-    cpfcnpj: string
-    username: string
+    phone: string
     password: string
+    cpfcnpj?: string | null
     image?: string | null
-    plan: PlanCreateNestedOneWithoutUsersInput
-    bussines?: BusinessCreateNestedManyWithoutOwnerInput
+    plan?: PlanCreateNestedOneWithoutUsersInput
+    business?: BusinessCreateNestedManyWithoutOwnerInput
   }
 
   export type UserUncheckedCreateInput = {
     id?: string
     name: string
     email: string
-    cpfcnpj: string
-    username: string
+    phone: string
     password: string
+    cpfcnpj?: string | null
     image?: string | null
-    planId: string
-    bussines?: BusinessUncheckedCreateNestedManyWithoutOwnerInput
+    planId?: string | null
+    business?: BusinessUncheckedCreateNestedManyWithoutOwnerInput
   }
 
   export type UserUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    cpfcnpj?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    cpfcnpj?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    plan?: PlanUpdateOneRequiredWithoutUsersNestedInput
-    bussines?: BusinessUpdateManyWithoutOwnerNestedInput
+    plan?: PlanUpdateOneWithoutUsersNestedInput
+    business?: BusinessUpdateManyWithoutOwnerNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    cpfcnpj?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    cpfcnpj?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    planId?: StringFieldUpdateOperationsInput | string
-    bussines?: BusinessUncheckedUpdateManyWithoutOwnerNestedInput
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
+    business?: BusinessUncheckedUpdateManyWithoutOwnerNestedInput
   }
 
   export type UserCreateManyInput = {
     id?: string
     name: string
     email: string
-    cpfcnpj: string
-    username: string
+    phone: string
     password: string
+    cpfcnpj?: string | null
     image?: string | null
-    planId: string
+    planId?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    cpfcnpj?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    cpfcnpj?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -15507,11 +15545,11 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    cpfcnpj?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    cpfcnpj?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    planId?: StringFieldUpdateOperationsInput | string
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProfessionalCreateInput = {
@@ -15730,13 +15768,15 @@ export namespace Prisma {
   export type BusinessCreateInput = {
     id?: string
     name: string
-    owner: UserCreateNestedOneWithoutBussinesInput
+    businessType: string
+    owner: UserCreateNestedOneWithoutBusinessInput
     professionals?: ProfessionalCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessUncheckedCreateInput = {
     id?: string
     name: string
+    businessType: string
     ownerId: string
     professionals?: ProfessionalUncheckedCreateNestedManyWithoutBusinessInput
   }
@@ -15744,13 +15784,15 @@ export namespace Prisma {
   export type BusinessUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    owner?: UserUpdateOneRequiredWithoutBussinesNestedInput
+    businessType?: StringFieldUpdateOperationsInput | string
+    owner?: UserUpdateOneRequiredWithoutBusinessNestedInput
     professionals?: ProfessionalUpdateManyWithoutBusinessNestedInput
   }
 
   export type BusinessUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    businessType?: StringFieldUpdateOperationsInput | string
     ownerId?: StringFieldUpdateOperationsInput | string
     professionals?: ProfessionalUncheckedUpdateManyWithoutBusinessNestedInput
   }
@@ -15758,17 +15800,20 @@ export namespace Prisma {
   export type BusinessCreateManyInput = {
     id?: string
     name: string
+    businessType: string
     ownerId: string
   }
 
   export type BusinessUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    businessType?: StringFieldUpdateOperationsInput | string
   }
 
   export type BusinessUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    businessType?: StringFieldUpdateOperationsInput | string
     ownerId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -16138,9 +16183,21 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type PlanScalarRelationFilter = {
-    is?: PlanWhereInput
-    isNot?: PlanWhereInput
+  export type UuidNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type PlanNullableScalarRelationFilter = {
+    is?: PlanWhereInput | null
+    isNot?: PlanWhereInput | null
   }
 
   export type BusinessListRelationFilter = {
@@ -16162,9 +16219,9 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     email?: SortOrder
-    cpfcnpj?: SortOrder
-    username?: SortOrder
+    phone?: SortOrder
     password?: SortOrder
+    cpfcnpj?: SortOrder
     image?: SortOrder
     planId?: SortOrder
   }
@@ -16173,9 +16230,9 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     email?: SortOrder
-    cpfcnpj?: SortOrder
-    username?: SortOrder
+    phone?: SortOrder
     password?: SortOrder
+    cpfcnpj?: SortOrder
     image?: SortOrder
     planId?: SortOrder
   }
@@ -16184,9 +16241,9 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     email?: SortOrder
-    cpfcnpj?: SortOrder
-    username?: SortOrder
+    phone?: SortOrder
     password?: SortOrder
+    cpfcnpj?: SortOrder
     image?: SortOrder
     planId?: SortOrder
   }
@@ -16237,6 +16294,21 @@ export namespace Prisma {
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
     not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type UuidNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
@@ -16391,18 +16463,21 @@ export namespace Prisma {
   export type BusinessCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    businessType?: SortOrder
     ownerId?: SortOrder
   }
 
   export type BusinessMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    businessType?: SortOrder
     ownerId?: SortOrder
   }
 
   export type BusinessMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    businessType?: SortOrder
     ownerId?: SortOrder
   }
 
@@ -16649,10 +16724,12 @@ export namespace Prisma {
     set?: string | null
   }
 
-  export type PlanUpdateOneRequiredWithoutUsersNestedInput = {
+  export type PlanUpdateOneWithoutUsersNestedInput = {
     create?: XOR<PlanCreateWithoutUsersInput, PlanUncheckedCreateWithoutUsersInput>
     connectOrCreate?: PlanCreateOrConnectWithoutUsersInput
     upsert?: PlanUpsertWithoutUsersInput
+    disconnect?: PlanWhereInput | boolean
+    delete?: PlanWhereInput | boolean
     connect?: PlanWhereUniqueInput
     update?: XOR<XOR<PlanUpdateToOneWithWhereWithoutUsersInput, PlanUpdateWithoutUsersInput>, PlanUncheckedUpdateWithoutUsersInput>
   }
@@ -16745,9 +16822,9 @@ export namespace Prisma {
     set?: boolean | null
   }
 
-  export type UserCreateNestedOneWithoutBussinesInput = {
-    create?: XOR<UserCreateWithoutBussinesInput, UserUncheckedCreateWithoutBussinesInput>
-    connectOrCreate?: UserCreateOrConnectWithoutBussinesInput
+  export type UserCreateNestedOneWithoutBusinessInput = {
+    create?: XOR<UserCreateWithoutBusinessInput, UserUncheckedCreateWithoutBusinessInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBusinessInput
     connect?: UserWhereUniqueInput
   }
 
@@ -16765,12 +16842,12 @@ export namespace Prisma {
     connect?: ProfessionalWhereUniqueInput | ProfessionalWhereUniqueInput[]
   }
 
-  export type UserUpdateOneRequiredWithoutBussinesNestedInput = {
-    create?: XOR<UserCreateWithoutBussinesInput, UserUncheckedCreateWithoutBussinesInput>
-    connectOrCreate?: UserCreateOrConnectWithoutBussinesInput
-    upsert?: UserUpsertWithoutBussinesInput
+  export type UserUpdateOneRequiredWithoutBusinessNestedInput = {
+    create?: XOR<UserCreateWithoutBusinessInput, UserUncheckedCreateWithoutBusinessInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBusinessInput
+    upsert?: UserUpsertWithoutBusinessInput
     connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBussinesInput, UserUpdateWithoutBussinesInput>, UserUncheckedUpdateWithoutBussinesInput>
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBusinessInput, UserUpdateWithoutBusinessInput>, UserUncheckedUpdateWithoutBusinessInput>
   }
 
   export type ProfessionalUpdateManyWithoutBusinessNestedInput = {
@@ -17004,6 +17081,17 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type NestedUuidNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
+  }
+
   export type NestedUuidWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -17072,6 +17160,20 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedUuidNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type NestedBoolFilter<$PrismaModel = never> = {
@@ -17153,12 +17255,14 @@ export namespace Prisma {
   export type BusinessCreateWithoutOwnerInput = {
     id?: string
     name: string
+    businessType: string
     professionals?: ProfessionalCreateNestedManyWithoutBusinessInput
   }
 
   export type BusinessUncheckedCreateWithoutOwnerInput = {
     id?: string
     name: string
+    businessType: string
     professionals?: ProfessionalUncheckedCreateNestedManyWithoutBusinessInput
   }
 
@@ -17223,18 +17327,21 @@ export namespace Prisma {
     NOT?: BusinessScalarWhereInput | BusinessScalarWhereInput[]
     id?: UuidFilter<"Business"> | string
     name?: StringFilter<"Business"> | string
+    businessType?: StringFilter<"Business"> | string
     ownerId?: UuidFilter<"Business"> | string
   }
 
   export type BusinessCreateWithoutProfessionalsInput = {
     id?: string
     name: string
-    owner: UserCreateNestedOneWithoutBussinesInput
+    businessType: string
+    owner: UserCreateNestedOneWithoutBusinessInput
   }
 
   export type BusinessUncheckedCreateWithoutProfessionalsInput = {
     id?: string
     name: string
+    businessType: string
     ownerId: string
   }
 
@@ -17272,12 +17379,14 @@ export namespace Prisma {
   export type BusinessUpdateWithoutProfessionalsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    owner?: UserUpdateOneRequiredWithoutBussinesNestedInput
+    businessType?: StringFieldUpdateOperationsInput | string
+    owner?: UserUpdateOneRequiredWithoutBusinessNestedInput
   }
 
   export type BusinessUncheckedUpdateWithoutProfessionalsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    businessType?: StringFieldUpdateOperationsInput | string
     ownerId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -17305,31 +17414,31 @@ export namespace Prisma {
     name?: StringFilter<"Role"> | string
   }
 
-  export type UserCreateWithoutBussinesInput = {
+  export type UserCreateWithoutBusinessInput = {
     id?: string
     name: string
     email: string
-    cpfcnpj: string
-    username: string
+    phone: string
     password: string
+    cpfcnpj?: string | null
     image?: string | null
-    plan: PlanCreateNestedOneWithoutUsersInput
+    plan?: PlanCreateNestedOneWithoutUsersInput
   }
 
-  export type UserUncheckedCreateWithoutBussinesInput = {
+  export type UserUncheckedCreateWithoutBusinessInput = {
     id?: string
     name: string
     email: string
-    cpfcnpj: string
-    username: string
+    phone: string
     password: string
+    cpfcnpj?: string | null
     image?: string | null
-    planId: string
+    planId?: string | null
   }
 
-  export type UserCreateOrConnectWithoutBussinesInput = {
+  export type UserCreateOrConnectWithoutBusinessInput = {
     where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutBussinesInput, UserUncheckedCreateWithoutBussinesInput>
+    create: XOR<UserCreateWithoutBusinessInput, UserUncheckedCreateWithoutBusinessInput>
   }
 
   export type ProfessionalCreateWithoutBusinessInput = {
@@ -17358,37 +17467,37 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type UserUpsertWithoutBussinesInput = {
-    update: XOR<UserUpdateWithoutBussinesInput, UserUncheckedUpdateWithoutBussinesInput>
-    create: XOR<UserCreateWithoutBussinesInput, UserUncheckedCreateWithoutBussinesInput>
+  export type UserUpsertWithoutBusinessInput = {
+    update: XOR<UserUpdateWithoutBusinessInput, UserUncheckedUpdateWithoutBusinessInput>
+    create: XOR<UserCreateWithoutBusinessInput, UserUncheckedCreateWithoutBusinessInput>
     where?: UserWhereInput
   }
 
-  export type UserUpdateToOneWithWhereWithoutBussinesInput = {
+  export type UserUpdateToOneWithWhereWithoutBusinessInput = {
     where?: UserWhereInput
-    data: XOR<UserUpdateWithoutBussinesInput, UserUncheckedUpdateWithoutBussinesInput>
+    data: XOR<UserUpdateWithoutBusinessInput, UserUncheckedUpdateWithoutBusinessInput>
   }
 
-  export type UserUpdateWithoutBussinesInput = {
+  export type UserUpdateWithoutBusinessInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    cpfcnpj?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    cpfcnpj?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    plan?: PlanUpdateOneRequiredWithoutUsersNestedInput
+    plan?: PlanUpdateOneWithoutUsersNestedInput
   }
 
-  export type UserUncheckedUpdateWithoutBussinesInput = {
+  export type UserUncheckedUpdateWithoutBusinessInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    cpfcnpj?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    cpfcnpj?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    planId?: StringFieldUpdateOperationsInput | string
+    planId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProfessionalUpsertWithWhereUniqueWithoutBusinessInput = {
@@ -17422,22 +17531,22 @@ export namespace Prisma {
     id?: string
     name: string
     email: string
-    cpfcnpj: string
-    username: string
+    phone: string
     password: string
+    cpfcnpj?: string | null
     image?: string | null
-    bussines?: BusinessCreateNestedManyWithoutOwnerInput
+    business?: BusinessCreateNestedManyWithoutOwnerInput
   }
 
   export type UserUncheckedCreateWithoutPlanInput = {
     id?: string
     name: string
     email: string
-    cpfcnpj: string
-    username: string
+    phone: string
     password: string
+    cpfcnpj?: string | null
     image?: string | null
-    bussines?: BusinessUncheckedCreateNestedManyWithoutOwnerInput
+    business?: BusinessUncheckedCreateNestedManyWithoutOwnerInput
   }
 
   export type UserCreateOrConnectWithoutPlanInput = {
@@ -17494,11 +17603,11 @@ export namespace Prisma {
     id?: UuidFilter<"User"> | string
     name?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
-    cpfcnpj?: StringFilter<"User"> | string
-    username?: StringFilter<"User"> | string
+    phone?: StringFilter<"User"> | string
     password?: StringFilter<"User"> | string
+    cpfcnpj?: StringNullableFilter<"User"> | string | null
     image?: StringNullableFilter<"User"> | string | null
-    planId?: UuidFilter<"User"> | string
+    planId?: UuidNullableFilter<"User"> | string | null
   }
 
   export type BenefitUpsertWithWhereUniqueWithoutPlanInput = {
@@ -17618,23 +17727,27 @@ export namespace Prisma {
   export type BusinessCreateManyOwnerInput = {
     id?: string
     name: string
+    businessType: string
   }
 
   export type BusinessUpdateWithoutOwnerInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    businessType?: StringFieldUpdateOperationsInput | string
     professionals?: ProfessionalUpdateManyWithoutBusinessNestedInput
   }
 
   export type BusinessUncheckedUpdateWithoutOwnerInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    businessType?: StringFieldUpdateOperationsInput | string
     professionals?: ProfessionalUncheckedUpdateManyWithoutBusinessNestedInput
   }
 
   export type BusinessUncheckedUpdateManyWithoutOwnerInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    businessType?: StringFieldUpdateOperationsInput | string
   }
 
   export type RoleUpdateWithoutProfessionalsInput = {
@@ -17686,9 +17799,9 @@ export namespace Prisma {
     id?: string
     name: string
     email: string
-    cpfcnpj: string
-    username: string
+    phone: string
     password: string
+    cpfcnpj?: string | null
     image?: string | null
   }
 
@@ -17696,31 +17809,31 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    cpfcnpj?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    cpfcnpj?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    bussines?: BusinessUpdateManyWithoutOwnerNestedInput
+    business?: BusinessUpdateManyWithoutOwnerNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPlanInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    cpfcnpj?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    cpfcnpj?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    bussines?: BusinessUncheckedUpdateManyWithoutOwnerNestedInput
+    business?: BusinessUncheckedUpdateManyWithoutOwnerNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutPlanInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
-    cpfcnpj?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
+    cpfcnpj?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
   }
 

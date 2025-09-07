@@ -6,6 +6,7 @@ import { BodyParams, PathParams } from "@tsed/platform-params";
 import { Delete, Description, Get, Groups, In, Post, Put, Returns, Security, Summary } from "@tsed/schema";
 
 import { User } from "../../generated/prisma";
+import { BusinessUser } from "../@types/dataTypes";
 
 import { UserModelDefinition } from "../@types/modelDefinition";
 import { ValidateAccessJWT } from "../middleware/auth";
@@ -28,7 +29,7 @@ export class UserController {
         return user;
     }
 
-    @Get("/")
+    @Get("/all")
     @Summary("Busca todos os usuários")
     @Returns(200, Array).Of(UserModelDefinition)
     @Returns(404).Description("Não há usuários na base!")
@@ -38,12 +39,24 @@ export class UserController {
         return users;
     }
 
-    @Post("/")
-    @Summary("Cria um novo usuário")
+    @Post("/client")
+    @Summary("Registra um novo cliente")
     @Returns(201, String).Description("OK").Examples("OK")
     @Returns(500).Description("Erro interno")
-    async create(@BodyParams(UserModelDefinition) @Groups("createUser") newUserData: User): Promise<Partial<User> | string | Error> {
-        const newUser = await this.service.create(newUserData);
+    async createClient(@BodyParams(UserModelDefinition) newUserData: User): Promise<Partial<User> | string | Error> {
+        const newUser = await this.service.createClient(newUserData);
+
+        return newUser;
+    }
+
+    @Post("/owner")
+    @Summary("Registra um novo cliente")
+    @Returns(201, String).Description("OK").Examples("OK")
+    @Returns(500).Description("Erro interno")
+    async createOwner(
+        @BodyParams(UserModelDefinition) @Groups("createOwner") newUserData: BusinessUser,
+    ): Promise<Partial<User> | string | Error> {
+        const newUser = await this.service.createOwner(newUserData);
 
         return newUser;
     }
