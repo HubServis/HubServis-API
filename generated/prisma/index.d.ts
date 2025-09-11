@@ -2083,6 +2083,7 @@ export namespace Prisma {
     cpfcnpj: string | null
     image: string | null
     planId: string | null
+    stripeId: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -2094,6 +2095,7 @@ export namespace Prisma {
     cpfcnpj: string | null
     image: string | null
     planId: string | null
+    stripeId: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -2105,6 +2107,7 @@ export namespace Prisma {
     cpfcnpj: number
     image: number
     planId: number
+    stripeId: number
     _all: number
   }
 
@@ -2118,6 +2121,7 @@ export namespace Prisma {
     cpfcnpj?: true
     image?: true
     planId?: true
+    stripeId?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -2129,6 +2133,7 @@ export namespace Prisma {
     cpfcnpj?: true
     image?: true
     planId?: true
+    stripeId?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -2140,6 +2145,7 @@ export namespace Prisma {
     cpfcnpj?: true
     image?: true
     planId?: true
+    stripeId?: true
     _all?: true
   }
 
@@ -2224,6 +2230,7 @@ export namespace Prisma {
     cpfcnpj: string | null
     image: string | null
     planId: string | null
+    stripeId: string | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -2252,6 +2259,7 @@ export namespace Prisma {
     cpfcnpj?: boolean
     image?: boolean
     planId?: boolean
+    stripeId?: boolean
     plan?: boolean | User$planArgs<ExtArgs>
     business?: boolean | User$businessArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -2266,6 +2274,7 @@ export namespace Prisma {
     cpfcnpj?: boolean
     image?: boolean
     planId?: boolean
+    stripeId?: boolean
     plan?: boolean | User$planArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2278,6 +2287,7 @@ export namespace Prisma {
     cpfcnpj?: boolean
     image?: boolean
     planId?: boolean
+    stripeId?: boolean
     plan?: boolean | User$planArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2290,9 +2300,10 @@ export namespace Prisma {
     cpfcnpj?: boolean
     image?: boolean
     planId?: boolean
+    stripeId?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "phone" | "password" | "cpfcnpj" | "image" | "planId", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "phone" | "password" | "cpfcnpj" | "image" | "planId" | "stripeId", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     plan?: boolean | User$planArgs<ExtArgs>
     business?: boolean | User$businessArgs<ExtArgs>
@@ -2320,6 +2331,7 @@ export namespace Prisma {
       cpfcnpj: string | null
       image: string | null
       planId: string | null
+      stripeId: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2753,6 +2765,7 @@ export namespace Prisma {
     readonly cpfcnpj: FieldRef<"User", 'String'>
     readonly image: FieldRef<"User", 'String'>
     readonly planId: FieldRef<"User", 'String'>
+    readonly stripeId: FieldRef<"User", 'String'>
   }
     
 
@@ -14631,7 +14644,8 @@ export namespace Prisma {
     password: 'password',
     cpfcnpj: 'cpfcnpj',
     image: 'image',
-    planId: 'planId'
+    planId: 'planId',
+    stripeId: 'stripeId'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -14844,6 +14858,7 @@ export namespace Prisma {
     cpfcnpj?: StringNullableFilter<"User"> | string | null
     image?: StringNullableFilter<"User"> | string | null
     planId?: UuidNullableFilter<"User"> | string | null
+    stripeId?: StringNullableFilter<"User"> | string | null
     plan?: XOR<PlanNullableScalarRelationFilter, PlanWhereInput> | null
     business?: BusinessListRelationFilter
   }
@@ -14857,6 +14872,7 @@ export namespace Prisma {
     cpfcnpj?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     planId?: SortOrderInput | SortOrder
+    stripeId?: SortOrderInput | SortOrder
     plan?: PlanOrderByWithRelationInput
     business?: BusinessOrderByRelationAggregateInput
   }
@@ -14873,6 +14889,7 @@ export namespace Prisma {
     password?: StringFilter<"User"> | string
     image?: StringNullableFilter<"User"> | string | null
     planId?: UuidNullableFilter<"User"> | string | null
+    stripeId?: StringNullableFilter<"User"> | string | null
     plan?: XOR<PlanNullableScalarRelationFilter, PlanWhereInput> | null
     business?: BusinessListRelationFilter
   }, "id" | "id" | "email" | "cpfcnpj">
@@ -14886,6 +14903,7 @@ export namespace Prisma {
     cpfcnpj?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     planId?: SortOrderInput | SortOrder
+    stripeId?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -14903,6 +14921,7 @@ export namespace Prisma {
     cpfcnpj?: StringNullableWithAggregatesFilter<"User"> | string | null
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
     planId?: UuidNullableWithAggregatesFilter<"User"> | string | null
+    stripeId?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type ProfessionalWhereInput = {
@@ -15480,6 +15499,7 @@ export namespace Prisma {
     password: string
     cpfcnpj?: string | null
     image?: string | null
+    stripeId?: string | null
     plan?: PlanCreateNestedOneWithoutUsersInput
     business?: BusinessCreateNestedManyWithoutOwnerInput
   }
@@ -15493,6 +15513,7 @@ export namespace Prisma {
     cpfcnpj?: string | null
     image?: string | null
     planId?: string | null
+    stripeId?: string | null
     business?: BusinessUncheckedCreateNestedManyWithoutOwnerInput
   }
 
@@ -15504,6 +15525,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     cpfcnpj?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeId?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: PlanUpdateOneWithoutUsersNestedInput
     business?: BusinessUpdateManyWithoutOwnerNestedInput
   }
@@ -15517,6 +15539,7 @@ export namespace Prisma {
     cpfcnpj?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     planId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeId?: NullableStringFieldUpdateOperationsInput | string | null
     business?: BusinessUncheckedUpdateManyWithoutOwnerNestedInput
   }
 
@@ -15529,6 +15552,7 @@ export namespace Prisma {
     cpfcnpj?: string | null
     image?: string | null
     planId?: string | null
+    stripeId?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -15539,6 +15563,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     cpfcnpj?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -15550,6 +15575,7 @@ export namespace Prisma {
     cpfcnpj?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     planId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProfessionalCreateInput = {
@@ -16224,6 +16250,7 @@ export namespace Prisma {
     cpfcnpj?: SortOrder
     image?: SortOrder
     planId?: SortOrder
+    stripeId?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -16235,6 +16262,7 @@ export namespace Prisma {
     cpfcnpj?: SortOrder
     image?: SortOrder
     planId?: SortOrder
+    stripeId?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -16246,6 +16274,7 @@ export namespace Prisma {
     cpfcnpj?: SortOrder
     image?: SortOrder
     planId?: SortOrder
+    stripeId?: SortOrder
   }
 
   export type UuidWithAggregatesFilter<$PrismaModel = never> = {
@@ -17422,6 +17451,7 @@ export namespace Prisma {
     password: string
     cpfcnpj?: string | null
     image?: string | null
+    stripeId?: string | null
     plan?: PlanCreateNestedOneWithoutUsersInput
   }
 
@@ -17434,6 +17464,7 @@ export namespace Prisma {
     cpfcnpj?: string | null
     image?: string | null
     planId?: string | null
+    stripeId?: string | null
   }
 
   export type UserCreateOrConnectWithoutBusinessInput = {
@@ -17486,6 +17517,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     cpfcnpj?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeId?: NullableStringFieldUpdateOperationsInput | string | null
     plan?: PlanUpdateOneWithoutUsersNestedInput
   }
 
@@ -17498,6 +17530,7 @@ export namespace Prisma {
     cpfcnpj?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     planId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProfessionalUpsertWithWhereUniqueWithoutBusinessInput = {
@@ -17535,6 +17568,7 @@ export namespace Prisma {
     password: string
     cpfcnpj?: string | null
     image?: string | null
+    stripeId?: string | null
     business?: BusinessCreateNestedManyWithoutOwnerInput
   }
 
@@ -17546,6 +17580,7 @@ export namespace Prisma {
     password: string
     cpfcnpj?: string | null
     image?: string | null
+    stripeId?: string | null
     business?: BusinessUncheckedCreateNestedManyWithoutOwnerInput
   }
 
@@ -17608,6 +17643,7 @@ export namespace Prisma {
     cpfcnpj?: StringNullableFilter<"User"> | string | null
     image?: StringNullableFilter<"User"> | string | null
     planId?: UuidNullableFilter<"User"> | string | null
+    stripeId?: StringNullableFilter<"User"> | string | null
   }
 
   export type BenefitUpsertWithWhereUniqueWithoutPlanInput = {
@@ -17803,6 +17839,7 @@ export namespace Prisma {
     password: string
     cpfcnpj?: string | null
     image?: string | null
+    stripeId?: string | null
   }
 
   export type UserUpdateWithoutPlanInput = {
@@ -17813,6 +17850,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     cpfcnpj?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeId?: NullableStringFieldUpdateOperationsInput | string | null
     business?: BusinessUpdateManyWithoutOwnerNestedInput
   }
 
@@ -17824,6 +17862,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     cpfcnpj?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeId?: NullableStringFieldUpdateOperationsInput | string | null
     business?: BusinessUncheckedUpdateManyWithoutOwnerNestedInput
   }
 
@@ -17835,6 +17874,7 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     cpfcnpj?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type BenefitUpdateWithoutPlanInput = {

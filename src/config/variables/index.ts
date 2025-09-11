@@ -30,3 +30,5 @@ export const SMPT_SECURE = process.env.SMPT_SECURE;
 export const GCP_ID = process.env.GCP_ID;
 export const GCP_SECRET = process.env.GCP_SECRET;
 export const GCP_REDIRECT = process.env.GCP_REDIRECT;
+
+export const PAYMENT_KEY = process.env.PAYMENT_KEY;

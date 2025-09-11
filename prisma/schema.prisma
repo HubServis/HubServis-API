@@ -29,6 +29,7 @@ model User {
   planId    String?      @db.Uuid()
   plan      Plan?        @relation(fields: [planId], references: [id])
   business  Business[]
+  stripeId  String?
 }
 
 model Professional {
