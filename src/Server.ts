@@ -9,8 +9,6 @@ import { Configuration, Inject } from "@tsed/di";
 
 import { PlatformApplication } from "@tsed/platform-http";
 
-import redisCache from "cache-manager-ioredis";
-
 import { config } from "./config";
 
 import { AUTORIZED_ORIGINS, NODE_ENV, PORT, SERVER_URL } from "./config/variables";
@@ -23,6 +21,7 @@ import { RoleController } from "./controllers/RoleController";
 import { PlanController } from "./controllers/PlanController";
 import { RatingController } from "./controllers/RatingController";
 import { BenefitController } from "./controllers/BenefitController";
+import { PaymentController } from "./controllers/PaymentController";
 import { ScheduleController } from "./controllers/ScheduleController";
 import { CategoryController } from "./controllers/CategoryController";
 import { BusinessController } from "./controllers/BusinessController";
@@ -121,6 +120,7 @@ const rootDir = __dirname;
             BlockingController,
             ExpedientController,
             ProfessionalController,
+            PaymentController,
         ],
     },
     exclude: ["**/*.specs.ts"],
